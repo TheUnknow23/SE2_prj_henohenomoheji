@@ -1,7 +1,7 @@
 
 const express = require('express');
 const app = express();
-const PORT = process.env.port || 443;
+const PORT = process.env.PORT || 443;
 
 app.get('/', function(req, res) {
 	res.send('Hello, world!');
