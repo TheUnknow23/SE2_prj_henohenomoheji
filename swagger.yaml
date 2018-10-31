@@ -1,12 +1,9 @@
 swagger: '2.0'
 info:
-  version: '1.0'
-  title: "henohenoapi"
-  description: Polls is a simple API allowing consumers to view polls and vote in them.
-  license:
-    name: MIT
-    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
-host: polls.apiblueprint.org
+  version: '0.0.1'
+  title: "Henohenoapi"
+  description:  The project aims to create a platform for managing exams, teachers can public exams(which have a deadline) and add tasks to them, while students can submit their answers and solutions.
+host: henoheno-app.herokuapp.com
 basePath: /
 schemes:
 - http
