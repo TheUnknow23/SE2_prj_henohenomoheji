@@ -26,7 +26,7 @@
     "express": "^4.16.4",
     "jest": "^23.6.0"
   },
-  "jest":{
+  "jest": {
     "verbose": true,
     "collectCoverage": true
   }
