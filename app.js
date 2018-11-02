@@ -1,11 +1,14 @@
-
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 443;
+const PORT = process.env.PORT || 3000;
 
-app.get('/', function(req, res) {
-	res.send('Hello, world!');
-});
+var index = require('./routes/index');
+var users = require('./routes/users');
+var tasks = require('./routes/tasks');
+
+app.use('/', index);
+app.use('/users', users);
+app.use('/tasks', tasks);
 
 app.listen(PORT, function(){
 	console.log('Server running on port ' + PORT);
