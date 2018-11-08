@@ -136,10 +136,8 @@ paths:
                             application/json:
                               - task_id: 88
                                 task_name: es 6
-                                exam_id: 1
                               - task_id: 89
                                 task_name: es 5
-                                exam_id: 1
                 default:
                           $ref: '#/responses/Unknown_error'  
         post:
@@ -181,7 +179,6 @@ paths:
                             application/json:
                                     task_id: 88
                                     task_name: es 6
-                                    exam_id: 1
                 default:
                           $ref: '#/responses/Unknown_error'                             
                           
@@ -283,8 +280,6 @@ definitions:
                     type: integer                   
                 task_name:
                     type: string
-                exam_id:
-                    type: integer
  
             required:
                 - task_id
