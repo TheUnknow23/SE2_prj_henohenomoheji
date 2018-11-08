@@ -22,23 +22,25 @@ produces:
 
 
 tags:
-  - name: Risorse_utente
-    description: tutte operazione riguarda utente
-  - name: Risorse_esame
-    description: tutte operazione riguarda esame
-  - name: Risorse_task
-    description: tutte operazione riguarda task
-  - name: Risorse_soluzione
-    description: tutte operazione riguarda soluzione
+  - name: Users_resource
+    description: Operarions regarding the users
+  - name: Exams_resource
+    description: Operarions regarding the exam
+  - name: Tasks_resource
+    description: Operarions regarding the tasks
+  - name: Solutions_resource
+    description: Operarions regarding the solutions
+  - name: Groups_resource
+    description: Operarions regarding the students
 
 #parte di url--------------------------------------------------------------------------
 paths: 
 
     /users:
         get:
-            summary: lista di utente
+            summary: users list
             tags:
-                -   Risorse_utente
+                - Users_resource
             responses:
                 200:
                         description: risposta positiva
@@ -59,7 +61,7 @@ paths:
         get:
             summary: singolo utente
             tags:
-                -   Risorse_utente
+                -   Users_resource
             parameters:   
                 -   $ref: '#/parameters/User_id_in_path'
             responses:
@@ -77,9 +79,9 @@ paths:
                           
     /exams:
         get:
-            summary: lista di esame
+            summary: exams list
             tags:
-                -   Risorse_esame
+                -   Exams_resource
             responses:
                 200:
                         description: risposta positiva
@@ -102,7 +104,7 @@ paths:
         get:
             summary: singolo esame
             tags:
-                -   Risorse_esame
+                -   Exams_resource
             parameters:   
                 -   $ref: '#/parameters/Exam_id_in_path'
             responses:
@@ -120,9 +122,9 @@ paths:
 
     /tasks:
         get:
-            summary: lista di task
+            summary: tasks list
             tags:
-                -   Risorse_task
+                - Tasks_resource
             responses:
                 200:
                         description: risposta positiva
@@ -140,12 +142,34 @@ paths:
                                 exam_id: 1
                 default:
                           $ref: '#/responses/Unknown_error'  
-                          
+        post:
+            summary: create new task
+            tags:
+                - Tasks_resource
+            responses:
+                201: 
+                        description: correctly created
+        put:
+            summary: update an existing task
+            tags:
+                - Tasks_resource
+            responses:
+                200:
+                        description: OK
+        delete:
+            summary: delete an existing task
+            tags:
+                - Tasks_resource
+            responses:
+                204:
+                        description: correctly deleted
+            
+
     /tasks/{task_id}:
         get:
             summary: singolo task
             tags:
-                -   Risorse_task
+                -   Tasks_resource
             parameters:   
                 -   $ref: '#/parameters/Task_id_in_path'
             responses:
@@ -166,7 +190,7 @@ paths:
         get:
             summary: lista di soluzione
             tags:
-                -   Risorse_soluzione
+                -   Solutions_resource
             responses:
                 200:
                         description: risposta positiva
@@ -190,7 +214,7 @@ paths:
         get:
             summary: singola soluzione
             tags:
-                -   Risorse_soluzione
+                -   Solutions_resource
             parameters:   
                 -   $ref: '#/parameters/Solution_id_in_path'
             responses:
@@ -319,13 +343,3 @@ responses:
         description: Un errore imprevisto.
         schema:
             $ref: "#/definitions/Error"
-
-
-
-
-
-
-
-
-
-
