@@ -20,15 +20,17 @@ produces:
   - application/json
 tags:
   - name: Users_resource
-    description: Operarions regarding the users
+    description: Operations regarding the users
   - name: Exams_resource
-    description: Operarions regarding the exam
+    description: Operations regarding the exam
   - name: Tasks_resource
-    description: Operarions regarding the tasks
+    description: Operations regarding the tasks
   - name: Solutions_resource
-    description: Operarions regarding the solutions
+    description: Operations regarding the solutions
   - name: Groups_resource
-    description: Operarions regarding the students
+    description: Operations regarding the students
+  - name: Marks_resource
+    description: Operations regarding the marks
 #parte di url--------------------------------------------------------------------------
 paths:
   /users:
@@ -54,7 +56,7 @@ paths:
     post:
       summary: user subscription
       tags:
-        - Users_resource
+        - Users_resourcdd
       responses:
         '201':
           description: corretly created
@@ -79,6 +81,16 @@ paths:
   '/users/{user_id}/exams':
     get:
       summary: get the exams assigned to a student
+      tags:
+        - Users_resource
+      parameters:
+        - $ref: '#/parameters/User_id_in_path'
+      responses:
+        '200':
+          description: OK
+  '/users/{user_id}/marks':
+    get:
+      summary: get the marks assigned to a student
       tags:
         - Users_resource
       parameters:
@@ -170,20 +182,6 @@ paths:
       responses:
         '201':
           description: correctly created
-    put:
-      summary: update an existing task
-      tags:
-        - Tasks_resource
-      responses:
-        '200':
-          description: OK
-    delete:
-      summary: delete an existing task
-      tags:
-        - Tasks_resource
-      responses:
-        '204':
-          description: correctly deleted
   '/tasks/{task_id}':
     get:
       summary: access one specific task
@@ -202,6 +200,24 @@ paths:
               task_name: es 6
         default:
           $ref: '#/responses/Unknown_error'
+    put:
+      summary: update an existing task
+      tags:
+        - Tasks_resource
+      parameters:
+        - $ref: '#/parameters/Task_id_in_path'
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: delete an existing task
+      tags:
+        - Tasks_resource
+      parameters:
+        - $ref: '#/parameters/Task_id_in_path'
+      responses:
+        '204':
+          description: correctly deleted
   /solutions:
     get:
       summary: Solutions list
@@ -224,9 +240,16 @@ paths:
                 author_id: 1
         default:
           $ref: '#/responses/Unknown_error'
+    post:
+      summary: submit new solution
+      tags:
+        - Solutions_resource
+      responses:
+        '201':
+          description: correctly created
   '/solutions/{solution_id}':
     get:
-      summary: singola soluzione
+      summary: access a specific solution
       tags:
         - Solutions_resource
       parameters:
@@ -243,6 +266,73 @@ paths:
               author_id: 1
         default:
           $ref: '#/responses/Unknown_error'
+    put:
+      summary: update an existing solution
+      tags:
+        - Solutions_resource
+      parameters:
+        - $ref: '#/parameters/Solution_id_in_path'
+      responses:
+        '200':
+          description: OK
+  /groups:
+    get:
+      summary: groups list
+      tags:
+        - Groups_resource
+      responses:
+        '200':
+          description: positive answer
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+          examples:
+            application/json:
+              - group_id: 88
+                group_name: henohenomoheji
+                group_members: [9, 91, 19]
+              - group_id: 89
+                group_name: apicoltori
+                group_members: [9, 91, 19]
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: create new group
+      tags:
+        - Groups_resource
+      responses:
+        '201':
+          description: correctly created
+  /marks:
+    get:
+      summary: marks list
+      tags:
+        - Marks_resource
+      responses:
+        '200':
+          description: positive answer
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Mark'
+          examples:
+            application/json:
+              - mark_id: 88
+                student_id: 100
+                teache_id: 23
+              - group_id: 89
+                group_name: 99
+                group_members: 12
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: add new mark
+      tags:
+        - Marks_resource
+      responses:
+        '201':
+          description: correctly created
 #parte di costante --------------------------------------------------------------------------
 definitions:
   Error:
@@ -295,6 +385,30 @@ definitions:
         type: integer
     required:
       - solution_id
+  Group:
+    type: object
+    properties:
+      group_id:
+        type: integer
+      group_name:
+        type: string
+      group_members:
+        type: array
+        items:
+          type: integer
+    required:
+      - group_id
+  Mark:
+    type: object
+    properties:
+      mark_id:
+        type: integer
+      student_id:
+        type: integer
+      teacher_id:
+        type: integer
+    required:
+      - mark_id
 parameters:
   User_id_in_path:
     name: user_id
@@ -320,8 +434,20 @@ parameters:
     in: path
     type: integer
     required: true
+  Group_id_in_path:
+    name: group_id
+    description: the id of a group
+    in: path
+    type: integer
+    required: true
+  Mark_id_in_path:
+    name: mark_id
+    description: the id of a mark
+    in: path
+    type: integer
+    required: true
 responses:
   Unknown_error:
-    description: Un errore imprevisto.
+    description: unhandled error
     schema:
       $ref: '#/definitions/Error'
