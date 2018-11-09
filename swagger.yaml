@@ -1,26 +1,23 @@
 swagger: '2.0'
 info:
-  version: '0.0.1'
-  title: "Henohenoapi"
-  description:  The project aims to create a platform for managing exams, teachers can public exams(which have a deadline) and add tasks to them, while students can submit their answers and solutions.
-
+  version: 0.0.1
+  title: Henohenoapi
+  description: >-
+    The project aims to create a platform for managing exams, teachers can
+    public exams(which have a deadline) and add tasks to them, while students
+    can submit their answers and solutions.
 #domino e baseroot
 host: henoheno-app.herokuapp.com
 basePath: /
-
 #portocollo supportato
 schemes:
-- http
-
+  - http
 #formati dati accettabile da server
 consumes:
-- application/json
-
+  - application/json
 #formati dati prodotto da server
 produces:
-- application/json
-
-
+  - application/json
 tags:
   - name: Users_resource
     description: Operarions regarding the users
@@ -32,320 +29,299 @@ tags:
     description: Operarions regarding the solutions
   - name: Groups_resource
     description: Operarions regarding the students
-
 #parte di url--------------------------------------------------------------------------
-paths: 
-
-    /users:
-        get:
-            summary: users list
-            tags:
-                - Users_resource
-            responses:
-                200:
-                    description: OK
-                    schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/User'
-                    examples:
-                        application/json:
-                          - user_id: 1
-                            user_name: mario2018
-                          - user_id: 2
-                            user_name: luca2019    
-                default:
-                    $ref: '#/responses/Unknown_error' 
-        post:
-            summary: user subscription
-            tags:
-                - Users_resource
-            responses:
-                201:
-                    description: corretly created
-                          
-    /users/{user_id}:
-        get:
-            summary: singolo utente
-            tags:
-                - Users_resource
-            parameters:   
-                - $ref: '#/parameters/User_id_in_path'
-            responses:
-                200:
-                    description: OK
-                    schema:
-                        $ref: '#/definitions/User'
-                    examples:
-                        application/json:
-                            user_id: 1
-                            user_name: mario2018
-                default:
-                    $ref: '#/responses/Unknown_error' 
-                          
-      
-    /exams:
-        get:
-            summary: exams list
-            tags:
-                - Exams_resource
-            responses:
-                200:
-                    description: OK
-                    schema:
-                        type: array
-                        items:
-                                $ref: '#/definitions/Exam'
-                    examples:
-                        application/json:
-                          - exam_id: 1
-                            exam_name: analisi1
-                            author_id: 7
-                          - exam_id: 2
-                            exam_name: analisi2
-                            author_id: 8  
-                default:
-                    $ref: '#/responses/Unknown_error'
-        post:
-            summary: create an exam by defining a set of tasks and other stuff
-            tags:
-                -  Exams_resource
-            responses:
-                201:
-                    description: correctly created
-                    
-                          
-    /exams/{exam_id}:
-        get:
-            summary: singolo esame
-            tags:
-                - Exams_resource
-            parameters:   
-                - $ref: '#/parameters/Exam_id_in_path'
-            responses:
-                200:
-                    description: risposta positiva
-                    schema:
-                        $ref: '#/definitions/Exam'
-                    examples:
-                        application/json:
-                            exam_id: 1
-                            exam_name: analisi1
-                            author_id: 7
-                default:
-                    $ref: '#/responses/Unknown_error'
-
-    /tasks:
-        get:
-            summary: tasks list
-            tags:
-                - Tasks_resource
-            responses:
-                200:
-                    description: risposta positiva
-                    schema:
-                        type: array
-                        items:
-                                $ref: '#/definitions/Task'
-                    examples:
-                        application/json:
-                          - task_id: 88
-                            task_name: es 6
-                          - task_id: 89
-                            task_name: es 5
-                default:
-                    $ref: '#/responses/Unknown_error'  
-        post:
-            summary: create new task
-            tags:
-                - Tasks_resource
-            responses:
-                201: 
-                    description: correctly created
-        put:
-            summary: update an existing task
-            tags:
-                - Tasks_resource
-            responses:
-                200:
-                    description: OK
-        delete:
-            summary: delete an existing task
-            tags:
-                - Tasks_resource
-            responses:
-                204:
-                    description: correctly deleted
-            
-
-    /tasks/{task_id}:
-        get:
-            summary: singolo task
-            tags:
-                - Tasks_resource
-            parameters:   
-                - $ref: '#/parameters/Task_id_in_path'
-            responses:
-                200:
-                    description: risposta positiva
-                    schema:
-                        $ref: '#/definitions/Task'
-                    examples:
-                        application/json:
-                            task_id: 88
-                            task_name: es 6
-                default:
-                    $ref: '#/responses/Unknown_error'                             
-                          
-
-    /solutions:
-        get:
-            summary: lista di soluzione
-            tags:
-                - Solutions_resource
-            responses:
-                200:
-                    description: risposta positiva
-                    schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/Solution'
-                    examples:
-                        application/json:
-                          - solution_id: 44
-                            task_id: 88
-                            author_id: 1
-                          - solution_id: 45
-                            task_id: 89
-                            author_id: 1
-                            
-                default:
-                          $ref: '#/responses/Unknown_error'  
-                          
-    /solutions/{solution_id}:
-        get:
-            summary: singola soluzione
-            tags:
-                -   Solutions_resource
-            parameters:   
-                -   $ref: '#/parameters/Solution_id_in_path'
-            responses:
-                200:
-                    description: risposta positiva
-                    schema:
-                        $ref: '#/definitions/Solution'
-                    examples:
-                        application/json:
-                            solution_id: 44
-                            task_id: 88
-                            author_id: 1
-                default:
-                    $ref: '#/responses/Unknown_error'     
-                          
-                          
+paths:
+  /users:
+    get:
+      summary: users list
+      tags:
+        - Users_resource
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+          examples:
+            application/json:
+              - user_id: 1
+                user_name: mario2018
+              - user_id: 2
+                user_name: luca2019
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: user subscription
+      tags:
+        - Users_resource
+      responses:
+        '201':
+          description: corretly created
+  '/users/{user_id}':
+    get:
+      summary: access one specific user
+      tags:
+        - Users_resource
+      parameters:
+        - $ref: '#/parameters/User_id_in_path'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+          examples:
+            application/json:
+              user_id: 1
+              user_name: mario2018
+        default:
+          $ref: '#/responses/Unknown_error'
+  '/users/{user_id}/exams':
+    get:
+      summary: get the exams assigned to a student
+      tags:
+        - Users_resource
+      parameters:
+        - $ref: '#/parameters/User_id_in_path'
+      responses:
+        '200':
+          description: OK
+  /exams:
+    get:
+      summary: exams list
+      tags:
+        - Exams_resource
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Exam'
+          examples:
+            application/json:
+              - exam_id: 1
+                exam_name: analisi1
+                author_id: 7
+              - exam_id: 2
+                exam_name: analisi2
+                author_id: 8
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: create an exam by defining a set of tasks and other stuff
+      tags:
+        - Exams_resource
+      responses:
+        '201':
+          description: correctly created
+  '/exams/{exam_id}':
+    get:
+      summary: access one specific exam
+      tags:
+        - Exams_resource
+      parameters:
+        - $ref: '#/parameters/Exam_id_in_path'
+      responses:
+        '200':
+          description: risposta positiva
+          schema:
+            $ref: '#/definitions/Exam'
+          examples:
+            application/json:
+              exam_id: 1
+              exam_name: analisi1
+              author_id: 7
+        default:
+          $ref: '#/responses/Unknown_error'
+    put:
+      summary: update an exam by adding groups or changing specific fields
+      tags:
+        - Exams_resource
+      parameters:
+        - $ref: '#/parameters/Exam_id_in_path'
+      responses:
+        '200':
+          description: OK
+  /tasks:
+    get:
+      summary: tasks list
+      tags:
+        - Tasks_resource
+      responses:
+        '200':
+          description: risposta positiva
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+          examples:
+            application/json:
+              - task_id: 88
+                task_name: es 6
+              - task_id: 89
+                task_name: es 5
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: create new task
+      tags:
+        - Tasks_resource
+      responses:
+        '201':
+          description: correctly created
+    put:
+      summary: update an existing task
+      tags:
+        - Tasks_resource
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: delete an existing task
+      tags:
+        - Tasks_resource
+      responses:
+        '204':
+          description: correctly deleted
+  '/tasks/{task_id}':
+    get:
+      summary: access one specific task
+      tags:
+        - Tasks_resource
+      parameters:
+        - $ref: '#/parameters/Task_id_in_path'
+      responses:
+        '200':
+          description: risposta positiva
+          schema:
+            $ref: '#/definitions/Task'
+          examples:
+            application/json:
+              task_id: 88
+              task_name: es 6
+        default:
+          $ref: '#/responses/Unknown_error'
+  /solutions:
+    get:
+      summary: Solutions list
+      tags:
+        - Solutions_resource
+      responses:
+        '200':
+          description: risposta positiva
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Solution'
+          examples:
+            application/json:
+              - solution_id: 44
+                task_id: 88
+                author_id: 1
+              - solution_id: 45
+                task_id: 89
+                author_id: 1
+        default:
+          $ref: '#/responses/Unknown_error'
+  '/solutions/{solution_id}':
+    get:
+      summary: singola soluzione
+      tags:
+        - Solutions_resource
+      parameters:
+        - $ref: '#/parameters/Solution_id_in_path'
+      responses:
+        '200':
+          description: risposta positiva
+          schema:
+            $ref: '#/definitions/Solution'
+          examples:
+            application/json:
+              solution_id: 44
+              task_id: 88
+              author_id: 1
+        default:
+          $ref: '#/responses/Unknown_error'
 #parte di costante --------------------------------------------------------------------------
 definitions:
-
-    Error:
-        properties:
-          code:
-            type: string
-          message:
-            type: string
-
-    #oggetto utente
-    User:
-        #tipo di dati
-        type: object
-        
-        #proprietà
-        properties:
-            user_id:
-                type: integer                   
-            user_name:
-                type: string
-                
-       #proprietà obbligatorie             
-        required:
-            - user_id
-
-    Exam:
-        type: object
-        
-        properties:
-            exam_id:
-                type: integer                   
-            exam_name:
-                type: string
-            author_id:    
-                type: integer   
-
-        required:
-            - exam_id
-                
- 
-    Task:
-        type: object
-        
-        properties:
-            task_id:
-                type: integer                   
-            task_name:
-                type: string
-
-        required:
-            - task_id
-                
-    Solution:
-        type: object
-        
-        properties:
-            solution_id:
-                type: integer         
-            task_id:
-                type: integer                    
-            author_id:
-                type: integer
-
-        required:
-            - solution_id                
-
- 
+  Error:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  #oggetto utente
+  User:
+    #tipo di dati
+    type: object
+    #proprietà
+    properties:
+      user_id:
+        type: integer
+      user_name:
+        type: string
+    #proprietà obbligatorie 
+    required:
+      - user_id
+  Exam:
+    type: object
+    properties:
+      exam_id:
+        type: integer
+      exam_name:
+        type: string
+      author_id:
+        type: integer
+    required:
+      - exam_id
+  Task:
+    type: object
+    properties:
+      task_id:
+        type: integer
+      task_name:
+        type: string
+    required:
+      - task_id
+  Solution:
+    type: object
+    properties:
+      solution_id:
+        type: integer
+      task_id:
+        type: integer
+      author_id:
+        type: integer
+    required:
+      - solution_id
 parameters:
-
-    User_id_in_path:
-        name: user_id
-        description: id utente
-        in: path
-        type: integer
-        required: true
-          
-    Exam_id_in_path:
-        name: exam_id
-        description: id esame
-        in: path
-        type: integer
-        required: true
-            
-    Task_id_in_path:
-        name: task_id
-        description: id task
-        in: path
-        type: integer
-        required: true
-        
-    Solution_id_in_path:
-        name: solution_id
-        description: id soluzione
-        in: path
-        type: integer
-        required: true
-              
-
+  User_id_in_path:
+    name: user_id
+    description: id utente
+    in: path
+    type: integer
+    required: true
+  Exam_id_in_path:
+    name: exam_id
+    description: id esame
+    in: path
+    type: integer
+    required: true
+  Task_id_in_path:
+    name: task_id
+    description: id task
+    in: path
+    type: integer
+    required: true
+  Solution_id_in_path:
+    name: solution_id
+    description: id soluzione
+    in: path
+    type: integer
+    required: true
 responses:
-    
-    
-    Unknown_error:
-        description: Un errore imprevisto.
-        schema:
-            $ref: "#/definitions/Error"
+  Unknown_error:
+    description: Un errore imprevisto.
+    schema:
+      $ref: '#/definitions/Error'
