@@ -51,6 +51,10 @@ paths:
                 user_name: mario2018
               - user_id: 2
                 user_name: luca2019
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -59,7 +63,13 @@ paths:
         - Users_resourcdd
       responses:
         '201':
-          description: corretly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   '/users/{user_id}':
     get:
       summary: access one specific user
@@ -76,6 +86,10 @@ paths:
             application/json:
               user_id: 1
               user_name: mario2018
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
   '/users/{user_id}/exams':
@@ -88,6 +102,10 @@ paths:
       responses:
         '200':
           description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
   '/users/{user_id}/marks':
     get:
       summary: get the marks assigned to a student
@@ -98,6 +116,10 @@ paths:
       responses:
         '200':
           description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
   /exams:
     get:
       summary: exams list
@@ -118,6 +140,10 @@ paths:
               - exam_id: 2
                 exam_name: analisi2
                 author_id: 8
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -126,7 +152,13 @@ paths:
         - Exams_resource
       responses:
         '201':
-          description: correctly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   '/exams/{exam_id}':
     get:
       summary: access one specific exam
@@ -144,6 +176,10 @@ paths:
               exam_id: 1
               exam_name: analisi1
               author_id: 7
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     put:
@@ -155,6 +191,16 @@ paths:
       responses:
         '200':
           description: OK
+        '201':
+          description: Created
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
   /tasks:
     get:
       summary: tasks list
@@ -173,6 +219,10 @@ paths:
                 task_name: es 6
               - task_id: 89
                 task_name: es 5
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -181,7 +231,13 @@ paths:
         - Tasks_resource
       responses:
         '201':
-          description: correctly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   '/tasks/{task_id}':
     get:
       summary: access one specific task
@@ -198,6 +254,10 @@ paths:
             application/json:
               task_id: 88
               task_name: es 6
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     put:
@@ -209,6 +269,16 @@ paths:
       responses:
         '200':
           description: OK
+        '201':
+          description: Created
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
     delete:
       summary: delete an existing task
       tags:
@@ -218,6 +288,12 @@ paths:
       responses:
         '204':
           description: correctly deleted
+        '404':
+          description: Not Found
+        '405':
+          description: Method Not Allowed
+        '500':
+          description: Internal Server Error
   /solutions:
     get:
       summary: Solutions list
@@ -238,6 +314,10 @@ paths:
               - solution_id: 45
                 task_id: 89
                 author_id: 1
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -246,7 +326,13 @@ paths:
         - Solutions_resource
       responses:
         '201':
-          description: correctly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   '/solutions/{solution_id}':
     get:
       summary: access a specific solution
@@ -264,6 +350,10 @@ paths:
               solution_id: 44
               task_id: 88
               author_id: 1
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     put:
@@ -275,6 +365,16 @@ paths:
       responses:
         '200':
           description: OK
+        '201':
+          description: Created
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
+        '500':
+          description: Internal Server Error
   /groups:
     get:
       summary: groups list
@@ -295,6 +395,10 @@ paths:
               - group_id: 89
                 group_name: apicoltori
                 group_members: [9, 91, 19]
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -303,7 +407,13 @@ paths:
         - Groups_resource
       responses:
         '201':
-          description: correctly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   /marks:
     get:
       summary: marks list
@@ -324,6 +434,10 @@ paths:
               - group_id: 89
                 group_name: 99
                 group_members: 12
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
         default:
           $ref: '#/responses/Unknown_error'
     post:
@@ -332,7 +446,13 @@ paths:
         - Marks_resource
       responses:
         '201':
-          description: correctly created
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
 #parte di costante --------------------------------------------------------------------------
 definitions:
   Error:
