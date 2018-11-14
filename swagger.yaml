@@ -6,7 +6,7 @@ info:
     The project aims to create a platform for managing exams, teachers can
     public exams(which have a deadline) and add tasks to them, while students
     can submit their answers and solutions.
-#domino e baseroot
+#dominio e baseroot
 host: henoheno-app.herokuapp.com
 basePath: /
 #portocollo supportato
@@ -31,8 +31,18 @@ tags:
     description: Operations regarding the students
   - name: Marks_resource
     description: Operations regarding the marks
+  - name: Review_resource
+    description: Operations regarding the reviews
 #parte di url--------------------------------------------------------------------------
 paths:
+  /auth:
+    post:
+      summary: user authentication
+      tags:
+        - Users_resource
+      responses:
+        '201':
+          description: Created
   /users:
     get:
       summary: users list
@@ -60,7 +70,7 @@ paths:
     post:
       summary: user subscription
       tags:
-        - Users_resourcdd
+        - Users_resource
       responses:
         '201':
           description: Created
@@ -168,7 +178,7 @@ paths:
         - $ref: '#/parameters/Exam_id_in_path'
       responses:
         '200':
-          description: risposta positiva
+          description: OK
           schema:
             $ref: '#/definitions/Exam'
           examples:
@@ -201,6 +211,22 @@ paths:
           description: Conflict
         '500':
           description: Internal Server Error
+  '/exams/{exam_id}/solutions':
+    get:
+      summary: access the solutions of a specific exam
+      tags:
+        - Exams_resource
+      parameters:
+        - $ref: '#/parameters/Exam_id_in_path'
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        default:
+          $ref: '#/responses/Unknown_error'
   /tasks:
     get:
       summary: tasks list
@@ -208,7 +234,7 @@ paths:
         - Tasks_resource
       responses:
         '200':
-          description: risposta positiva
+          description: OK
           schema:
             type: array
             items:
@@ -247,7 +273,7 @@ paths:
         - $ref: '#/parameters/Task_id_in_path'
       responses:
         '200':
-          description: risposta positiva
+          description: OK
           schema:
             $ref: '#/definitions/Task'
           examples:
@@ -301,7 +327,7 @@ paths:
         - Solutions_resource
       responses:
         '200':
-          description: risposta positiva
+          description: OK
           schema:
             type: array
             items:
@@ -342,7 +368,7 @@ paths:
         - $ref: '#/parameters/Solution_id_in_path'
       responses:
         '200':
-          description: risposta positiva
+          description: OK
           schema:
             $ref: '#/definitions/Solution'
           examples:
@@ -375,6 +401,44 @@ paths:
           description: Conflict
         '500':
           description: Internal Server Error
+  '/solutions/{solution_id}/reviews':
+    get:
+      summary: access the reviews of a solution
+      tags:
+        - Solutions_resource
+      parameters:
+        - $ref: '#/parameters/Solution_id_in_path'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Review'
+          examples:
+            application/json:
+              solution_id: 44
+              task_id: 88
+              author_id: 1
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        default:
+          $ref: '#/responses/Unknown_error'
+    post:
+      summary: submit a review to a solution
+      tags:
+        - Solutions_resource
+      parameters:
+        - $ref: '#/parameters/Solution_id_in_path'
+      responses:
+        '201':
+          description: Created
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
   /groups:
     get:
       summary: groups list
@@ -382,7 +446,7 @@ paths:
         - Groups_resource
       responses:
         '200':
-          description: positive answer
+          description: OK
           schema:
             type: array
             items:
@@ -453,6 +517,54 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
+  /reviews:
+    get:
+      summary: reviews list
+      tags:
+        - Reviews_resource
+      responses:
+        '200':
+          description: positive answer
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Review'
+          examples:
+            application/json:
+              - task_id: 88
+                student_id: 100
+                solution_id: 23
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        default:
+          $ref: '#/responses/Unknown_error'
+  '/reviews/{review_id}':
+    get:
+      summary: read a specific review
+      tags:
+        - Reviews_resource
+      parameters:
+        - $ref: '#/parameters/Review_id_in_path'
+      responses:
+        '200':
+          description: positive answer
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Review'
+          examples:
+            application/json:
+              - task_id: 88
+                student_id: 100
+                solution_id: 23
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        default:
+          $ref: '#/responses/Unknown_error'
 #parte di costante --------------------------------------------------------------------------
 definitions:
   Error:
@@ -529,6 +641,17 @@ definitions:
         type: integer
     required:
       - mark_id
+  Review:
+    type: object
+    properties:
+      review_id:
+        type: integer
+      student_id:
+        type: integer
+      task_id:
+        type: integer
+    required:
+      - review_id
 parameters:
   User_id_in_path:
     name: user_id
@@ -563,6 +686,12 @@ parameters:
   Mark_id_in_path:
     name: mark_id
     description: the id of a mark
+    in: path
+    type: integer
+    required: true
+  Review_id_in_path:
+    name: review_id
+    description: the id of the review
     in: path
     type: integer
     required: true
