@@ -33,6 +33,7 @@ tags:
     description: Operations regarding the marks
   - name: Review_resource
     description: Operations regarding the reviews
+
 #parte di url--------------------------------------------------------------------------
 paths:
   /auth:
@@ -636,6 +637,7 @@ definitions:
         type: string
       message:
         type: string
+  
   #oggetto utente
   User:
     #tipo di dati
@@ -644,35 +646,142 @@ definitions:
     properties:
       user_id:
         type: integer
-      user_name:
+      email:
+        type: string
+      password:
+        type: string
+      name:
+        type: string
+      surname:
         type: string
     #proprietà obbligatorie 
     required:
       - user_id
+  
   Exam:
     type: object
     properties:
       exam_id:
         type: integer
-      exam_name:
+      owner:
+        type: string
+      title:
+        type: string
+      description:
         type: string
       task_set:
         type: array
         items:
-          type: integer #has to be of Tasks
-      author_id:
-        type: integer
+          $ref: '#/definitions/Task'
+      group:
+        $ref: '#/definitions/Group'
+      final_deadline:
+        type: string
+        format: date
+      reviews_deadline:
+        type: string
+        format: date
     required:
       - exam_id
+  
   Task:
     type: object
     properties:
       task_id:
         type: integer
-      task_name:
+      owner:
         type: string
+      task_type:
+        type: string
+      subject:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      options:
+        type: array
+        items: 
+          type: string
+      solutions:
+        type: array
+        items: 
+          type: string
     required:
       - task_id
+  
+  Group:
+    type: object
+    properties:
+      group_id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      members:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+    required:
+      - group_id
+  
+  Exam_submission:
+    type: object
+    properties:
+      exam_submission_id:
+        type: integer
+      referred_exam:
+        $ref: '#/definitions/Exam'
+      submitter:
+        $ref: '#/definitions/User'
+      answers:
+        type: array
+        items:
+          type: object
+          properties:
+            task_name: #task_name? referred_task object?
+              type: string
+            value:
+              type: string
+      status:
+        type: string
+    required: 
+      - exam_submission_id
+      
+  exam_peer_review:
+    type: object
+    properties:
+      exam_peer_review_id:
+        type: integer
+      reviewer:
+        $ref: '#/definitions/User'
+      submitted_exam:
+        $ref: '#/definitions/Exam_submission'
+      review:
+        type: string
+    required:
+      - exam_peer_review_id
+      
+  exam_assessment:
+    type: object
+    properties:
+      exam_assessment_id:
+        type: integer
+      assigner:
+        $ref: '#/definitions/User'
+      assignee:
+        $ref: '#/definitions/User'
+      referred_exam:
+        $ref: '#/definitions/Exam'
+      submitted_exam:
+        $ref: '#/definitions/Exam_submission'
+      assessment:
+        type: string
+    required:
+      - exam_peer_review_id
+  
+  #NO MORE NEEDED----------------------------------    
   Answer:
     type: object
     properties:
@@ -684,19 +793,7 @@ definitions:
         type: integer
     required:
       - solution_id
-  Group:
-    type: object
-    properties:
-      group_id:
-        type: integer
-      group_name:
-        type: string
-      group_members:
-        type: array
-        items:
-          type: integer
-    required:
-      - group_id
+  
   Mark:
     type: object
     properties:
@@ -708,6 +805,7 @@ definitions:
         type: integer
     required:
       - mark_id
+  
   Review:
     type: object
     properties:
@@ -719,6 +817,9 @@ definitions:
         type: integer
     required:
       - review_id
+#/NO MORE NEEDED----------------------------------
+
+
 parameters:
   User_id_in_path:
     name: user_id
