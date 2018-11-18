@@ -510,6 +510,33 @@ paths:
         '500':
                 $ref: '#/responses/500_internal_server_error'
                 
+
+  '/exam_submissions/{exam_submission_id}/exam_assessments':
+    post:
+      summary: add new mark
+      description: add new exam assessment
+      tags:
+        - Exam_submissions_resource
+      security:
+        - Api_key_teacher: []     #solo insegnante 
+      parameters:
+        - $ref: '#/parameters/Exam_submission_id_in_path'
+        - $ref: '#/parameters/Exam_assessment_post'
+      responses:
+        '201':
+                description: Created
+                schema:
+                        type: integer
+                        description: the new exam assessment's id
+        '204':
+                $ref: '#/responses/204_no_content'
+        '400':
+                $ref: '#/responses/400_bad_request'
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
+
   '/exam_submissions/{exam_submission_id}/exam_peer_reviews':
     get:
       summary: access the reviews of a solution
@@ -557,6 +584,7 @@ paths:
                 $ref: '#/responses/401_unauthorized'
         '500':
                 $ref: '#/responses/500_internal_server_error'
+                
 
           
   /groups:
@@ -675,14 +703,7 @@ paths:
           schema:
                 $ref: '#/definitions/Exam_assessments'
                 
-          examples:
-            application/json:
-              - mark_id: 88
-                student_id: 100
-                teache_id: 23
-              - group_id: 89
-                group_name: 99
-                group_members: 12
+
                 
         '401':
                 $ref: '#/responses/401_unauthorized'
@@ -691,30 +712,26 @@ paths:
         '500':
                 $ref: '#/responses/500_internal_server_error'
 
-    post:
-      summary: add new mark
-      description: add new exam assessment
+  /exam_assessments/{exam_assessment_id}:
+    get:
+      summary: read a specific exam assessment
+      description: read a specific exam assessment
       tags:
         - Exam_assessments_resource
-      security:
-        - Api_key_teacher: []     #solo insegnante 
       parameters:
-        - $ref: '#/parameters/Exam_assessment_post'    
+        - $ref: '#/parameters/Exam_assessment_id_in_path'
       responses:
-        '201':
-                description: Created
-                schema:
-                        type: integer
-                        description: the new exam assessment's id
-        '204':
-                $ref: '#/responses/204_no_content'
-        '400':
-                $ref: '#/responses/400_bad_request'
+        '200':
+          description: OK
+          schema:
+              $ref: '#/definitions/Exam_assessment'
+                
         '401':
                 $ref: '#/responses/401_unauthorized'
+        '404':
+                $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
           
   /exam_peer_reviews:
     get:
