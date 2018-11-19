@@ -29,8 +29,6 @@ tags:
     description: Operations regarding the answer
   - name: Groups_resource
     description: Operations regarding the students
-  - name: Exam_assessments_resource
-    description: Operations regarding the marks
   - name: Exam_peer_reviews_resource
     description: Operations regarding the reviews
 
@@ -76,7 +74,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/Users'
+            $ref: '#/definitions/Users_in_response'
         '401':
                 $ref: '#/responses/401_unauthorized'
         '404':
@@ -122,7 +120,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/User_in_response'
         '401':
                 $ref: '#/responses/401_unauthorized'
         '404':
@@ -137,7 +135,7 @@ paths:
       description: get the exams assigned to a student
       tags:
         - Users_resource
-        
+      
       parameters:
         - $ref: '#/parameters/User_id_in_path'
       responses:
@@ -152,19 +150,21 @@ paths:
                 '500':
                         $ref: '#/responses/500_internal_server_error'
         
-  '/users/{user_id}/exam_assessments':
+  '/users/{user_id}/exam_submissions':
     get:
-      summary: get the marks assigned to a student
-      description: get the marks assigned to a student
+      summary: get the submissions of a student
+      description: get the submissions of a student
       tags:
         - Users_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante
       parameters:
         - $ref: '#/parameters/User_id_in_path'
       responses:
                 '200':
                         description: OK
                         schema:
-                              $ref: '#/definitions/Exam_assessments' 
+                              $ref: '#/definitions/Exam_submissions' 
                 '401':
                         $ref: '#/responses/401_unauthorized'
                 '404':
@@ -175,7 +175,8 @@ paths:
   /exams:
     get:
       summary: exams list
-      description: get a exams list
+      description: 
+        Teachers get the list of created exams, while students the list of assigned exams(the tasks solutions will be empty in this case)
       tags:
         - Exams_resource
       responses:
@@ -218,7 +219,7 @@ paths:
   '/exams/{exam_id}':
     get:
       summary: access one specific exam
-      description: access one specific exam
+      description: access one specific exam and its tasks
       tags:
         - Exams_resource
       parameters:
@@ -268,6 +269,8 @@ paths:
       description: get a exam submission list of a specific exam
       tags:
         - Exams_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante
       parameters:
         - $ref: '#/parameters/Exam_id_in_path'
       responses:
@@ -281,34 +284,32 @@ paths:
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-        
-          
-  '/exams/{exam_id}/tasks':
+  '/exams/{exam_id}/exam_peer_reviews':
     get:
-      summary: access the tasks of a specific exam
-      description: get a tasks list of a specific exam
+      summary: access the reviews of a specific exam
+      description: get the list of reviews of an exam
       tags:
         - Exams_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante
       parameters:
         - $ref: '#/parameters/Exam_id_in_path'
       responses:
         '200':
                 description: OK
                 schema:
-                        $ref: '#/definitions/Tasks' 
+                        $ref: '#/definitions/Exam_peer_reviews' 
         '401':
                 $ref: '#/responses/401_unauthorized'
         '404':
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-        
-          
           
   /tasks:
     get:
       summary: tasks list
-      description: get a tasks list
+      description: As a teacher you get the list of created tasks and as a student you get the list of tasks assigned to you(without solutions)
       tags:
         - Tasks_resource
       responses:
@@ -352,7 +353,7 @@ paths:
   '/tasks/{task_id}':
     get:
       summary: access one specific task
-      description: access one specific task
+      description: access one specific task(as a student you won't see the solutions)
       tags:
         - Tasks_resource
       parameters:
@@ -403,6 +404,8 @@ paths:
       description: delete an existing task
       tags:
         - Tasks_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante può creare
       parameters:
         - $ref: '#/parameters/Task_id_in_path'
       responses:
@@ -419,8 +422,8 @@ paths:
           
   /exam_submissions:
     get:
-      summary: Answer list
-      description: get a answer list
+      summary: Exam submission list
+      description: get the list of the submissions of your students or, if you're a student, get the list of all your submissions(tasks won't contain solutions)
       tags:
         - Exam_submissions_resource
       responses:
@@ -461,11 +464,30 @@ paths:
                 $ref: '#/responses/401_unauthorized'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
+  '/exam_submissions?toreview=true':
+    get:
+      summary: Exam submissions to review
+      description: get the list of the submissions to review(task set won't contain solutions)
+      tags:
+        - Exam_submissions_resource
+      security:
+         - Api_key_student: []     #solo lo studente
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Exam_submissions'
+          
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '404':
+                $ref: '#/responses/404_not_found'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
   '/exam_submissions/{exam_submission_id}':  
     get:  
       summary: access a specific answer
-      description: XXXXXXXXXXXX
+      description: read the submission of a student and its evaluation(if present)
       tags:
         - Exam_submissions_resource
       parameters:
@@ -485,12 +507,10 @@ paths:
         
           
     put:
-      summary: update an existing solution
-      description: XXXXXXXXXXXX
+      summary: update an existing solution(or assign evaluation)
+      description: As a student you might update your submission, or if you're a teacher you can set an evaluation for the submission
       tags:
         - Exam_submissions_resource
-      security:
-         - Api_key_student: []     #solo lo studente
       parameters:
         - $ref: '#/parameters/Exam_submission_id_in_path'
         - $ref: '#/parameters/Exam_submission_in_put'
@@ -511,36 +531,10 @@ paths:
                 $ref: '#/responses/500_internal_server_error'
                 
 
-  '/exam_submissions/{exam_submission_id}/exam_assessments':
-    post:
-      summary: add new mark
-      description: add new exam assessment
-      tags:
-        - Exam_submissions_resource
-      security:
-        - Api_key_teacher: []     #solo insegnante 
-      parameters:
-        - $ref: '#/parameters/Exam_submission_id_in_path'
-        - $ref: '#/parameters/Exam_assessment_post'
-      responses:
-        '201':
-                description: Created
-                schema:
-                        type: integer
-                        description: the new exam assessment's id
-        '204':
-                $ref: '#/responses/204_no_content'
-        '400':
-                $ref: '#/responses/400_bad_request'
-        '401':
-                $ref: '#/responses/401_unauthorized'
-        '500':
-                $ref: '#/responses/500_internal_server_error'
-
   '/exam_submissions/{exam_submission_id}/exam_peer_reviews':
     get:
       summary: access the reviews of a solution
-      description: get all reviews of a specific solution
+      description: get all reviews of a specific submission(if it's a student he won't get the solutions)
       tags:
         - Exam_submissions_resource
       parameters:
@@ -590,7 +584,7 @@ paths:
   /groups:
     get:
       summary: groups list
-      description: get a groups list
+      description: get the list of created groups or the list of groups you're in
       tags:
         - Groups_resource
       responses:
@@ -598,15 +592,6 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/Groups'
-              
-          examples:
-            application/json:
-              - group_id: 88
-                group_name: henohenomoheji
-                group_members: [9, 91, 19]
-              - group_id: 89
-                group_name: apicoltori
-                group_members: [9, 91, 19]
                 
         '401':
                 $ref: '#/responses/401_unauthorized'
@@ -661,9 +646,6 @@ paths:
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
-        
-          
     put:
       summary: update an existing group
       description: update an existing group
@@ -689,56 +671,35 @@ paths:
                 $ref: '#/responses/409_conflict'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
-          
-  /exam_assessments:
-    get:
-      summary: marks list
-      description: get a exam assessment list
+    delete:
+      summary: delete an existing group
+      description: delete an existing group
       tags:
-        - Exam_assessments_resource
-      responses:
-        '200':
-          description: OK
-          schema:
-                $ref: '#/definitions/Exam_assessments'
-                
-
-                
-        '401':
-                $ref: '#/responses/401_unauthorized'
-        '404':
-                $ref: '#/responses/404_not_found'
-        '500':
-                $ref: '#/responses/500_internal_server_error'
-
-  /exam_assessments/{exam_assessment_id}:
-    get:
-      summary: read a specific exam assessment
-      description: read a specific exam assessment
-      tags:
-        - Exam_assessments_resource
+        - Tasks_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante può creare
       parameters:
-        - $ref: '#/parameters/Exam_assessment_id_in_path'
+        - $ref: '#/parameters/Group_id_in_path'
       responses:
-        '200':
-          description: OK
-          schema:
-              $ref: '#/definitions/Exam_assessment'
-                
+        '204':
+                $ref: '#/responses/204_no_content'
         '401':
                 $ref: '#/responses/401_unauthorized'
         '404':
                 $ref: '#/responses/404_not_found'
+        '405':
+                $ref: '#/responses/405_method_not_allowed'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-          
+    
   /exam_peer_reviews:
     get:
       summary: reviews list
-      description: get a peer reviews list
+      description: As a student you can get the list of all your reviews
       tags:
         - Exam_peer_reviews_resource
+      security:
+        - Api_key_student: []  #solo insegnante
       responses:
         '200':
           description: OK
@@ -774,8 +735,51 @@ paths:
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
-        
+    put:
+      summary: update a review
+      description: update a review
+      tags:
+        - Exam_peer_review_resource
+      security:
+        - Api_key_student: []     #solo insegnante 
+      parameters:
+        - $ref: '#/parameters/Exam_peer_review_id_in_path'
+        - $ref: '#/parameters/Exam_peer_review_in_put'        
+      responses:
+        '200':
+                $ref: '#/responses/200_ok_only'
+        '201':
+                $ref: '#/responses/201_created'
+        '204':
+                $ref: '#/responses/204_no_content'
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '404':
+                $ref: '#/responses/404_not_found'
+        '409':
+                $ref: '#/responses/409_conflict'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
+    delete:
+      summary: delete an existing review
+      description: delete an existing review
+      tags:
+        - Tasks_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante può creare
+      parameters:
+        - $ref: '#/parameters/Exam_peer_review_id_in_path'
+      responses:
+        '204':
+                $ref: '#/responses/204_no_content'
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '404':
+                $ref: '#/responses/404_not_found'
+        '405':
+                $ref: '#/responses/405_method_not_allowed'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
           
           
 #parte di costante --------------------------------------------------------------------------
@@ -787,11 +791,11 @@ definitions:
       message:
         type: string
   
-  #oggetto utente
+###oggetto user
   User:
     type: object   
     properties:
-      user_id:
+      user_id: #primary key
         type: integer
         description: the user 's id
       email:
@@ -812,14 +816,14 @@ definitions:
         type: array
         items: 
                 $ref: '#/definitions/User'
-  
+###oggetto exam
   Exam:
     type: object
     properties:
-      exam_id:
+      exam_id:  #primary key
+        type: integer 
+      owner_id: #foreign key
         type: integer
-      owner:
-        type: string
       title:
         type: string
       description:
@@ -842,14 +846,14 @@ definitions:
         items: 
                 $ref: '#/definitions/Exam'
   
-  
+###oggetto task
   Task:
     type: object
     properties:
-      task_id:
+      task_id: #primary key
         type: integer
-      owner:
-        type: string
+      owner_id: #foreign key
+        type: integer
       task_type:
         type: string
       subject:
@@ -871,11 +875,13 @@ definitions:
         type: array
         items: 
                 $ref: '#/definitions/Task'
-  
+###oggetto group
   Group:
     type: object
     properties:
-      group_id:
+      group_id: #primary key
+        type: integer
+      owner_id: #foreign key
         type: integer
       name:
         type: string
@@ -884,56 +890,191 @@ definitions:
       members:
         type: array
         items:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/User_in_response'
 
   Groups:
         type: array
         items: 
                 $ref: '#/definitions/Group'
-  
+###oggetto exam_submission
   Exam_submission:
     type: object
     properties:
-      exam_submission_id:
+      exam_submission_id: #primary key
         type: integer
-      referred_exam:
+      referred_exam: #'foreign' key
         $ref: '#/definitions/Exam'
-      submitter:
-        $ref: '#/definitions/User'
+      submitter_id: #foreign key
+        type: integer
       answers:
         type: array
         items:
           type: object
           properties:
-            task_name: #task_name? referred_task object?
-              type: string
-            value:
+            task_id:
+              type: integer
+            answer:
               type: string
       status:
+        type: string
+      evaluation:
         type: string
 
   Exam_submissions:
           type: array
           items:
                   $ref: '#/definitions/Exam_submission'  
-      
+###oggetto exam_peer_review
   Exam_peer_review:
     type: object
     properties:
-      exam_peer_review_id:
+      exam_peer_review_id: #primary key
         type: integer
-      reviewer:
-        $ref: '#/definitions/User'
-      submitted_exam:
+      reviewer_id: #foreign key
+        type: integer 
+      submitted_exam: #'foreign' key
         $ref: '#/definitions/Exam_submission'
       review:
-        type: string
+        type: array
+        items:
+          type: string
 
   Exam_peer_reviews:
           type: array
           items:
                   $ref: '#/definitions/Exam_peer_review'  
-      
+###additional objects##
+  User_in_response:
+      type: object   
+      properties:
+        user_id: 
+          type: integer
+          description: the user 's id
+        email:
+          type: string
+          description: the user 's email
+        name:
+          type: string
+          description: the user 's name
+        surname:
+          type: string
+          description: the user 's surname
+  Users_in_response:
+    type: array
+    items:
+      $ref: '#/definitions/User_in_response'
+  User_for_post:
+    type: object   
+    properties:
+      email:
+        type: string
+        description: the user 's email
+      password:
+        type: string
+        format: password
+        description: the user 's password
+      name:
+        type: string
+        description: the user 's name
+      surname:
+        type: string
+        description: the user 's surname
+  Exam_for_post:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      tasks_ids:
+        type: array
+        items:
+            type: integer
+      group_id:
+        type: integer
+      final_deadline:
+        type: string
+        format: date
+      reviews_deadline:
+        type: string
+        format: date
+  Task_for_post:
+    type: object
+    properties:
+      task_type:
+        type: string
+      subject:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      options:
+        type: array
+        items: 
+          type: string
+      solutions:
+        type: array
+        items: 
+          type: string
+  Exam_submission_for_post:
+    type: object
+    properties:
+      referred_exam_id: #'foreign' key
+        type: integer
+      answers:
+        type: array
+        items:
+          type: object
+          properties:
+            task_id:
+              type: integer
+            answer:
+              type: string
+      status:
+        type: string
+  Exam_submission_for_put:
+    type: object
+    properties:
+      answers:
+        type: array
+        items:
+          type: object
+          properties:
+            task_id:
+              type: integer
+            answer:
+              type: string
+      status:
+        type: string
+      evaluation:
+        type: string
+  Exam_peer_review_for_post:
+    type: object
+    properties:
+      review:
+        type: array
+        items:
+          type: string
+  Group_for_post:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      members_id:
+        type: array
+        items:
+          type: integer
+  Exam_peer_review_for_put:
+    type: object
+    properties:
+      review:
+        type: array
+        items:
+          type: string
+###############not useful#######################################
   Exam_assessment:
     type: object
     properties:
@@ -955,7 +1096,7 @@ definitions:
           items:
                   $ref: '#/definitions/Exam_assessment'  
   
-
+################################################################
 
 
 parameters:
@@ -965,7 +1106,7 @@ parameters:
         description: the object user
         in: body
         schema:
-                $ref: '#/definitions/User'
+                $ref: '#/definitions/User_for_post'
                 required:
                         - email
                         - password
@@ -981,11 +1122,11 @@ parameters:
                 properties:
                         email:
                                 type: string
-                                description: the user s' email
+                                description: the user 's email
                         password:
                                 type: string
                                 format: password     
-                                description: the user s' password
+                                description: the user 's password
                 required: 
                         - email
                         - password
@@ -1004,13 +1145,11 @@ parameters:
         description: the object exam
         in: body
         schema:
-                $ref: '#/definitions/Exam'
+                $ref: '#/definitions/Exam_for_post'
                 required:
-                        - owner
                         - title
                         - description
                         - task_set
-                        - group
                         - final_deadline
                         - reviews_deadline
  
@@ -1019,9 +1158,8 @@ parameters:
         description: the object exam
         in: body
         schema:
-                $ref: '#/definitions/Exam'
-                required:
-                        - exam_id
+                $ref: '#/definitions/Exam_for_post'
+
     
   Exam_id_in_path:
     name: exam_id
@@ -1035,11 +1173,11 @@ parameters:
         description: the object task
         in: body
         schema:
-                $ref: '#/definitions/Task'
+                $ref: '#/definitions/Task_for_post'
                 required:
-                        - owner
                         - task_type
                         - subject
+                        - title
                         - description
                         - options
                         - solutions
@@ -1049,9 +1187,7 @@ parameters:
         description: the object task
         in: body
         schema:
-                $ref: '#/definitions/Task'
-                required:
-                        - task_id
+                $ref: '#/definitions/Task_for_post'
                         
   Task_id_in_path:
     name: task_id
@@ -1065,7 +1201,7 @@ parameters:
         description: the object group
         in: body
         schema:
-                $ref: '#/definitions/Group'
+                $ref: '#/definitions/Group_for_post'
                 required:
                         - name
                         - description
@@ -1075,9 +1211,7 @@ parameters:
         description: the object group
         in: body
         schema:
-                $ref: '#/definitions/Group'
-                required:
-                        - group_id
+                $ref: '#/definitions/Group_for_post'
 
   Group_id_in_path:
     name: group_id
@@ -1091,10 +1225,10 @@ parameters:
         description: the object exam_submission
         in: body
         schema:
-                $ref: '#/definitions/Exam_submission'
+                $ref: '#/definitions/Exam_submission_for_post'
                 required:
-                        - referred_exam
-                        - submitter
+                        - referred_exam_id
+                        #- submitter
                         - answers
                         - status    
           
@@ -1103,9 +1237,7 @@ parameters:
         description: the object exam_submission
         in: body
         schema:
-                $ref: '#/definitions/Exam_submission'
-                required:
-                        - exam_submission_id
+                $ref: '#/definitions/Exam_submission_for_put'
                         
   Exam_submission_id_in_path:
     name: exam_submission_id
@@ -1119,10 +1251,8 @@ parameters:
         description: the object exam peer review
         in: body
         schema:
-                $ref: '#/definitions/Exam_peer_review'
+                $ref: '#/definitions/Exam_peer_review_for_post'
                 required:
-                        - reviewer
-                        - submitted_exam
                         - review  
                         
   Exam_peer_review_in_put:
@@ -1130,7 +1260,7 @@ parameters:
         description: the object exam peer review
         in: body
         schema:
-                $ref: '#/definitions/Exam_peer_review'
+                $ref: '#/definitions/Exam_peer_review_for_put'
                 required:
                         - exam_peer_review_id
 
