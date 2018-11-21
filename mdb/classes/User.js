@@ -39,10 +39,10 @@ class Users extends Array{
         console.log("Users length : " + this.length);
     }
     //FIND METHODS
-    findByEmail(email){
+    getUserByEmail(email){
         return this.find(obj => obj.email === email);
     }
-    findById(id){
+    getUserById(id){
         return this.filter(obj => obj.id === id);
     }
     //FILTER METHODS
@@ -50,7 +50,7 @@ class Users extends Array{
         return this.filter(obj => obj.name === name);
     }
     //GET METHODS
-    getIndexByEmail(email){
+    getUserIndexByEmail(email){
         return this.indexOf(this.find(obj => obj.email === email));
     }
     //DELETE METHODS
