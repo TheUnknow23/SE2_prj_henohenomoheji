@@ -44,10 +44,6 @@ class Exams extends Array{
         }
         console.log("Exams length : " + this.length);
     }
-    //FIND METHODS
-    findById(id){
-        return this.find(obj => obj.id === id);
-    }
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
@@ -59,11 +55,20 @@ class Exams extends Array{
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
+    getExamById(id){
+        return this.find(obj => obj.id === id);
+    }
     //DELETE METHODS
     deleteByTitleAndOwner(title, owner){
-        var id = this.indexOf(this.find(obj => (obj.title === title && obj.owner === owner)));
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => (obj.title === title && obj.owner === owner)));
+        if(index>=0){
+            this.splice(index,1);
+        }
+    }
+    deleteById(id){
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }

@@ -36,7 +36,13 @@ console.log("EXAM_SUBMISSIONS _>");console.log(exam_submissions);console.log("\n
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
 exam_peer_reviews.add(exams[0].group.getRandomMember(), exam_submissions[0], undefined);
 console.log("EXAM_PEER_REVIEWS _>");console.log(exam_peer_reviews);console.log("\n###################\n");
-
+//login.get(/login)
+email = "gino@gino"; password = "pwd1";
+if(users.getUserByEmail(email).password === password){
+    console.log("LOGGED IN SUCCESSFULLY!");
+    active_users.add(users.getUserByEmail(email));
+}
+console.log("ACTIVE_USERS _>");console.log(active_users);console.log("\n###################\n");
 
 //------------------------------------------
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;

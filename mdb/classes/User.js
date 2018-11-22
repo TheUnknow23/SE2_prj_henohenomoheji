@@ -38,26 +38,31 @@ class Users extends Array{
         }
         console.log("Users length : " + this.length);
     }
-    //FIND METHODS
+    //FILTER METHODS
+    filterByName(name){
+        return this.filter(obj => obj.name === name);
+    }
+    //GET METHODS
+    getIndexByEmail(email){
+        return this.indexOf(this.find(obj => obj.email === email));
+    }
     getUserByEmail(email){
         return this.find(obj => obj.email === email);
     }
     getUserById(id){
         return this.filter(obj => obj.id === id);
     }
-    //FILTER METHODS
-    filterByName(name){
-        return this.filter(obj => obj.name === name);
-    }
-    //GET METHODS
-    getUserIndexByEmail(email){
-        return this.indexOf(this.find(obj => obj.email === email));
-    }
     //DELETE METHODS
     deleteByEmail(email){
-        var id = this.indexOf(this.find(obj => obj.email === email));
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => obj.email === email));
+        if(index>=0){
+            this.splice(index,1);
+        }
+    }
+    deleteById(id){
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }

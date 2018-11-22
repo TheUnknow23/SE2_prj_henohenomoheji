@@ -26,10 +26,6 @@ class Exam_Peer_Reviews extends Array{
         }
         console.log("Reviews length : " + this.length);
     }
-    //FIND METHODS
-    findById(id){
-        return this.find(obj => obj.id === id);
-    }
     //FILTER METHODS
     filterBySubmitter(reviewer){
         return this.filter(obj => obj.reviewer.email === reviewer.email);
@@ -41,10 +37,14 @@ class Exam_Peer_Reviews extends Array{
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
+    findById(id){
+        return this.find(obj => obj.id === id);
+    }
     //DELETE METHODS
     deleteById(id){
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }

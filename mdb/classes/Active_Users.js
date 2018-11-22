@@ -18,6 +18,7 @@ class Active_User{
 class Active_Users extends Array{
     //ADD METHOD
     add(user){
+        console.log("got user -> " + user);
         var x = null;
         if(this.length === 0){
             x = new Active_User(user);
@@ -35,11 +36,20 @@ class Active_Users extends Array{
     getTokenByUser(user){
         return this[this.indexOf(this.find(obj => obj.user.email === user.email))].token;
     }
+    getUserByToken(token){
+        return this[this.indexOf(this.find(obj => obj.token === token))].user;
+    }
     //DELETE METHODS
     deleteByUser(user){
-        var id = this.indexOf(this.find(obj => obj.user.email === user.email));
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => obj.user.email === user.email));
+        if(index>=0){
+            this.splice(index,1);
+        }
+    }
+    deleteById(id){
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }

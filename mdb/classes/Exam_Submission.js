@@ -31,8 +31,6 @@ class Exam_Submissions extends Array{
         }
         console.log("Submissions length : " + this.length);
     }
-    //FIND METHODS
-
     //FILTER METHODS
     filterByExam(exam){
         return this.find(obj => obj.ref_exam.id === exam.id);
@@ -46,8 +44,9 @@ class Exam_Submissions extends Array{
     }
     //DELETE METHODS
     deleteById(id){
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }

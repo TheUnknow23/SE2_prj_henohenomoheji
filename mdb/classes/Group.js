@@ -38,13 +38,6 @@ class Groups extends Array{
         }
         console.log("Groups length : " + this.length);
     }
-    //FIND METHODS
-    findById(id){
-        return this.find(obj => obj.id === id);
-    }
-    findByName(name){
-        return this.find(obj => obj.name === name);
-    }
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
@@ -53,11 +46,23 @@ class Groups extends Array{
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
+    getGroupById(id){
+        return this.find(obj => obj.id === id);
+    }
+    getGroupByName(name){
+        return this.find(obj => obj.name === name);
+    }
     //DELETE METHODS
     deleteByName(name){
-        var id = this.indexOf(this.find(obj => obj.name === name));
-        if(id>=0){
-            this.splice(id,1);
+        var index = this.indexOf(this.find(obj => obj.name === name));
+        if(index>=0){
+            this.splice(index,1);
+        }
+    }
+    deleteById(id){
+        var index = this.indexOf(this.find(obj => obj.id === id));
+        if(index>=0){
+            this.splice(index,1);
         }
     }
 }
