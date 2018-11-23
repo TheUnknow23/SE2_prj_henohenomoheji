@@ -1,4 +1,5 @@
 const express = require('express');
+var bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,11 +12,14 @@ var groups = require ('./routes/groups');
 var exam_peer_reviews = require ('./routes/exam_peer_reviews');
 var logout = require ('./routes/logout');
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/tasks', tasks);
 app.use('/auth', auth);
-app.use('/exam_submission', exam_submission);
+app.use('/exam_submissions', exam_submission);
 app.use('/groups', groups);
 app.use('/exam_peer_reviews', exam_peer_reviews);
 app.use('/logout', logout);
