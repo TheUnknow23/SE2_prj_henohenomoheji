@@ -42,6 +42,9 @@ class Exam_Submissions extends Array{
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
+    getExamSubmissionById(id){
+        return this.find(obj => obj.id === id);
+    }
     //DELETE METHODS
     deleteById(id){
         var index = this.indexOf(this.find(obj => obj.id === id));
