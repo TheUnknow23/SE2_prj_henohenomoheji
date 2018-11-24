@@ -29,7 +29,7 @@ class Exam_Submissions extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Submissions length : " + this.length);
+        //console.log("Submissions length : " + this.length);
     }
     //FILTER METHODS
     filterByExam(exam){

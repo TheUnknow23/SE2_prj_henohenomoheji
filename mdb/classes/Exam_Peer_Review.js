@@ -24,7 +24,7 @@ class Exam_Peer_Reviews extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Reviews length : " + this.length);
+        //console.log("Reviews length : " + this.length);
     }
     //FILTER METHODS
     filterBySubmitter(reviewer){

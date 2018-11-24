@@ -18,7 +18,7 @@ class Active_User{
 class Active_Users extends Array{
     //ADD METHOD
     add(user){
-        console.log("got user -> " + user);
+        //console.log("got user -> " + user);
         var x = null;
         if(this.length === 0){
             x = new Active_User(user);
@@ -30,7 +30,7 @@ class Active_Users extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Active users length : " + this.length);
+        //console.log("Active users length : " + this.length);
     }
     //GET METHODS
     getTokenByUser(user){

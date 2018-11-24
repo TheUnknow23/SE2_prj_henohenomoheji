@@ -39,7 +39,7 @@ class Tasks extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Tasks length : " + this.length);
+        //console.log("Tasks length : " + this.length);
     }
     //FILTER METHODS
     filterByOwner(owner){

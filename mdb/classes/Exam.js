@@ -42,7 +42,7 @@ class Exams extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Exams length : " + this.length);
+        //console.log("Exams length : " + this.length);
     }
     //FILTER METHODS
     filterByOwner(owner){
