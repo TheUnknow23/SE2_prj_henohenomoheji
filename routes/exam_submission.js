@@ -97,3 +97,10 @@ router.post('/:id/exam_peer_reviews', function(req, res){
 });
 
 module.exports = router;
+module.exports.display_exam_submission = display_exam_submission;
+module.exports.display_exam_submission_list = display_exam_submission_list;
+module.exports.display_exam_submission_to_review_list = display_exam_submission_to_review_list;
+module.exports.exam_submission_peer_review_list = exam_submission_peer_review_list;
+module.exports.insert_exam_peer_review = insert_exam_peer_review;
+module.exports.insert_exam_submission = insert_exam_submission;
+module.exports.update_exam_submission = update_exam_submission;
