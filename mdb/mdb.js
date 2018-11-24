@@ -25,6 +25,10 @@ groups.add(users[1], "group1", "desch1", [users[0], users[2]]);
 groups.add(users[0], "group2", "desc2", [users[1], users[2], users[3]]);
 console.log("\x1b[32mGROUPS _> \x1b[0m");console.log("," + groups);console.log("\n###################\n");
 
+//default active_users for testing purposes
+active_users.add(users.getUserById(0));
+active_users.add(users.getUserById(2));
+
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
 exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], tasks[2]], groups[0], "12/12/12 12:12", "12/12/12 12:21");
 console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");

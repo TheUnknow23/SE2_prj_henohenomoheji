@@ -24,25 +24,41 @@ class User{
 }
 class Users extends Array{
     //ADD METHOD
-    add(name, surname, email, password){
+    add(name, surname, email, password, type){
         var x = null;
+        
+        //Abort return 0 if one of the fields is null
+        if (name == null || surname == null || email == null || password == null) {
+            return 0;
+        }
+        
+        //First user
         if(this.length === 0){
-            x = new User(0, name, surname, email, password);
-        }else{
+            x = new User(0, name, surname, email, password, type);
+        } else {
             if(this.find(obj => obj.email === email) === undefined){
-                x = new User(this[this.length-1].id+1, name, surname, email, password);
+                //Insertion in "db" and ID definition
+                x = new User(this[this.length-1].id+1, name, surname, email, password, type);
             }
         }
-        if(x !== null){
+        if(x !== null) {
             this.push(x);
+            return 1;
+        } else {
+            return 0;
         }
         console.log("Users length : " + this.length);
     }
+
     //FILTER METHODS
     filterByName(name){
         return this.filter(obj => obj.name === name);
     }
+
     //GET METHODS
+    getAll() {
+        return this;
+    }
     getIndexByEmail(email){
         return this.indexOf(this.find(obj => obj.email === email));
     }
@@ -50,8 +66,9 @@ class Users extends Array{
         return this.find(obj => obj.email === email);
     }
     getUserById(id){
-        return this.filter(obj => obj.id === id);
+        return this.find(obj => obj.id === id);
     }
+
     //DELETE METHODS
     deleteByEmail(email){
         var index = this.indexOf(this.find(obj => obj.email === email));

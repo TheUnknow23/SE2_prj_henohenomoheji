@@ -38,6 +38,9 @@ class Exam_Submissions extends Array{
     filterBySubmitter(submitter){
         return this.filter(obj => obj.submitter.email === submitter.email);
     }
+    filterBySubmitterId(id) {
+        return this.filter(obj => obj.submitter.id === id);
+    }
     //GET METHODS
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
