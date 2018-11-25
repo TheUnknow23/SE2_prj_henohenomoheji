@@ -37,11 +37,11 @@ class Active_Users extends Array{
         return this[this.indexOf(this.find(obj => obj.user.email === user.email))].token;
     }
     getUserByToken(token){
-        try{
-            return this[this.indexOf(this.find(obj => obj.token === token))].user;
-        }catch(err){
-            console.log("MDBERR: incorrect token");
-            throw "invalid token";
+        var idx = this.indexOf(this.find(obj => obj.token === token));
+        if(idx === -1){
+            return null;
+        }else{
+            return this[idx].user;
         }
     }
     //DELETE METHODS
