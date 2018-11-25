@@ -68,8 +68,6 @@ paths:
       description: get a users list
       tags:
                 - Users_resource
-      security:
-                - Api_key_teacher: [] #solo insegnante può vedere
       responses:
         '200':
           description: OK
@@ -171,6 +169,23 @@ paths:
                         $ref: '#/responses/404_not_found'
                 '500':
                         $ref: '#/responses/500_internal_server_error'
+  /logout:
+    post:
+      summary: user logout
+      description: logged in users can logout
+      tags:
+        - Users_resource
+      responses:
+          '204':
+                  $ref: '#/responses/204_no_content'
+          '401':
+                  $ref: '#/responses/401_unauthorized'
+          '404':
+                  $ref: '#/responses/404_not_found'
+          '405':
+                  $ref: '#/responses/405_method_not_allowed'
+          '500':
+                  $ref: '#/responses/500_internal_server_error'
           
   /exams:
     get:
@@ -284,34 +299,16 @@ paths:
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-  '/exams/{exam_id}/exam_peer_reviews':
-    get:
-      summary: access the reviews of a specific exam
-      description: get the list of reviews of an exam
-      tags:
-        - Exams_resource
-      security:
-        - Api_key_teacher: []  #solo insegnante
-      parameters:
-        - $ref: '#/parameters/Exam_id_in_path'
-      responses:
-        '200':
-                description: OK
-                schema:
-                        $ref: '#/definitions/Exam_peer_reviews' 
-        '401':
-                $ref: '#/responses/401_unauthorized'
-        '404':
-                $ref: '#/responses/404_not_found'
-        '500':
-                $ref: '#/responses/500_internal_server_error'
+
           
   /tasks:
     get:
       summary: tasks list
-      description: As a teacher you get the list of created tasks and as a student you get the list of tasks assigned to you(without solutions)
+      description: As a teacher you get the list of created tasks
       tags:
         - Tasks_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante può creare
       responses:
         '200':
           description: OK
@@ -353,7 +350,9 @@ paths:
   '/tasks/{task_id}':
     get:
       summary: access one specific task
-      description: access one specific task(as a student you won't see the solutions)
+      description: access one specific task
+      security:
+        - Api_key_teacher: []  #solo insegnante può creare
       tags:
         - Tasks_resource
       parameters:
@@ -1360,8 +1359,8 @@ securityDefinitions:
         Api_key_student:
                 type: apiKey
                 in: query
-                name: api_key
+                name: token
         Api_key_teacher:
                 type: apiKey
                 in: query
-                name: api_key
+                name: token
