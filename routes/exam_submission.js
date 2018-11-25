@@ -1,7 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const mdb = require ('./../mdb/mdb.js');
+const Ajv = require('ajv');
+var ajv = new Ajv();
 
+var schema = {
+        type: "object",
+        properties: {
+          lol: {
+                  type: "number"
+          }
+        }
+      };
 function display_exam_submission_list(token, type){
         var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
         if(user !== null){
@@ -28,14 +38,15 @@ router.get('/', function(req, res) {
 });
 
 function insert_exam_submission(token, exam_submission){
+	console.log("GETTING THE FOLLOWING EXAM SUBMISSION");
+        console.log(exam_submission);
+        console.log(ajv.validate(schema, exam_submission));
         return null;
 }
 
 router.post('/', function(req, res){
-        console.log("POST exam_submissions/ -> token : " + req.query.token + "\npayload:\n ");
-        console.log(req.body.exam_submission);
-        //res.send(insert_exam_submission(req.query.token, req.body.exam_submission));
-        res.send();
+        console.log("POST exam_submissions/ -> token : " + req.query.token);
+        res.send(insert_exam_submission(req.query.token, req.body));
 });
 
 function display_exam_submission(token, id){
