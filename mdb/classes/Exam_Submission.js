@@ -43,7 +43,7 @@ class Exam_Submissions extends Array{
         return this.indexOf(this.find(obj => obj.id === id));
     }
     getExamSubmissionById(id){
-        return this.find(obj => obj.id === id);
+        return this.find(obj => obj.id === parseInt(id));
     }
     //DELETE METHODS
     deleteById(id){

@@ -10,8 +10,8 @@ var exam_peer_reviews = new Exam_Peer_Reviews(); var active_users = new Active_U
 
 
 //default users | input schema: (name, surname, email, password, type)
-users.add("gino", "giino", "gino@gino", "pwd1", "teacher");users.add("geno", "genovese", "geno@geno", "pwd2", "teacher");
-users.add("gano", "gano", "gano@gsno", "pwd3", "student");users.add("guno", "gunovese", "guno@geno", "pwd4", "student");
+users.add("gino", "giino", "gino@gino", "pwd1");users.add("geno", "genovese", "geno@geno", "pwd2");
+users.add("gano", "gano", "gano@gsno", "pwd3");users.add("guno", "gunovese", "guno@geno", "pwd4");
 //console.log("\x1b[36mUSERS _> \x1b[0m");//console.log("," + users);//console.log("\n###################\n");
 
 //default tasks | input schema: (owner, task_type, subject, title, description, answer[], solution)
@@ -30,7 +30,7 @@ exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], task
 //console.log("\x1b[31mEXAMS _> \x1b[0m");//console.log("" + exams);//console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
-exam_submissions.add(exams[0], users[2], ["opt3", "opt2"], "on hold");
+exam_submissions.add(exams[0], users[0], ["opt3", "opt2"], "on hold");
 //console.log("EXAM_SUBMISSIONS _>");//console.log(exam_submissions);//console.log("\n###################\n");
 
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
@@ -41,6 +41,7 @@ email = "gino@gino"; password = "pwd1";
 if(users.getUserByEmail(email).password === password){
     //console.log("LOGGED IN SUCCESSFULLY!");
     active_users.add(users.getUserByEmail(email));
+    console.log("token is " + active_users[0].token);
 }
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
 

@@ -11,7 +11,7 @@ class Active_User{
     user(User) UNIQUE
     */
     constructor(user){
-        this.token = makeid(8);
+        this.token = makeid(2);
         this.user = user;
     }
 }
@@ -37,7 +37,12 @@ class Active_Users extends Array{
         return this[this.indexOf(this.find(obj => obj.user.email === user.email))].token;
     }
     getUserByToken(token){
-        return this[this.indexOf(this.find(obj => obj.token === token))].user;
+        try{
+            return this[this.indexOf(this.find(obj => obj.token === token))].user;
+        }catch(err){
+            console.log("MDBERR: incorrect token");
+            throw "invalid token";
+        }
     }
     //DELETE METHODS
     deleteByUser(user){

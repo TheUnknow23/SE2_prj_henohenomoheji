@@ -5,11 +5,10 @@ class User{
     surname(string)
     email(string) UNIQUE
     password(string)
-    type(string) #teacher or student
     */
-    constructor(id, name, surname, email, password, type){
+    constructor(id, name, surname, email, password){
         this.id = id;this.name = name; this.surname = surname; 
-        this.email = email; this.password = password; this.type = type;
+        this.email = email; this.password = password;
     }
     update(name, surname, email, password){
         (name !== "" || name !== undefined) ? this.name = name : console.log("T_T"); 
