@@ -41,6 +41,9 @@ class Exam_Peer_Reviews extends Array{
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
+    getReviewerByExamSubmission(submission){
+        return this.find(obj => obj.submission === submission).reviewer;
+    }
     findById(id){
         return this.find(obj => obj.id === id);
     }
