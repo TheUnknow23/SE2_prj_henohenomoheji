@@ -31,18 +31,18 @@ exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], task
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
 exam_submissions.add(exams[0], users[0], ["opt3", "opt2"], "on hold");
+exam_submissions.add(exams[0], users[2], ["opt3", "opt2"], "on hold");
 //console.log("EXAM_SUBMISSIONS _>");//console.log(exam_submissions);//console.log("\n###################\n");
 
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
 exam_peer_reviews.add(exams[0].group.getRandomMember(), exam_submissions[0], undefined);
 //console.log("EXAM_PEER_REVIEWS _>");//console.log(exam_peer_reviews);//console.log("\n###################\n");
 //login.get(/login)
-email = "gino@gino"; password = "pwd1";
-if(users.getUserByEmail(email).password === password){
-    //console.log("LOGGED IN SUCCESSFULLY!");
-    active_users.add(users.getUserByEmail(email));
-    console.log("token is " + active_users[0].token);
-}
+    active_users.add(users[0]);active_users.add(users[1]);active_users.add(users[2]); active_users.add(users[3]);
+    console.log("token[0](gino is an exam submitter) is " + active_users[0].token);
+    console.log("token[1](geno is an exam owner) is " + active_users[1].token);
+    console.log("token[2](gano) is " + active_users[2].token);
+    console.log("token[3](guno) is " + active_users[3].token);
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
 
 //------------------------------------------
