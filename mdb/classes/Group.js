@@ -15,7 +15,9 @@ class Group{
         (members !== "" || members !== undefined) ? this.members = members : console.log("T_T"); 
     }
     getRandomMember(){
-        return this.members[Math.floor(Math.random()*this.members.length)];
+        var reviewer = this.members[Math.floor(Math.random()*this.members.length)];
+        console.log("reviewer is -> " + reviewer.name);
+        return reviewer;
     }
     toString(){
         return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
