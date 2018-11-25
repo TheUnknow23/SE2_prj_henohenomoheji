@@ -30,6 +30,10 @@ class Exam_Peer_Reviews extends Array{
     filterBySubmitter(reviewer){
         return this.filter(obj => obj.reviewer.email === reviewer.email);
     }
+    filterExamSubmissionByReviewer(reviewer){
+        var a = this.filter(obj => obj.reviewer.email === reviewer.email);
+        return a.map(obj => obj.submission);
+    }
     filterByExam(exam){
         return this.filter(obj => obj.submission.ref_exam.id === exam.id);
     }
