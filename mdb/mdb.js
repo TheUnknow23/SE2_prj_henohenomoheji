@@ -36,6 +36,7 @@ exam_submissions.add(exams[0], users[2], ["opt3", "opt2"], "on hold");
 
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
 exam_peer_reviews.add(exams[0].group.getRandomMember(), exam_submissions[0], undefined);
+exam_peer_reviews.add(exams[0].group.getRandomMember(), exam_submissions[1], undefined);
 //console.log("EXAM_PEER_REVIEWS _>");//console.log(exam_peer_reviews);//console.log("\n###################\n");
 //login.get(/login)
     active_users.add(users[0]);active_users.add(users[1]);active_users.add(users[2]); active_users.add(users[3]);
