@@ -24,7 +24,17 @@ test('call display_exam_submission with correct token and id(as submitter)', () 
 test('call display_exam_submission with correct token and id(as reviewer)', () => {
     expect(es.display_exam_submission(mdb.active_users[2].token, 0)).toBe(mdb.exam_submissions[0]);
 });
+
 //display_exam_submission_list() tests
 test('call display_exam_submission_list with no parameters', () => {
     expect(es.display_exam_submission_list()).toBe("error null");
+});
+test('call display_exam_submission_list with incorrect token', () => {
+    expect(es.display_exam_submission_list("dsdsdsdssdsd", "toreview")).toBe("error null");
+});
+test('call display_exam_submission_list with incorrect query param', () => {
+    expect(es.display_exam_submission_list(mdb.active_users[0].token, "torevifew")).toBe("error null");
+});
+test('call display_exam_submission_list with correct values', () => {
+    expect(es.display_exam_submission_list(mdb.active_users[1].token, "owned")).toEqual(mdb.exam_submissions);
 });
