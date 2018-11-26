@@ -27,7 +27,7 @@ groups.add(users[1], "group2", "desc2", [users[1], users[2], users[3]]);
 //console.log("\x1b[32mGROUPS _> \x1b[0m");//console.log("," + groups);//console.log("\n###################\n");
 
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
-exams.add(users[0], "cool title", "cool subject", "description", [{"id":tasks[0].id, "text": tasks[0].title}, {"id":tasks[2].id, "text": tasks[2].title}], groups[0], "12/12/12 12:12", "12/12/12 12:21");
+exams.add(users[0], "cool title", "cool subject", "description", [{"id":tasks[0].id, "text": tasks[0].title}, {"id":tasks[2].id, "text": tasks[2].title}], groups[0], new Date("2018-12-01"), new Date("2018-12-03"));
 //console.log("\x1b[31mEXAMS _> \x1b[0m");//console.log("" + exams);//console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
@@ -44,7 +44,9 @@ exam_peer_reviews.add(users[3], exam_submissions[0], undefined);
     console.log("token[2](GINO) is " + active_users[2].token);
     console.log("token[3](GONO) is " + active_users[3].token);
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
-
+//console.log(exams);
+console.log(exams[0].final_deadline<exams[0].review_deadline);
+console.log(exams[0].final_deadline<new Date());
 //------------------------------------------
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;
 module.exports.exams = exams; module.exports.exam_submissions = exam_submissions;
