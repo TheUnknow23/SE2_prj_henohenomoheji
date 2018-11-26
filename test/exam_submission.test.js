@@ -52,3 +52,19 @@ test('call insert_exam_submission with incorrect payload', () => {
 test('call insert_exam_submission with correct values', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","booby"], "status": "on hold"})).toEqual(1);
 });
+//update_exam_submission() tests
+test('call update_exam_submission with no parameters', () => {
+    expect(es.update_exam_submission()).toBe("error null");
+});
+test('call update_exam_submission with incorrect token', () => {
+    expect(es.update_exam_submission("dsdsdsdssdsd", {"ref_exam": 0,"answers":["bob","booby"], "status": "on hold"})).toBe("error null");
+});
+test('call update_exam_submission with incorrect payload', () => {
+    expect(es.update_exam_submission(mdb.active_users[1].token, {"ref_exam": 0})).toBe("error null");
+});
+test('call update_exam_submission with correct values as submitter', () => {
+    expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"answers":["bob","booby"], "status": "completed"})).toEqual(0);
+});
+test('call update_exam_submission with correct values as owner of the exam', () => {
+    expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"evaluation": "good"})).toEqual(0);
+});
