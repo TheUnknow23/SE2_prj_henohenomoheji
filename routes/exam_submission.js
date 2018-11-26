@@ -4,17 +4,10 @@ const mdb = require ('./../mdb/mdb.js');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
-var schema = {
-        type: "object",
-        properties: {
-          lol: {
-                  type: "number"
-          }
-        }
-      };
 function display_exam_submission_list(token, type){
         var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
         if(user !== null){
+                console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
                 if(type === "submitted"){
                         console.log("sending submitted exam submissions");
                         return mdb.exam_submissions.filterBySubmitter(user);
@@ -38,22 +31,56 @@ router.get('/', function(req, res) {
 });
 
 function insert_exam_submission(token, exam_submission){
+        var now = new Date();
 	console.log("GETTING THE FOLLOWING EXAM SUBMISSION");
         console.log(exam_submission);
-        console.log(ajv.validate(schema, exam_submission));
-        return null;
+        var scheck = ajv.validate(require('./../schemas/exam_submission_post.json'), exam_submission);
+        if(scheck){//se il payload ha un formato valido
+                var user = mdb.active_users.getUserByToken(token);
+                console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
+                if(user !== null){//se l'utente loggato esiste
+                        var ref_exam = mdb.exams.getExamById(exam_submission.ref_exam);
+                        if(ref_exam !== undefined){//se esiste l'esame
+                                if(now < ref_exam.final_deadline){//se è entro la data limite
+                                        console.log("VALID DEADLINE");
+                                        if(ref_exam.group.isThere(user)){//se fa parte del gruppo
+                                                console.log("HE IS IN THE GROUP");
+                                                if(!mdb.exam_submissions.hasSubmission(ref_exam, user)){//se non ha già submittato per l'esame
+                                                        console.log("HE HASN'T SUBMITTED YET");
+                                                        var id = mdb.exam_submissions.add(ref_exam, user, exam_submission.asnwers, exam_submission.status);
+                                                        //after I add the exam submission I serch for a suitable reviewer
+                                                        do{
+                                                                var r_member = ref_exam.group.getRandomMember(user);
+                                                                console.log("..");
+                                                        }while(mdb.exam_peer_reviews.hasReview(ref_exam,r_member))
+                                                        mdb.exam_peer_reviews.add(r_member, ref_exam, undefined);
+                                                        console.log("ASSIGNED THE FOLLOWING REVIEW");console.log(mdb.exam_peer_reviews[mdb.exam_peer_reviews.length-1]);
+                                                        return id;
+                                                }else{
+                                                        console.log("HE ALREADY SUBMITTED AN ANSWER");
+                                                }
+                                        }else{
+                                                console.log("HE IS NOT IN THE GROUP");
+                                        }
+                                }
+                        }
+                }
+        }
+        return "error null";
 }
 
 router.post('/', function(req, res){
         console.log("POST exam_submissions/ -> token : " + req.query.token);
-        res.send(insert_exam_submission(req.query.token, req.body));
+        res.send("" + insert_exam_submission(req.query.token, req.body));
 });
 
 function display_exam_submission(token, id){
         var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
         if(user !== null){
+                console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
                 var e_sub = mdb.exam_submissions.getExamSubmissionById(id);
                 if(e_sub !== undefined){
+                        console.log("GOT THE FOLLOWING SUBMISSION"); console.log(e_sub);
                         //controllo se è il submitter
                         if(e_sub.submitter === user){
                                 //prendo la submission
@@ -84,15 +111,42 @@ router.get('/:id/', function(req, res){
         //res.send();
 });
 
-function update_exam_submission(token, id, exam_submission){
-        return null;
+function update_exam_submission(token, id, updated_submission){
+        var now = new Date();
+	console.log("GETTING THE FOLLOWING UPDATED SUBMISSION(" + id +")");
+        console.log(updated_submission);
+        var scheck = ajv.validate(require('./../schemas/exam_submission_put.json'), updated_submission);
+        if(scheck){//se il payload ha un formato valido
+                console.log("VALID SCHEMA");
+                var user = mdb.active_users.getUserByToken(token);
+                console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
+                if(user !== null){//se l'utente loggato esiste
+                        var ref_sub = mdb.exam_submissions.getExamSubmissionById(id);
+                        if(ref_sub !== undefined){//se esiste la submission
+                                console.log("SUBMISSION EXISTS");
+                                if(ref_sub.submitter === user){//se è submitter della submission
+                                        console.log("USER IS SUBMITTER");
+                                        if(now < ref_sub.ref_exam.final_deadline){//se è entro la data limite
+                                                console.log("VALID DEADLINE");
+                                                var index = mdb.exam_submissions.getIndexById(id)
+                                                console.log("index -> " + index);
+                                                var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update(updated_submission.answers,updated_submission.status);
+                                                return updated.id;
+                                        }
+                                }else if(ref_sub.ref_exam.owner === user){
+                                        console.log("USER IS OWNER");
+                                        var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update("","",updated_submission.evaluation);
+                                        return updated.id;
+                                }
+                        }
+                }
+        }
+        return "error null";
 }
 
 router.put('/:id/', function(req, res){
-        console.log("PUT exam_submissions/:id -> id : " + req.params.id + " | token : " + req.query.token + "\npayload:\n");
-        console.log(req.body.exam_submission);
-        //res.send(update_exam_submission(req.params.id, req.query.token, req.body.exam_submission));
-        res.send();
+        console.log("PUT exam_submissions/:id -> id : " + req.params.id + " | token : " + req.query.token);
+        res.send("" + update_exam_submission(req.query.token, req.params.id, req.body));
 });
 
 function exam_submission_peer_review_list(token, id){
@@ -117,9 +171,9 @@ router.post('/:id/exam_peer_reviews', function(req, res){
 });
 
 module.exports = router;
-module.exports.display_exam_submission = display_exam_submission;
-module.exports.display_exam_submission_list = display_exam_submission_list;
+module.exports.display_exam_submission = display_exam_submission;/**/
+module.exports.display_exam_submission_list = display_exam_submission_list;/**/
 module.exports.exam_submission_peer_review_list = exam_submission_peer_review_list;
 module.exports.insert_exam_peer_review = insert_exam_peer_review;
-module.exports.insert_exam_submission = insert_exam_submission;
-module.exports.update_exam_submission = update_exam_submission;
+module.exports.insert_exam_submission = insert_exam_submission;/**/
+module.exports.update_exam_submission = update_exam_submission;/**/

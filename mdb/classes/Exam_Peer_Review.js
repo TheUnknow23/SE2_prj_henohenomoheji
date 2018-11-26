@@ -60,7 +60,7 @@ class Exam_Peer_Reviews extends Array{
     }
     hasReview(exam, user){//checks is there's already an review for the given exam and user
         var rev = this.find(obj => (obj.submission.ref_exam === exam && obj.reviewer === user));
-        console.log("found the following review ->");console.log(rev);
+        //console.log("found the following review ->");console.log(rev);
         if(rev !== undefined){
             return true;
         }

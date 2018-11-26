@@ -15,6 +15,7 @@ class Exam_Submission{
         (answer !== "" || answer !== undefined) ? this.answer = answer : console.log("T_T");
         (status !== "" || status !== undefined) ? this.status = status : console.log("T_T"); 
         (evaluation !== "" || evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
+        return this;
     }
 }
 class Exam_Submissions extends Array{
@@ -44,7 +45,7 @@ class Exam_Submissions extends Array{
     }
     //GET METHODS
     getIndexById(id){
-        return this.indexOf(this.find(obj => obj.id === id));
+        return this.indexOf(this.find(obj => obj.id === parseInt(id)));
     }
     getExamSubmissionById(id){
         return this.find(obj => obj.id === parseInt(id));
