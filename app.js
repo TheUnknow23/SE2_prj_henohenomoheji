@@ -10,7 +10,7 @@ var auth = require ('./routes/auth');
 var exams = require ('./routes/exams').router;
 var exam_submission = require ('./routes/exam_submission');
 var groups = require ('./routes/groups');
-var exam_peer_reviews = require ('./routes/exam_peer_reviews');
+var exam_peer_reviews = require ('./routes/exam_peer_reviews').router;
 var logout = require ('./routes/logout');
 
 app.use(bodyParser.urlencoded({ extended: false }));

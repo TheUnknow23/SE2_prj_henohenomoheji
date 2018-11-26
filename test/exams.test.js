@@ -87,7 +87,7 @@ test("validate exam id for put a exam", function () {
 });
 
 
-test("validate response put post a exam", function () {
+test("validate response for put a exam", function () {
 
         expect(exams.postExam(token, {"title": "bbb"}, 0).status).toBe(200);
 
