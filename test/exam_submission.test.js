@@ -52,7 +52,7 @@ test('call insert_exam_submission with incorrect payload', () => {
 test('call insert_exam_submission with correct values', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","booby"], "status": "on hold"})).toEqual(1);
 });
-//update_exam_submission() tests
+//exam_submission_peer_review_list() tests
 test('call update_exam_submission with no parameters', () => {
     expect(es.update_exam_submission()).toBe("error null");
 });
@@ -67,4 +67,14 @@ test('call update_exam_submission with correct values as submitter', () => {
 });
 test('call update_exam_submission with correct values as owner of the exam', () => {
     expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"evaluation": "good"})).toEqual(0);
+});
+//exam_submission_peer_review_list() tests
+test('call exam_submission_peer_review_list with incorrect token', () => {
+    expect(es.exam_submission_peer_review_list("dsdsdsdssdsd")).toBe("error null");
+});
+test('call exam_submission_peer_review_list with correct values as submitter', () => {
+    expect(es.exam_submission_peer_review_list(mdb.active_users[1].token,  0)).toEqual([mdb.exam_peer_reviews[0]]);
+});
+test('call exam_submission_peer_review_list with correct values as submitter - 2', () => {
+    expect(es.exam_submission_peer_review_list(mdb.active_users[2].token,  1)).toEqual([mdb.exam_peer_reviews[1]]);
 });
