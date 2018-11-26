@@ -14,7 +14,3 @@ module.exports.router = router;
 module.exports.result400 = result400;
 module.exports.result401 = result401;
 module.exports.result404 = result404;
-module.exports.getExamlist = getExamlist;
-module.exports.postExam = postExam;
-module.exports.getExam = getExam;
-module.exports.putExam = putExam;

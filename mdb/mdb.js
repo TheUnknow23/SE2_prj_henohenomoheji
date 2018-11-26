@@ -26,7 +26,9 @@ groups.add(users[0], "group2", "desc2", [users[1], users[2], users[3]]);
 console.log("\x1b[32mGROUPS _> \x1b[0m");console.log("," + groups);console.log("\n###################\n");
 
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
-exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], tasks[2]], groups[0], "12/12/12 12:12", "12/12/12 12:21");
+let taskInExam1 = {"task_id": tasks[1].id, "description" : tasks[1].description};
+let taskInExam2 = {"task_id": tasks[2].id, "description" : tasks[2].description};
+exams.add(users[1].id, "cool title",  "description", [taskInExam1, taskInExam2], groups[0], "12/12/12 12:12", "12/12/12 12:21");
 console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)

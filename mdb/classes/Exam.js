@@ -1,10 +1,10 @@
 class Exam {
         /* 
          id(integer) PRIMARY KEY
-         owner(User) FOREIGN KEY
+         owner(integer) FOREIGN KEY
          title(string)
          description(string)
-         taskset(Task[]) "MULTIPLE" FOREIGN KEY
+         taskset(taskInExam[]) "MULTIPLE" FOREIGN KEY
          group(Group) FOREIGN KEY
          final_deadline(timestamp)
          review_deadline(timestamp)
@@ -28,7 +28,7 @@ class Exam {
                 (review_deadline !== "" || review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
         }
         toString() {
-                return "\x1b[31mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TITLE : " + this.title + ", DESCRIPTION : " + this.description + "\n\nTASK SET -> \n" + this.taskset +
+                return "\x1b[31mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TITLE : " + this.title + ", DESCRIPTION : " + this.description + "\n\nTASK SET -> \n" + JSON.stringify(this.taskset) +
                         "\nGROUP -> " + this.group + "\nFINAL_DEADLINE : " + this.final_deadline + ", REVIEW_DEADLINE : " + this.review_deadline;
         }
 }
@@ -48,12 +48,12 @@ class Exams extends Array {
                 {
                         this.push(x);
                 }
-                console.log("Exams length : " + this.length);
+                //console.log("Exams add : " + x.toString());
                 return x.id;
         }
         //FILTER METHODS
         filterByOwner(owner) {
-                return this.filter(obj => obj.owner.email === owner.email);
+                return this.filter(obj => obj.owner === owner);
         }
         filterByTitle(title) {
                 return this.filter(obj => obj.title === title);
@@ -63,29 +63,23 @@ class Exams extends Array {
                 //check su ogni esame
                 let arrayOfExam = this.filter(function (singleExam) {
                         let exist = false;
-                        //se utente attuale appartiene a gruppo di quella esame
-                        for (let j = 0; j < singleExam.group.members.length; j++)
+                        
+                        //se esame ha uno gruppo e tale gruppo non ии vuoto
+                        if (singleExam.group !== undefined && singleExam.group.members !== undefined)
                         {
-                                if (singleExam.group.members[j].id === user_id)
+                               
+                                for (let j = 0; j < singleExam.group.members.length; j++)
                                 {
-                                        exist = true;
+                                         //se utente attuale appartiene a gruppo di quella esame
+                                        if (singleExam.group.members[j].id === user_id)
+                                        {
+                                                exist = true;
+                                        }
                                 }
                         }
                         return exist;
 
                 });
-
-
-                //eliminare gli attributi inutili di task
-                for (let i = 0; i < arrayOfExam.length; i++)
-                {
-                        for (let j = 0; j < arrayOfExam[i].taskset.length; j++)
-                        {
-                                arrayOfExam[i].taskset[j].owner = "";
-                                arrayOfExam[i].taskset[j].solutions = "";
-                                
-                        }
-                }
 
                 return arrayOfExam;
         }
