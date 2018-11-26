@@ -42,7 +42,11 @@ class Exam_Peer_Reviews extends Array{
         return this.indexOf(this.find(obj => obj.id === id));
     }
     getReviewerByExamSubmission(submission){
-        return this.find(obj => obj.submission === submission).reviewer;
+        var rev = this.find(obj => obj.submission === submission);
+        if(rev !== undefined){
+            return rev.reviewer;
+        }
+        return undefined;
     }
     findById(id){
         return this.find(obj => obj.id === id);
@@ -53,6 +57,14 @@ class Exam_Peer_Reviews extends Array{
         if(index>=0){
             this.splice(index,1);
         }
+    }
+    hasReview(exam, user){//checks is there's already an review for the given exam and user
+        var rev = this.find(obj => (obj.submission.ref_exam === exam && obj.reviewer === user));
+        console.log("found the following review ->");console.log(rev);
+        if(rev !== undefined){
+            return true;
+        }
+        return false;
     }
 }
 module.exports = Exam_Peer_Reviews;

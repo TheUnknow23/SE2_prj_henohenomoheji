@@ -30,6 +30,7 @@ class Exam_Submissions extends Array{
             this.push(x);
         }
         //console.log("Submissions length : " + this.length);
+        return this[this.length-1].id;
     }
     //FILTER METHODS
     filterByExam(exam){
@@ -54,6 +55,14 @@ class Exam_Submissions extends Array{
         if(index>=0){
             this.splice(index,1);
         }
+    }
+    hasSubmission(exam, user){//checks is there's already an exam_submission for the given exam and user
+        var sub = this.find(obj => (obj.ref_exam === exam && obj.submitter === user));
+        console.log("found the following submission ->");console.log(sub);
+        if(sub !== undefined){
+            return true;
+        }
+        return false;
     }
 }
 module.exports = Exam_Submissions;
