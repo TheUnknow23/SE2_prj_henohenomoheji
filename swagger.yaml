@@ -231,7 +231,7 @@ paths:
         '500':
                 $ref: '#/responses/500_internal_server_error'
                 
-  '/exams/{exam_id}':
+  '/exams/{id}':
     get:
       summary: access one specific exam
       description: access one specific exam and its tasks
@@ -278,7 +278,7 @@ paths:
         '500':
                 $ref: '#/responses/500_internal_server_error'
                 
-  '/exams/{exam_id}/exam_submissions':
+  '/exams/{id}/exam_submissions':
     get:
       summary: access the answer of a specific exam
       description: get a exam submission list of a specific exam
@@ -800,9 +800,9 @@ definitions:
   Exam:
     type: object
     properties:
-      exam_id:  #primary key
+      id:  #primary key
         type: integer 
-      owner_id: #foreign key
+      owner: #foreign key
         type: integer
       title:
         type: string
@@ -1152,7 +1152,7 @@ parameters:
 
     
   Exam_id_in_path:
-    name: exam_id
+    name: id
     description: id esame
     in: path
     type: integer
