@@ -35,14 +35,30 @@ class Groups extends Array{
         }
         if(x !== null){
             this.push(x);
+            console.log("Groups length : " + this.length);
+            return true;
         }
         console.log("Groups length : " + this.length);
+    }
+
+    //UPDATE METHOD
+    updateById(id, name, description, members){
+        var group = this.getGroupById(id);
+        if (group !== null){
+            group.update(name, description, members);
+            return 200;
+        } else{
+            return 400;
+        }
     }
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
     }
     //GET METHODS
+    getAll(){
+        return this;
+    }
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
@@ -63,6 +79,9 @@ class Groups extends Array{
         var index = this.indexOf(this.find(obj => obj.id === id));
         if(index>=0){
             this.splice(index,1);
+            return 200;
+        } else {
+            return 404;
         }
     }
 }
