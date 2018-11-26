@@ -808,7 +808,7 @@ definitions:
         type: string
       description:
         type: string
-      task_set:
+      taskset:
         type: array
         items:
           $ref: '#/definitions/Task_in_exam'
@@ -1139,7 +1139,7 @@ parameters:
                 required:
                         - title
                         - description
-                        - task_set
+                        - taskset
                         - final_deadline
                         - reviews_deadline
  
