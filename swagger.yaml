@@ -817,7 +817,7 @@ definitions:
       final_deadline:
         type: string
         format: date
-      reviews_deadline:
+      review_deadline:
         type: string
         format: date
 
@@ -985,7 +985,7 @@ definitions:
       final_deadline:
         type: string
         format: date
-      reviews_deadline:
+      review_deadline:
         type: string
         format: date
   Task_for_post:
@@ -1141,7 +1141,7 @@ parameters:
                         - description
                         - taskset
                         - final_deadline
-                        - reviews_deadline
+                        - review_deadline
  
   Exam_in_put:        
         name: exam
