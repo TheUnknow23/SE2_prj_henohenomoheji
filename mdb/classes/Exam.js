@@ -31,6 +31,7 @@ class Exam{
     }
 }
 class Exams extends Array{
+    
     //ADD METHOD
     add(owner, title, subject, description, taskset, group, final_deadline, review_deadline){
         var x = null;
@@ -44,13 +45,35 @@ class Exams extends Array{
         }
         console.log("Exams length : " + this.length);
     }
+
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
     }
+    filterByOwnerId(ownerId) {
+        return this.filter(obj => obj.owner.id === ownerId);
+    }
+    filterByAssignedId(assignedId) {
+        let exams = [];
+        let currentExam;
+        let endInnerCycle = false;
+        //Take an exam
+        for (let i = 0; i < this.length; i++) {
+            currentExam = this[i];
+            //Cycle through all members of group to which exam was assigned
+            for (let j = 0; j < currentExam.group.members.length && endInnerCycle === false; j++) {
+                if (currentExam.group.members[j].id === assignedId) {
+                    exams.push(currentExam);
+                    endInnerCycle = true;
+                }
+            }
+        }
+        return exams;
+    }
     filterByTitle(title){
         return this.filter(obj => obj.title === title);
     }
+    
     //GET METHODS
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
@@ -58,6 +81,7 @@ class Exams extends Array{
     getExamById(id){
         return this.find(obj => obj.id === id);
     }
+    
     //DELETE METHODS
     deleteByTitleAndOwner(title, owner){
         var index = this.indexOf(this.find(obj => (obj.title === title && obj.owner === owner)));

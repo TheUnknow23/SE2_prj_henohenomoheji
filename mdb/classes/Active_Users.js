@@ -20,44 +20,45 @@ class Active_User {
 class Active_Users extends Array {
 	
 	//ADD METHOD
-	add(user) {
-		console.log("got user -> " + user);
-		var x = null;
-		if (this.length === 0) {
-			x = new Active_User(user);
-		}
-		else {
-			if (this.find(obj => obj.user.email === user.email) === undefined) {
-				x = new Active_User(user);
-			}
-			if (x !== null) {
-				this.push(x);
-			}
-		}
-		console.log("Active users length : " + this.length);
-	}
+    add(user) {
+        console.log("got user -> " + user);
+        var x = null;
+        if (this.length === 0) {
+                x = new Active_User(user);
+        } else {
+            if (this.find(obj => obj.user.email === user.email) === undefined) {
+                x = new Active_User(user);
+            }
+        } if (x !== null) {
+            this.push(x);
+        }
+        console.log("Active users length : " + this.length);
+    }
 
     //GET METHODS
+    getAll() {
+        return this;
+    }
     getTokenByUser(user){
-        let res = this[this.indexOf(this.find(obj => obj.user.email === user.email))];
-        if (res !== undefined) {
-            return res.token;
+        let userFound = this.find(obj => obj.user.email === user.email);
+        if (userFound !== undefined) {
+            return this[this.indexOf(userFound)].token;
         } else {
             return null;
         }
     }
     getTokenByUserId(id) {
-        let res = this[this.indexOf(this.find(obj => obj.user.id === id))];
-        if (res !== undefined) {
-            return res.token;
+        let userFound = this.find(obj => obj.user.id === id);
+        if (userFound !== undefined) {
+            return this[this.indexOf(userFound)].token;
         } else {
             return null;
         }
     }
     getUserByToken(token){
-        let res = this[this.indexOf(this.find(obj => obj.token === token))];
-        if (res !== undefined) {
-            return res.user;
+        let tokenFound = this.find(obj => obj.token === token);
+        if (tokenFound !== undefined) {
+            return this[this.indexOf(tokenFound)].user;
         } else {
             return null;
         }

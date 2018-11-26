@@ -29,12 +29,13 @@ console.log("\x1b[32mGROUPS _> \x1b[0m");console.log("," + groups);console.log("
 active_users.add(users.getUserById(0));
 active_users.add(users.getUserById(2));
 
-//default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
+//default exams | input schema: (owner, title, subject, description, taskset[], group, final_deadline, review_deadline)
 exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], tasks[2]], groups[0], "12/12/12 12:12", "12/12/12 12:21");
+exams.add(users[0], "Banana exam", "Study of Bananas", "A lot of bananas", [tasks[1], tasks[2]], groups[1], "12/12/12 12:12", "12/12/12 12:21");
 console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
-exam_submissions.add(exams[0], users[2], ["opt3", "opt2"], "on hold");
+exam_submissions.add(exams[0], users.getUserById(2), ["opt3", "opt2"], "on hold");
 console.log("EXAM_SUBMISSIONS _>");console.log(exam_submissions);console.log("\n###################\n");
 
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])

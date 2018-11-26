@@ -138,6 +138,11 @@ paths:
       
       parameters:
         - $ref: '#/parameters/User_id_in_path'
+        - in: query
+          name: selection
+          schema:
+            type: string
+          description: Assumes values "created" or "assigned"
       responses:
                 '200':
                         description: OK

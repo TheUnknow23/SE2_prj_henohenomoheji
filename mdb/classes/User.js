@@ -32,6 +32,8 @@ class Users extends Array{
             return 0;
         }
         
+        console.log("Users length : " + this.length);
+
         //First user
         if(this.length === 0){
             x = new User(0, name, surname, email, password, type);
@@ -45,9 +47,8 @@ class Users extends Array{
             this.push(x);
             return 1;
         } else {
-            return 0;
+            return -1;
         }
-        console.log("Users length : " + this.length);
     }
 
     //FILTER METHODS
