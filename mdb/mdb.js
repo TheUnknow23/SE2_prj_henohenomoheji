@@ -26,7 +26,7 @@ groups.add(users[0], "group2", "desc2", [users[1], users[2], users[3]]);
 console.log("\x1b[32mGROUPS _> \x1b[0m");console.log("," + groups);console.log("\n###################\n");
 
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
-exams.add(users[1], "cool title", "cool subject", "description", [tasks[1], tasks[2]], groups[0], "12/12/12 12:12", "12/12/12 12:21");
+exams.add(users[1], "cool title", "cool subject", "description", [{"id":tasks[0].id, "text": tasks[0].title}, {"id":tasks[2].id, "text": tasks[2].title}], groups[0], "12/12/12 12:12", "12/12/12 12:21");
 console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
@@ -43,6 +43,8 @@ if(users.getUserByEmail(email).password === password){
     active_users.add(users.getUserByEmail(email));
 }
 console.log("ACTIVE_USERS _>");console.log(active_users);console.log("\n###################\n");
+
+console.log(exam_submissions[0].ref_exam.taskset);//access the taskset array of an exam
 
 //------------------------------------------
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;
