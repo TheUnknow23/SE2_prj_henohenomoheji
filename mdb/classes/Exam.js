@@ -42,7 +42,8 @@ class Exams extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Exams length : " + this.length);
+        console.log("last exams id : " + this[this.length-1].id);
+        return this[this.length-1].id;
     }
     //FILTER METHODS
     filterByOwner(owner){

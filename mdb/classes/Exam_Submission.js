@@ -29,7 +29,8 @@ class Exam_Submissions extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Submissions length : " + this.length);
+        console.log("last submission id : " + this[this.length-1].id);
+        return this[this.length-1].id;
     }
     //FILTER METHODS
     filterByExam(exam){
