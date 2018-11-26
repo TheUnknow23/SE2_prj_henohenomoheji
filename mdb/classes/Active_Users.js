@@ -36,12 +36,15 @@ class Active_Users extends Array {
                 if (x !== null)
                 {
                         this.push(x);
+
                         //se ии stato inserito corettamente ritorna token
                         return x.token;
                 }
                 console.log("Active users length : " + this.length);
                 //se non ии stato inserito ritorna null
                 return null;
+
+
         }
         //GET METHODS
         getTokenByUser(user) {

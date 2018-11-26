@@ -36,7 +36,8 @@ class Groups extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Groups length : " + this.length);
+        console.log("last group id : " + this[this.length-1].id);
+        return this[this.length-1].id;
     }
     //FILTER METHODS
     filterByOwner(owner){

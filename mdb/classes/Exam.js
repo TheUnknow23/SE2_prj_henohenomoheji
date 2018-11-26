@@ -49,7 +49,9 @@ class Exams extends Array {
                         this.push(x);
                 }
                 //console.log("Exams add : " + x.toString());
-                return x.id;
+                //console.log("last exams id : " + this[this.length - 1].id);
+                return this[this.length - 1].id;
+
         }
         //FILTER METHODS
         filterByOwner(owner) {
@@ -63,14 +65,14 @@ class Exams extends Array {
                 //check su ogni esame
                 let arrayOfExam = this.filter(function (singleExam) {
                         let exist = false;
-                        
-                        //se esame ha uno gruppo e tale gruppo non ¨¨ vuoto
+
+                        //se esame ha uno gruppo e tale gruppo non ¡§¡§ vuoto
                         if (singleExam.group !== undefined && singleExam.group.members !== undefined)
                         {
-                               
+
                                 for (let j = 0; j < singleExam.group.members.length; j++)
                                 {
-                                         //se utente attuale appartiene a gruppo di quella esame
+                                        //se utente attuale appartiene a gruppo di quella esame
                                         if (singleExam.group.members[j].id === user_id)
                                         {
                                                 exist = true;

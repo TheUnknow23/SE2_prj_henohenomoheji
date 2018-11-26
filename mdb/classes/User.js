@@ -36,7 +36,8 @@ class Users extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("Users length : " + this.length);
+        console.log("last user id : " + this[this.length-1].id);
+        return this[this.length-1].id;
     }
     //FILTER METHODS
     filterByName(name){
