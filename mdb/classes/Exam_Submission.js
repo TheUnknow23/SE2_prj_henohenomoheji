@@ -31,7 +31,7 @@ class Exam_Submissions extends Array{
             this.push(x);
         }
         //console.log("Submissions length : " + this.length);
-        return this[this.length-1].id;
+        return this[this.length-1];
     }
     //FILTER METHODS
     filterByExam(exam){

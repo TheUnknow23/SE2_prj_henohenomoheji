@@ -37,6 +37,13 @@ class Exam_Peer_Reviews extends Array{
     filterByExam(exam){
         return this.filter(obj => obj.submission.ref_exam.id === exam.id);
     }
+    filterPeerReviewBySubmission(submission){
+        console.log("SERACHING THE FOLLOWING SUBMISSION");
+        console.log(submission);
+        var rev = this.filter(obj => obj.submission === submission);
+        console.log("FOUND THIS");console.log(rev);
+        return this.filter(obj => obj.submission === submission);
+    }
     //GET METHODS
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
