@@ -47,15 +47,15 @@ function insert_exam_submission(token, exam_submission){
                                                 console.log("HE IS IN THE GROUP");
                                                 if(!mdb.exam_submissions.hasSubmission(ref_exam, user)){//se non ha già submittato per l'esame
                                                         console.log("HE HASN'T SUBMITTED YET");
-                                                        var id = mdb.exam_submissions.add(ref_exam, user, exam_submission.asnwers, exam_submission.status);
+                                                        var id = mdb.exam_submissions.add(ref_exam, user, exam_submission.answers, exam_submission.status);
                                                         //after I add the exam submission I serch for a suitable reviewer
                                                         do{
                                                                 var r_member = ref_exam.group.getRandomMember(user);
                                                                 console.log("..");
                                                         }while(mdb.exam_peer_reviews.hasReview(ref_exam,r_member))
-                                                        mdb.exam_peer_reviews.add(r_member, ref_exam, undefined);
+                                                        mdb.exam_peer_reviews.add(r_member, id, "");
                                                         console.log("ASSIGNED THE FOLLOWING REVIEW");console.log(mdb.exam_peer_reviews[mdb.exam_peer_reviews.length-1]);
-                                                        return id;
+                                                        return id.id;
                                                 }else{
                                                         console.log("HE ALREADY SUBMITTED AN ANSWER");
                                                 }
@@ -150,13 +150,27 @@ router.put('/:id/', function(req, res){
 });
 
 function exam_submission_peer_review_list(token, id){
-        return null;
+        var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
+        if(user !== null){//controllo che l'utente sia loggato
+                console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
+                var ref_sub = mdb.exam_submissions.getExamSubmissionById(id);
+                if(ref_sub !== undefined){//se esiste la submission
+                        console.log("SUBMISSION EXISTS");
+                        if(ref_sub.submitter === user){//se è submitter della submission
+                                console.log("USER IS SUBMITTER");
+                                return mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub);
+                        }else if(ref_sub.ref_exam.owner === user){
+                                console.log("USER IS OWNER");
+                                return mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub);
+                        }
+                }
+        }
+        return "error null";
 }
 
 router.get('/:id/exam_peer_reviews', function(req, res){
         console.log("GET /:id/exam_peer_reviews -> id : " + req.params.id + " | token : " + req.query.token);
-        //res.send(exam_submission_peer_review_list(req.query.token, req.params.id));
-        res.send();
+        res.send(exam_submission_peer_review_list(req.query.token, req.params.id));
 });
 
 function insert_exam_peer_review(token, id, exam_peer_review){
@@ -165,7 +179,7 @@ function insert_exam_peer_review(token, id, exam_peer_review){
 
 router.post('/:id/exam_peer_reviews', function(req, res){
         console.log("POST /:id/exam_peer_reviews -> id : " + req.params.id + " | token : " + req.query.token + "\npayload\n");
-        console.log(req.body.exam_peer_review);
+        console.log(req.body);
         //res.send(insert_exam_peer_review(req.query.token, req.params.id, req.body.exam_peer_review));
         res.send();
 });
