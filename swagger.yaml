@@ -463,26 +463,7 @@ paths:
                 $ref: '#/responses/401_unauthorized'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-  '/exam_submissions?toreview=true':
-    get:
-      summary: Exam submissions to review
-      description: get the list of the submissions to review(task set won't contain solutions)
-      tags:
-        - Exam_submissions_resource
-      security:
-         - Api_key_student: []     #solo lo studente
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/Exam_submissions'
-          
-        '401':
-                $ref: '#/responses/401_unauthorized'
-        '404':
-                $ref: '#/responses/404_not_found'
-        '500':
-                $ref: '#/responses/500_internal_server_error'
+ 
   '/exam_submissions/{exam_submission_id}':  
     get:  
       summary: access a specific answer
@@ -830,7 +811,7 @@ definitions:
       task_set:
         type: array
         items:
-          $ref: '#/definitions/Task'
+          $ref: '#/definitions/Task_in_exam'
       group:
         $ref: '#/definitions/Group'
       final_deadline:
@@ -874,6 +855,16 @@ definitions:
         type: array
         items: 
                 $ref: '#/definitions/Task'
+                
+  Task_in_exam:
+         type: object
+         properties:
+                task_id: #primary key
+                       type: integer
+                description:
+                       type: string
+         
+                
 ###oggetto group
   Group:
     type: object
@@ -1363,4 +1354,4 @@ securityDefinitions:
         Api_key_teacher:
                 type: apiKey
                 in: query
-                name: token
+                name: tokent
