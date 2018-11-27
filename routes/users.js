@@ -124,9 +124,11 @@ router.post('/', function(req, res) {
 	
 	let postBody = req.body;
 	console.log("NAME: " + postBody.name);
-	
-	if (routerPostUser(postBody) === 1) {
+	let result = routerPostUser(postBody);
+	if (result === 1) {
 		res.sendStatus(201);
+	} else {
+		res.send(result);
 	}
 	//Other stati determined automatically I guess
 });
