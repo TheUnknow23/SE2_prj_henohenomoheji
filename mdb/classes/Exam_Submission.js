@@ -35,7 +35,7 @@ class Exam_Submissions extends Array{
     }
     //FILTER METHODS
     filterByExam(exam){
-        return this.find(obj => obj.ref_exam.id === exam.id);
+        return this.filter(obj => obj.ref_exam.id === exam.id);
     }
     filterBySubmitter(submitter){
         return this.filter(obj => obj.submitter.email === submitter.email);
