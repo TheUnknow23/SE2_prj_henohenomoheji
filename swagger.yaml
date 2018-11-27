@@ -534,30 +534,7 @@ paths:
 
         
           
-    post:
-      summary: submit a review to an answer
-      description: submit a review to an answer
-      tags:
-        - Exam_submissions_resource
-      security:
-         - Api_key_student: []     #solo lo studente
-      parameters:
-        - $ref: '#/parameters/Exam_submission_id_in_path'
-        - $ref: '#/parameters/Exam_peer_review_in_post'
-      responses:
-        '201':
-                description: Created
-                schema:
-                        type: integer
-                        description: the new exam peer review's id
-        '204':
-                $ref: '#/responses/204_no_content'
-        '400':
-                $ref: '#/responses/400_bad_request'
-        '401':
-                $ref: '#/responses/401_unauthorized'
-        '500':
-                $ref: '#/responses/500_internal_server_error'
+
                 
 
           
@@ -693,7 +670,29 @@ paths:
         '500':
                 $ref: '#/responses/500_internal_server_error'
 
-        
+    post:
+      summary: submit a review to an answer
+      description: submit a review to an answer
+      tags:
+        - Exam_peer_reviews_resource
+      security:
+         - Api_key_student: []     #solo lo studente
+      parameters:
+        - $ref: '#/parameters/Exam_peer_review_in_post'
+      responses:
+        '201':
+                description: Created
+                schema:
+                        type: integer
+                        description: the new exam peer review's id
+        '204':
+                $ref: '#/responses/204_no_content'
+        '400':
+                $ref: '#/responses/400_bad_request'
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
           
   '/exam_peer_reviews/{exam_peer_review_id}':
     get:
@@ -1046,10 +1045,13 @@ definitions:
   Exam_peer_review_for_post:
     type: object
     properties:
+      exam_submission_id:
+         type: integer
       review:
         type: array
         items:
           type: string
+
   Group_for_post:
     type: object
     properties:
@@ -1247,6 +1249,7 @@ parameters:
         schema:
                 $ref: '#/definitions/Exam_peer_review_for_post'
                 required:
+                        - exam_submission_id
                         - review  
                         
   Exam_peer_review_in_put:
@@ -1255,8 +1258,7 @@ parameters:
         in: body
         schema:
                 $ref: '#/definitions/Exam_peer_review_for_put'
-                required:
-                        - exam_peer_review_id
+
 
   Exam_peer_review_id_in_path:
     name: exam_peer_review_id
@@ -1264,6 +1266,7 @@ parameters:
     in: path
     type: integer
     required: true
+    
 
 
   Exam_assessment_post:
@@ -1358,4 +1361,4 @@ securityDefinitions:
         Api_key_teacher:
                 type: apiKey
                 in: query
-                name: tokent
+                name: token
