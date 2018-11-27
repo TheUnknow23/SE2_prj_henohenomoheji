@@ -269,110 +269,116 @@ function putExam(token, putBody, exam_id) {
         else
         {
 
-                let exam =  mdb.exams.getExamById(parseInt(exam_id));
-                 //se non esiste esame con tale id
-                if(exam === undefined){
+                let exam = mdb.exams.getExamById(parseInt(exam_id));
+                //se non esiste esame con tale id
+                if (exam === undefined)
+                {
 
                         result = result404;
                 }
-
-
-                //get parametri
-                let title = putBody.title;
-                let description = putBody.description;
-                //get array di taskInExam
-                let tasks_ids = putBody.tasks_ids;
-                let taskset = [];
-                //se tasks_ids non è vuoto
-                if (tasks_ids !== "")
+                else
                 {
-                        //se tasks_ids non è un array, trasforma in array
-                        if (tasks_ids.length === undefined)
+
+                        //get parametri
+                        let title = putBody.title;
+                        let description = putBody.description;
+                        //get array di taskInExam
+                        let tasks_ids = putBody.tasks_ids;
+                        let taskset = [];
+                        //se tasks_ids non è vuoto
+                        if (tasks_ids !== "")
                         {
-                                tasks_ids = [tasks_ids];
-                        }
-                        for (let i = 0; i < tasks_ids.length; i++)
-                        {
-                                let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
-                                if (singleTask !== undefined)
+                                //se tasks_ids non è un array, trasforma in array
+                                if (tasks_ids.length === undefined)
                                 {
-                                        taskset.push({"task_id": singleTask.id, "description": singleTask.description});
+                                        tasks_ids = [tasks_ids];
                                 }
+                                for (let i = 0; i < tasks_ids.length; i++)
+                                {
+                                        let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
+                                        if (singleTask !== undefined)
+                                        {
+                                                taskset.push({"task_id": singleTask.id, "description": singleTask.description});
+                                        }
 
+                                }
                         }
-                }
-                //get gruppo
-                let group_id = putBody.group_id;
-                let group = "";
-                //se group non è vuoto
-                if (group_id !== "")
-                {
-                        group = mdb.groups.getGroupById(parseInt(group_id));
-                }
-                //get data con formatta giusta
-                let final_deadline = formatDate(putBody.final_deadline);
-                let review_deadline = formatDate(putBody.review_deadline);
+                        //get gruppo
+                        let group_id = putBody.group_id;
+                        let group = "";
+                        //se group non è vuoto
+                        if (group_id !== "")
+                        {
+                                group = mdb.groups.getGroupById(parseInt(group_id));
+                        }
+                        //get data con formatta giusta
+                        let final_deadline = formatDate(putBody.final_deadline);
+                        let review_deadline = formatDate(putBody.review_deadline);
 
-                //insesce nella tabella
-                let index = mdb.exams.getIndexById(exam_id);
-                mdb.exams[index].update(title, description, taskset, group, final_deadline, review_deadline);
+                        //insesce nella tabella
+                        let index = mdb.exams.getIndexById(parseInt(exam_id));
+                        mdb.exams[index].update(title, description, taskset, group, final_deadline, review_deadline);
 
-                result = {};
-                result.status = 200;
+                        result = {};
+                        result.status = 200;
+                }
         }
-
         return result;
 }
 
 
-function getSubmissionsOfExam(token, exam_id){
+function getSubmissionsOfExam(token, exam_id) {
 
 
-          //il risultato da ritornare
-          let result;
-          //get user
-          let user = mdb.active_users.getUserByToken(token);
-          //if isn't empty
-          if (user === null)
-          {
-                  result = result401;
-          }
+        //il risultato da ritornare
+        let result;
+        //get user
+        let user = mdb.active_users.getUserByToken(token);
+        //if isn't empty
+        if (user === null)
+        {
+                result = result401;
+        }
         //if isn't valid id
         else if (exam_id === undefined || isNaN(parseInt(exam_id)))
         {
 
                 result = result400;
         }
-       
-  
-          else
-          {
-                let exam =  mdb.exams.getExamById(parseInt(exam_id));
-                 //se non esiste esame con tale id
-                if(exam === undefined){
+
+
+        else
+        {
+                let exam = mdb.exams.getExamById(parseInt(exam_id));
+                //se non esiste esame con tale id
+                if (exam === undefined)
+                {
 
                         result = result404;
                 }
-  
-                let body;
-   
-                body = mdb.exam_submissions.filterByExam(exam);
-
-                //se body è un array vuoto, significa 404
-                if (body.length === 0)
-                {
-                          result = result404;
-                }
                 else
                 {
-                          result = {};
-                          result.status = 200;
-                          result.body = body;
+
+                        let body;
+
+                        body = mdb.exam_submissions.filterByExam(exam);
+
+                        //se body è un array vuoto, significa 404
+                        if (body.length === 0)
+                        {
+                                result = result404;
+                        }
+                        else
+                        {
+                                result = {};
+                                result.status = 200;
+                                result.body = body;
+                        }
+
                 }
-  
-          }
-  
-          return result;
+        }
+
+        return result;
 
 
 
