@@ -15,6 +15,7 @@ class Exam_Submission{
         (answer !== "" || answer !== undefined) ? this.answer = answer : console.log("T_T");
         (status !== "" || status !== undefined) ? this.status = status : console.log("T_T"); 
         (evaluation !== "" || evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
+        return this;
     }
 }
 class Exam_Submissions extends Array{
@@ -29,8 +30,8 @@ class Exam_Submissions extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("last submission id : " + this[this.length-1].id);
-        return this[this.length-1].id;
+        //console.log("Submissions length : " + this.length);
+        return this[this.length-1];
     }
     //FILTER METHODS
     filterByExam(exam){
@@ -39,9 +40,15 @@ class Exam_Submissions extends Array{
     filterBySubmitter(submitter){
         return this.filter(obj => obj.submitter.email === submitter.email);
     }
+    filterByExamOwner(owner){
+        return this.filter(obj => obj.ref_exam.owner.email === owner.email);
+    }
     //GET METHODS
     getIndexById(id){
-        return this.indexOf(this.find(obj => obj.id === id));
+        return this.indexOf(this.find(obj => obj.id === parseInt(id)));
+    }
+    getExamSubmissionById(id){
+        return this.find(obj => obj.id === parseInt(id));
     }
     //DELETE METHODS
     deleteById(id){
@@ -49,6 +56,14 @@ class Exam_Submissions extends Array{
         if(index>=0){
             this.splice(index,1);
         }
+    }
+    hasSubmission(exam, user){//checks is there's already an exam_submission for the given exam and user
+        var sub = this.find(obj => (obj.ref_exam === exam && obj.submitter === user));
+        console.log("found the following submission ->");console.log(sub);
+        if(sub !== undefined){
+            return true;
+        }
+        return false;
     }
 }
 module.exports = Exam_Submissions;

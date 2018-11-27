@@ -5,8 +5,8 @@ const exams = require('./../routes/exams.js');
 
 const email = "geno@geno";
 const password = "pwd2";
-const token = mdb.active_users.add(mdb.users.getUserByEmail(email));
-const token2 = mdb.active_users.add(mdb.users.getUserByEmail("guno@geno"));
+const token = mdb.active_users[0].token;
+const token2 = mdb.active_users[3].token;
 
 
 //dati giusta
@@ -24,7 +24,7 @@ test("validate token for get a exam list ", function () {
         expect(exams.getExamlist("dsadawd", "assigned")).toEqual(exams.result401);
 });
 
-test("validate selection value for get a exam  list ", function () {
+test("validate selection value for get a exam  list ", function () {//
 
         expect(exams.getExamlist(token, "sadasd")).toEqual(exams.result400);
 });

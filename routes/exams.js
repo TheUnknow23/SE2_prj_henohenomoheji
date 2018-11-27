@@ -72,7 +72,7 @@ function formatDate(date) {
  * @returns {getExamlist.result|nm$_exam_submission.getExamlist.result|nm$_exam_submission.result400|nm$_exam_submission.result401}
  */
 function getExamlist(token, selection) {
-
+        console.log("TOKEN : " + token + ", SELECTION : " + selection);
         //il risultato da ritornare
         let result;
         //get user
@@ -85,22 +85,23 @@ function getExamlist(token, selection) {
         //if isn't valid selection value
         else if (isValidselection(selection) === 0)
         {
-
+                console.log("SELECTION IS NOT VALID");
                 result = result400;
         }
         else
         {
-
+                console.log("SELECTION IS VALID");
                 let body;
                 if (isValidselection(selection) === 1)
                 {
-                        body = mdb.exams.filterByOwner(user.id);
+                        body = mdb.exams.filterByOwner(user);
                 }
                 else if (isValidselection(selection) === 2)
                 {
-                        body = mdb.exams.filterByAssingned(user.id);
+                        body = mdb.exams.filterByAssingned(user);
                 }
-
+                console.log("FOUND");
+                console.log(body);
                 //se body è un array vuoto, significa 404
                 if (body.length === 0)
                 {

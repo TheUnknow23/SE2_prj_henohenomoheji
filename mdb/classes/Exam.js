@@ -55,13 +55,13 @@ class Exams extends Array {
         }
         //FILTER METHODS
         filterByOwner(owner) {
-                return this.filter(obj => obj.owner === owner);
+                return this.filter(obj => obj.owner.id === owner.id);
         }
         filterByTitle(title) {
                 return this.filter(obj => obj.title === title);
         }
         //get all assingned exams by user id
-        filterByAssingned(user_id) {
+        filterByAssingned(user) {
                 //check su ogni esame
                 let arrayOfExam = this.filter(function (singleExam) {
                         let exist = false;
@@ -73,7 +73,7 @@ class Exams extends Array {
                                 for (let j = 0; j < singleExam.group.members.length; j++)
                                 {
                                         //se utente attuale appartiene a gruppo di quella esame
-                                        if (singleExam.group.members[j].id === user_id)
+                                        if (singleExam.group.members[j].id === user.id)
                                         {
                                                 exist = true;
                                         }
