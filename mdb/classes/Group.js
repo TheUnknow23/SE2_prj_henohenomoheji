@@ -44,7 +44,7 @@ class Groups extends Array{
     //UPDATE METHOD
     updateById(id, name, description, members){
         var group = this.getGroupById(id);
-        if (group !== null){
+        if (group !== null&&group!==undefined){
             group.update(name, description, members);
             return 200;
         } else{

@@ -11,9 +11,7 @@ const putSchema = require('./../schemas/groups_put_schema.json');
 
 // GET on /groups
 function getGroups(token){
-    console.log(mdb.active_users.getUserByToken(token));
     const requester = mdb.active_users.getUserByToken(token);
-    console.log(requester);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         return mdb.groups.getAll();
     } else {
@@ -26,7 +24,8 @@ function getGroup(token, id){
     let requester = mdb.active_users.getUserByToken(token);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         let group = mdb.groups.getGroupById(id);
-        if (group !== null){
+        console.log(group);
+        if (group !== null&&group !==undefined){
             return group;
         } else {
             return 'The specified resource doesn\'t exist'
@@ -37,9 +36,10 @@ function getGroup(token, id){
 }
 
 // POST on /groups
-function createGroup (token, body){
+function createGroup (body){
+    console.log(body);
     if(ajv.validate(postSchema, body)) {
-        if (mdb.groups.add(mdb.active_users.getUserByToken(token), body.name, body.description, body.members)) {
+        if (mdb.groups.add(mdb.active_users.getUserByToken(body.token), body.name, body.description, body.members)) {
             return 201;
         } else {
             return 400;
@@ -68,11 +68,12 @@ router.get('/',function(req, res) {
 
 router.post('/',function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(createGroup(req.body.token, req.body));
+    res.sendStatus(createGroup(req.body));
 });
 
 router.get('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
+    console.log(req.query);
     res.send(JSON.stringify(getGroup(req.query.token, req.params.id), null, 3));
 });
 
