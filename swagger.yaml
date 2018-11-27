@@ -802,7 +802,12 @@ definitions:
       id:  #primary key
         type: integer 
       owner: #foreign key
-        type: integer
+        type: object
+        properties:
+          id:
+            type: integer
+          email:
+            type: string
       title:
         type: string
       description:
@@ -831,10 +836,15 @@ definitions:
   Task:
     type: object
     properties:
-      task_id: #primary key
+      id: #primary key
         type: integer
-      owner_id: #foreign key
-        type: integer
+      owner: #foreign key
+        type: object
+        properties:
+          id:
+            type: integer
+          email:
+            type: string
       task_type:
         type: string
       subject:
@@ -1192,7 +1202,13 @@ parameters:
         in: body
         schema:
                 $ref: '#/definitions/Task_for_post'
-                        
+                required:
+                        - task_type
+                        - subject
+                        - title
+                        - description
+                        - options
+                        - solutions                        
   Task_id_in_path:
     name: task_id
     description: id task
