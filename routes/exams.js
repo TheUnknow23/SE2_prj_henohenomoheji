@@ -31,7 +31,7 @@ function isValidselection(selection) {
  */
 function isValidInput(body) {
         let valid = true;
-        
+
         //controlla i dati sia definito e non sia vuoto
         if (body.title === undefined || body.title === "" || body.description === undefined || body.description === "" || body.tasks_ids === undefined || body.group_id === undefined || body.final_deadline === undefined || body.final_deadline === "" || body.review_deadline === undefined || body.review_deadline === "")
         {
@@ -152,6 +152,11 @@ function postExam(token, postBody) {
                 //se tasks_ids non è vuoto
                 if (tasks_ids !== "")
                 {
+                        //se tasks_ids non è un array, trasforma in array
+                        if (tasks_ids.length === undefined)
+                        {
+                                tasks_ids = [tasks_ids];
+                        }
                         for (let i = 0; i < tasks_ids.length; i++)
                         {
                                 let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
@@ -173,10 +178,10 @@ function postExam(token, postBody) {
                 //get data con formatta giusta
                 let final_deadline = formatDate(postBody.final_deadline);
                 let review_deadline = formatDate(postBody.review_deadline);
-                
+
                 //insesce nella tabella
                 let body = mdb.exams.add(user.id, title, description, taskset, group, final_deadline, review_deadline);
-                
+
                 result = {};
                 result.status = 201;
                 result.body = body;
@@ -279,6 +284,11 @@ function putExam(token, putBody, exam_id) {
                 //se tasks_ids non è vuoto
                 if (tasks_ids !== "")
                 {
+                        //se tasks_ids non è un array, trasforma in array
+                        if (tasks_ids.length === undefined)
+                        {
+                                tasks_ids = [tasks_ids];
+                        }
                         for (let i = 0; i < tasks_ids.length; i++)
                         {
                                 let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
@@ -291,7 +301,7 @@ function putExam(token, putBody, exam_id) {
                 }
                 //get gruppo
                 let group_id = putBody.group_id;
-                let group="";
+                let group = "";
                 //se group non è vuoto
                 if (group_id !== "")
                 {
@@ -300,10 +310,10 @@ function putExam(token, putBody, exam_id) {
                 //get data con formatta giusta
                 let final_deadline = formatDate(putBody.final_deadline);
                 let review_deadline = formatDate(putBody.review_deadline);
-                
+
                 //insesce nella tabella
                 mdb.exams[exam_id].update(title, description, taskset, group, final_deadline, review_deadline);
-                
+
                 result = {};
                 result.status = 200;
         }
