@@ -89,7 +89,7 @@ function routerGetUsersExamSubmissions(token, id) {
 }
 
 // /users POST
-function routerPostUser(postBody) {
+function routerPostUsers(postBody) {
 	
 	let validate = ajv.compile(userInputSchema);
 	
@@ -123,8 +123,8 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
 	
 	let postBody = req.body;
-	console.log("NAME: " + postBody.name);
-	let result = routerPostUser(postBody);
+
+	let result = routerPostUsers(postBody);
 	if (result === 1) {
 		res.sendStatus(201);
 	} else {
@@ -174,3 +174,8 @@ router.get('/:user_id/exam_submissions', function(req, res) {
 
 
 module.exports = router;
+module.exports.routerGetUsers = routerGetUsers;
+module.exports.routerGetUserById = routerGetUserById;
+module.exports.routerGetUsersExams = routerGetUsersExams;
+module.exports.routerGetUsersExamSubmissions = routerGetUsersExamSubmissions;
+module.exports.routerPostUsers = routerPostUsers;
