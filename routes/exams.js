@@ -322,6 +322,59 @@ function putExam(token, putBody, exam_id) {
 }
 
 
+function getSubmissionsOfExam(token, exam_id){
+
+
+          //il risultato da ritornare
+          let result;
+          //get user
+          let user = mdb.active_users.getUserByToken(token);
+          //if isn't empty
+          if (user === null)
+          {
+                  result = result401;
+          }
+        //if isn't valid id
+        else if (exam_id === undefined || isNaN(parseInt(exam_id)))
+        {
+
+                result = result400;
+        }
+       
+  
+          else
+          {
+                let exam =  mdb.exams.getExamById(parseInt(exam_id));
+                 //se non esiste esame con tale id
+                if(exam === undefined){
+
+                        result = result404;
+                }
+  
+                let body;
+   
+                body = mdb.exam_submissions.filterByExam(exam);
+
+                //se body è un array vuoto, significa 404
+                if (body.length === 0)
+                {
+                          result = result404;
+                }
+                else
+                {
+                          result = {};
+                          result.status = 200;
+                          result.body = body;
+                }
+  
+          }
+  
+          return result;
+
+
+
+}
+
 
 router.get('/', function (req, res) {
 
@@ -367,6 +420,18 @@ router.put('/:id', function (req, res) {
         res.sendStatus(result.status);
 });
 
+
+router.get('/:id/exam_submissions', function (req, res) {
+
+        //get parametri necessari
+        let id = req.params["id"];
+        let token = req.query.token;
+        let result = getSubmissionsOfExam(token, id);
+        //set codice di stato 
+        res.status(result.status);
+        res.json(result.body);
+});
+
 module.exports.router = router;
 module.exports.result400 = result400;
 module.exports.result401 = result401;
@@ -375,3 +440,4 @@ module.exports.getExamlist = getExamlist;
 module.exports.postExam = postExam;
 module.exports.getExam = getExam;
 module.exports.putExam = putExam;
+module.exports.getSubmissionsOfExam = getSubmissionsOfExam;
