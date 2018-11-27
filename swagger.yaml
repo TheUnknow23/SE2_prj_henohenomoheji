@@ -989,6 +989,7 @@ definitions:
         type: string
       tasks_ids:
         type: array
+        description: arrat format "1,2,3,4,5"
         items:
             type: integer
       group_id:
@@ -1014,6 +1015,7 @@ definitions:
         type: string
       options:
         type: array
+        description: arrat format "aaa,bbb,ccc," deve avere almeno 2 elementi
         items: 
           type: string
       solutions:
