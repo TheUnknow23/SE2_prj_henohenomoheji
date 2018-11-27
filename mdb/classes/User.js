@@ -60,8 +60,9 @@ class Users extends Array{
     }
 
     //GET METHODS
-    getAll() {
-        return this;
+    filterAll() {
+        let copy = JSON.parse(JSON.stringify(this));
+        return copy;
     }
     getIndexByEmail(email){
         return this.indexOf(this.find(obj => obj.email === email));

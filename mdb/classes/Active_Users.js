@@ -56,9 +56,9 @@ class Active_Users extends Array {
         }
     }
     getUserByToken(token){
-        let tokenFound = this.find(obj => obj.token === token);
-        if (tokenFound !== undefined) {
-            return this[this.indexOf(tokenFound)].user;
+        let itemFound = this.find(obj => obj.token === token);
+        if (itemFound !== undefined) {
+            return this[this.indexOf(itemFound)].user;
         } else {
             return null;
         }

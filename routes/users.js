@@ -30,7 +30,7 @@ function routerGetUsers(token) {
 	let requester = mdb.active_users.getUserByToken(token);
 	//BETTER USER TYPE DEFINITION REQUIRED
 	if (requester !== null) {
-		let users = mdb.users.getAll();
+		let users = mdb.users.filterAll();
 		for (let i = 0; i < users.length; i++) {
 			users[i].password = undefined;
 		}
@@ -47,16 +47,23 @@ function routerGetUsers(token) {
  */
 function routerGetUserById(token, id) {
 	let requester = mdb.active_users.getUserByToken(token);
+	//console.log("REQUESTER ID: " + requester.id);
 	//There exist a requester
 	if (requester !== null) {
 		let retUser = mdb.users.getUserById(id);
+		//console.log("SPECIFIED USER ID: " + retUser.id);
 		//There exist a returned user
 		if (retUser !== undefined) {
+			console.log('RETUSER: ' + retUser);
+			console.log('REQUESTER: ' + requester);
+			//COPY OF USER TO MODIFY PASSWORD FIELD
+			let responseUser = JSON.parse(JSON.stringify(retUser));
 			//If requesting user is not the same he selected, do not include user.password
-			if (retUser.id !== requester.id) {
-				retUser.password = undefined;
+			console.log("TEST: " + responseUser.id + "=?=" + requester.id);
+			if (responseUser.id !== requester.id) {
+				responseUser.password = undefined;
 			}
-			return retUser;
+			return responseUser;
 		} else {
 			return 'user not found';
 		}
@@ -75,17 +82,22 @@ function routerGetUsersExams(token, id, selection) {
 	let exams = [];
 	let requester = mdb.active_users.getUserByToken(token);
 	if (requester !== null) {
-		if (selection == 'created') {
-			exams = mdb.exams.filterByOwner(mdb.users.getUserById(id));
-		} else if (selection == 'assigned') {
-			exams = mdb.exams.filterByAssignedId(id);
-			//If assigned exams, delete task results in each taskset for
+		let specifiedUser = mdb.users.getUserById(id);
+		if (specifiedUser !== undefined) {
+			if (selection == 'created') {
+				exams = mdb.exams.filterByOwner(mdb.users.getUserById(id));
+			} else if (selection == 'assigned') {
+				exams = mdb.exams.filterByAssignedId(id);
+				//If assigned exams, delete task results in each taskset for
+			} else {
+				return 'Error in reading <selection> parameter'
+			}
+			return exams;
 		} else {
-			return 'Error in reading <selection> parameter'
+			return 'Failed to retrieve exams for user with specified id: ' + id;
 		}
-		return exams;
 	} else {
-		return 'error';
+		return 'requester not logged or not authorized';
 	}
 }
 
@@ -96,11 +108,24 @@ function routerGetUsersExams(token, id, selection) {
  * @param {number} id 
  */
 function routerGetUsersExamSubmissions(token, id) {
+	console.log('TOKEN: ' + token);
 	let submissions = [];
 	let requester = mdb.active_users.getUserByToken(token);
+	//console.log("ID PARAMETER: " + id);
+	//console.log("REQUESTER ID: " + requester.id);
 	if (requester !== null) {
-		submissions = mdb.exam_submissions.filterBySubmitter(mdb.users.getUserById(id));
-		return submissions;
+		let specifiedUser = mdb.users.getUserById(id);
+		if (specifiedUser !== undefined) {
+			//console.log("SPECIFIED USER ID: " + specifiedUser.id);
+			if (specifiedUser.id === requester.id) {
+				submissions = mdb.exam_submissions.filterBySubmitter(mdb.users.getUserById(id));
+				return submissions;
+			} else {
+				return 'You are authorized to see only your exam submissions';
+			}
+		} else {
+			return 'Failed to retrieve exams for user with specified id: ' + id;
+		}
 	} else {
 		return 'requester not logged or not authorized';
 	}
@@ -149,7 +174,7 @@ router.post('/', function(req, res) {
 	if (result === 1) {
 		res.sendStatus(201);
 	} else {
-		res.send(result);
+		res.send(result + ': user probably already registered, try using another email');
 	}
 	//Other stati determined automatically I guess
 });
@@ -159,7 +184,6 @@ router.get('/:user_id', function(req, res) {
 
 	//PARSE INT ON STRING PARAMETER
 	let id = parseInt(req.params.user_id, 10);
-	console.log('ID: ' + id);
 	
 	res.setHeader('Content-Type', 'application/json');
 	//Test call
@@ -183,14 +207,14 @@ router.get('/:user_id/exams', function(req, res) {
 })
 
 router.get('/:user_id/exam_submissions', function(req, res) {
-	let token = req.token;
+	let token = req.query.token;
 	let id = parseInt(req.params.user_id, 10);
 
 	res.setHeader('Content-Type', 'application/json');
 	//test call
-	let data = routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(0), id);
+	let data = routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(2), id);
 	//let data = routerGetUsersExamSubmissions(token, id)
-	res.send(JSON.stringify(routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(0), id), null, 3));
+	res.send(JSON.stringify(data, null, 3));
 })
 
 
