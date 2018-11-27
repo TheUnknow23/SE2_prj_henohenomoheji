@@ -1,33 +1,49 @@
 const express = require('express');
 const router = express.Router();
 const mdb = require ('./../mdb/mdb.js');
+const errors = require('./../errors/generic.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
-
+/**
+ * gets the list of exam_submissions, the user can select a type of exam submissions >
+ * - submitted: submissions made by the user requesting the service
+ * - owned: submissions relative to the owned exams
+ * - toreview(TO FIX): submissions to review
+ * - reviewed(TO DO): submissions that the user already reviewed
+ * @param {string} token of the active user
+ * @param {string} type of selection
+ * @returns {object} array of exam submissions or an error
+ */
 function display_exam_submission_list(token, type){
+	if(token === undefined || type === undefined){
+		return errors.error400;
+	}
 	var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
 	if(user !== null){
 		console.log("THE USER REQUESTING THE SERVICE IS"); console.log(user);
 		if(type === "submitted"){
 			console.log("sending submitted exam submissions");
-			return mdb.exam_submissions.filterBySubmitter(user);
+			return {"status": 200, "body": mdb.exam_submissions.filterBySubmitter(user)};
 		}else if(type === "owned"){
 			console.log("sending submissions of owned exams");
-			return mdb.exam_submissions.filterByExamOwner(user);
+			return {"status": 200, "body": mdb.exam_submissions.filterByExamOwner(user)};
 		}else if(type === "toreview"){
 			console.log("sending submissions to review");
-			return mdb.exam_peer_reviews.filterExamSubmissionByReviewer(user);
+			return {"status": 200, "body": mdb.exam_peer_reviews.filterExamSubmissionByReviewer(user)};
 		}else{
-			return "error null";
+			return errors.error400;
 		}
 	}else{
-		return "error null";
+		return errors.error401;
 	}
 }
 
 router.get('/', function(req, res) {
+	console.log(errors.error400);
 	console.log("GET exam_submissions/ -> token : " + req.query.token + " | select : " + req.query.select + ")");
-	res.send(display_exam_submission_list(req.query.token, req.query.select));
+	var result = display_exam_submission_list(req.query.token, req.query.select);
+	res.status(result.status);
+	res.json(result.body);
 });
 
 function insert_exam_submission(token, exam_submission){

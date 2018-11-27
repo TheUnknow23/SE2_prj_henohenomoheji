@@ -1,5 +1,6 @@
 const es = require('./../routes/exam_submission');
 const mdb = require('./../mdb/mdb');
+const errors = require('./../errors/generic.json');
 test('dummy test', () => {
     console.log("sdsadasdaddadd");
     expect(3).toBe(3);
@@ -26,16 +27,16 @@ test('call display_exam_submission with correct token and id(as reviewer)', () =
 
 //display_exam_submission_list() tests
 test('call display_exam_submission_list with no parameters', () => {
-    expect(es.display_exam_submission_list()).toBe("error null");
+    expect(es.display_exam_submission_list()).toBe(errors.error400);
 });
 test('call display_exam_submission_list with incorrect token', () => {
-    expect(es.display_exam_submission_list("dsdsdsdssdsd", "toreview")).toBe("error null");
+    expect(es.display_exam_submission_list("dsdsdsdssdsd", "toreview")).toBe(errors.error401);
 });
 test('call display_exam_submission_list with incorrect query param', () => {
-    expect(es.display_exam_submission_list(mdb.active_users[3].token, "torevifew")).toBe("error null");
+    expect(es.display_exam_submission_list(mdb.active_users[3].token, "torevifew")).toBe(errors.error400);
 });
 test('call display_exam_submission_list with correct values', () => {
-    expect(es.display_exam_submission_list(mdb.active_users[0].token, "owned")).toEqual(mdb.exam_submissions);
+    expect(es.display_exam_submission_list(mdb.active_users[0].token, "owned").body).toEqual(mdb.exam_submissions);
 });
 
 //insert_exam_submission() tests
