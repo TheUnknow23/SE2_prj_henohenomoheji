@@ -1145,7 +1145,8 @@ parameters:
                 required:
                         - title
                         - description
-                        - taskset
+                        - tasks_ids
+                        - group_id
                         - final_deadline
                         - review_deadline
  
@@ -1155,6 +1156,13 @@ parameters:
         in: body
         schema:
                 $ref: '#/definitions/Exam_for_post'
+                required:
+                        - title
+                        - description
+                        - tasks_ids
+                        - group_id
+                        - final_deadline
+                        - review_deadline
 
     
   Exam_id_in_path:
