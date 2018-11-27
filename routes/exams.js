@@ -94,11 +94,11 @@ function getExamlist(token, selection) {
                 let body;
                 if (isValidselection(selection) === 1)
                 {
-                        body = mdb.exams.filterByOwner(user.id);
+                        body = mdb.exams.filterByOwner(user);
                 }
                 else if (isValidselection(selection) === 2)
                 {
-                        body = mdb.exams.filterByAssingned(user.id);
+                        body = mdb.exams.filterByAssingned(user);
                 }
 
                 //se body è un array vuoto, significa 404
@@ -180,7 +180,7 @@ function postExam(token, postBody) {
                 let review_deadline = formatDate(postBody.review_deadline);
 
                 //insesce nella tabella
-                let body = mdb.exams.add(user.id, title, description, taskset, group, final_deadline, review_deadline);
+                let body = mdb.exams.add({id: user.id, email: user.email}, title, description, taskset, group, final_deadline, review_deadline);
 
                 result = {};
                 result.status = 201;

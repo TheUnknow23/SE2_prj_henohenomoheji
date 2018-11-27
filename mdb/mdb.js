@@ -29,7 +29,7 @@ console.log("\x1b[32mGROUPS _> \x1b[0m");console.log("," + groups);console.log("
 
 let taskInExam1 = {"task_id": tasks[1].id, "description" : tasks[1].description};
 let taskInExam2 = {"task_id": tasks[2].id, "description" : tasks[2].description};
-exams.add(users[1].id, "cool title",  "description", [taskInExam1, taskInExam2], groups[0], "12/12/12 12:12", "12/12/12 12:21");
+exams.add({id: users[1].id,email: users[1].email} , "cool title",  "description", [taskInExam1, taskInExam2], groups[0], "12/12/12 12:12", "12/12/12 12:21");
 console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
