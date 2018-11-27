@@ -12,8 +12,8 @@ var groups = require ('./routes/groups');
 var exam_peer_reviews = require ('./routes/exam_peer_reviews');
 var logout = require ('./routes/logout');
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use('/', index);
 app.use('/users', users);

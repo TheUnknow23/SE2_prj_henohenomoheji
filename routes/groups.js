@@ -1,13 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const mdb = require ('./../mdb/mdb.js');
+const Ajv = require ('ajv');
+const ajv = new Ajv();
+
+const postSchema = require('./../schemas/groups_post_schema.json');
+const putSchema = require('./../schemas/groups_put_schema.json');
 
 /*##### FUNCTION SECTION #####*/
 
 // GET on /groups
-function routerGetGroups(token){
-    let requester = mdb.active_users.getUserByToken(token);
-    if (requester !== null && (requester.type === 'teacher' || requester.type === 'student')){
+function getGroups(token){
+    console.log(mdb.active_users.getUserByToken(token));
+    const requester = mdb.active_users.getUserByToken(token);
+    console.log(requester);
+    if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         return mdb.groups.getAll();
     } else {
         return 'Requester not logged or not authorized'
@@ -15,9 +22,9 @@ function routerGetGroups(token){
 }
 
 // GET on /groups/:group_id
-function routerGetGroup(token, id){
+function getGroup(token, id){
     let requester = mdb.active_users.getUserByToken(token);
-    if (requester !== null && (requester.type === 'teacher' || requester.type === 'student')){
+    if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         let group = mdb.groups.getGroupById(id);
         if (group !== null){
             return group;
@@ -29,35 +36,59 @@ function routerGetGroup(token, id){
     }
 }
 
+// POST on /groups
+function createGroup (token, body){
+    if(ajv.validate(postSchema, body)) {
+        if (mdb.groups.add(mdb.active_users.getUserByToken(token), body.name, body.description, body.members)) {
+            return 201;
+        } else {
+            return 400;
+        }
+    } else {
+        return 400;
+    }
+}
+
+// PUT on /groups/:group_id
+function updateGroup(id, body){
+    if (ajv.validate(putSchema, body)){
+        return mdb.groups.updateById(id, body.name, body.description, body.members);
+    } else {
+        return 400;
+    }
+}
+
 /*##### ROUTES CATCH SECTION #####*/
 
-router.get('/', function(req, res) {
+router.get('/',function(req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.send(JSON.stringify(routerGetGroups(req.body.token), null, 3));
+    console.log(req.query);
+    res.send(JSON.stringify(getGroups(req.query.token), null, 3));
 });
 
-router.post('/', function (req, res) {
+router.post('/',function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    if (mdb.groups.add(mdb.active_users.getUserByToken(req.body.token), req.body.name, req.body.description, req.body.members)){
-        res.sendStatus(201);
-    } else {
-        res.sendStatus(400);
-    }
+    res.sendStatus(createGroup(req.body.token, req.body));
 });
 
 router.get('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.send(JSON.stringify(routerGetGroup(req.body.token, req.body.id), null, 3));
+    res.send(JSON.stringify(getGroup(req.query.token, req.params.id), null, 3));
 });
 
 router.put('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(mdb.groups.updateById(req.body.id, req.body.name, req.body.description, req.body.members));
+    res.sendStatus(updateGroup(req.params.id, req.body));
+    //res.sendStatus(mdb.groups.updateById(req.params.id, req.body.name, req.body.description, req.body.members));
 });
 
 router.delete('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(mdb.groups.deleteById(req.body.id));
-})
+    res.sendStatus(mdb.groups.deleteById(req.params.id));
+});
 
 module.exports = router;
+module.exports.getGroups = getGroups;
+module.exports.getGroup = getGroup;
+module.exports.createGroup = createGroup;
+module.exports.updateGroup = updateGroup;
