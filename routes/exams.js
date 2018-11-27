@@ -259,12 +259,7 @@ function putExam(token, putBody, exam_id) {
 
                 result = result400;
         }
-        //se non esiste esame con tale id
-        else if (mdb.exams.getExamById(parseInt(exam_id)) === undefined)
-        {
 
-                result = result404;
-        }
         //check validità di input
         else if (!isValidInput(putBody))
         {
@@ -273,6 +268,13 @@ function putExam(token, putBody, exam_id) {
 
         else
         {
+
+                let exam =  mdb.exams.getExamById(parseInt(exam_id));
+                 //se non esiste esame con tale id
+                if(exam === undefined){
+
+                        result = result404;
+                }
 
 
                 //get parametri
@@ -312,7 +314,8 @@ function putExam(token, putBody, exam_id) {
                 let review_deadline = formatDate(putBody.review_deadline);
 
                 //insesce nella tabella
-                mdb.exams[exam_id].update(title, description, taskset, group, final_deadline, review_deadline);
+                let index = mdb.exams.getIndexById(exam_id);
+                mdb.exams[index].update(title, description, taskset, group, final_deadline, review_deadline);
 
                 result = {};
                 result.status = 200;
