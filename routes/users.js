@@ -21,7 +21,11 @@ function hasEmptyFields(body) {
 	return empty;
 }
 
-// /users GET. As APIs specify, an array of type [User] w/o pwd fields is returned
+
+/**
+ * /users GET. As APIs specify, an array of type [User] w/o pwd fields is returned
+ * @param {string} token used to verify request coming from logged user
+ */
 function routerGetUsers(token) {
 	let requester = mdb.active_users.getUserByToken(token);
 	//BETTER USER TYPE DEFINITION REQUIRED
@@ -36,7 +40,11 @@ function routerGetUsers(token) {
 	}
 }
 
-// /users/:id GET. Gets single user once id specified
+/**
+ * /users/:id GET. Gets single user once id specified. If requested user is same of Id, also password is returned
+ * @param {string} token used to verify request coming from logged user
+ * @param {number} id id of the user to return
+ */
 function routerGetUserById(token, id) {
 	let requester = mdb.active_users.getUserByToken(token);
 	//There exist a requester
@@ -57,7 +65,12 @@ function routerGetUserById(token, id) {
 	}
 }
 
-// /users/:id/exams GET
+/**
+ * /users/:id/exams GET
+ * @param {string} token 
+ * @param {number} id id of the user of which to get the exams
+ * @param {string} selection tyoe of content to return "created" / "assigned"
+ */
 function routerGetUsersExams(token, id, selection) {
 	let exams = [];
 	let requester = mdb.active_users.getUserByToken(token);
@@ -76,7 +89,12 @@ function routerGetUsersExams(token, id, selection) {
 	}
 }
 
-// /users/:id/exam_submissions GET
+
+/**
+ * /users/:id/exam_submissions GET
+ * @param {string} token 
+ * @param {number} id 
+ */
 function routerGetUsersExamSubmissions(token, id) {
 	let submissions = [];
 	let requester = mdb.active_users.getUserByToken(token);
@@ -88,7 +106,10 @@ function routerGetUsersExamSubmissions(token, id) {
 	}
 }
 
-// /users POST
+/**
+ * /users POST. Implements users' subscription
+ * @param {object} postBody 
+ */
 function routerPostUsers(postBody) {
 	
 	let validate = ajv.compile(userInputSchema);
