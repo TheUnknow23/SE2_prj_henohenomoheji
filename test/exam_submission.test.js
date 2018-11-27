@@ -52,7 +52,7 @@ test('call insert_exam_submission with incorrect payload', () => {
 test('call insert_exam_submission with correct values', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","booby"], "status": "on hold"})).toEqual(1);
 });
-//exam_submission_peer_review_list() tests
+//update_exam_submission() tests
 test('call update_exam_submission with no parameters', () => {
     expect(es.update_exam_submission()).toBe("error null");
 });
@@ -77,4 +77,7 @@ test('call exam_submission_peer_review_list with correct values as submitter', (
 });
 test('call exam_submission_peer_review_list with correct values as submitter - 2', () => {
     expect(es.exam_submission_peer_review_list(mdb.active_users[2].token,  1)).toEqual([mdb.exam_peer_reviews[1]]);
+});
+test('call exam_submission_peer_review_list with correct values as group member', () => {
+    expect(es.exam_submission_peer_review_list(mdb.active_users[3].token,  1)).toEqual([mdb.exam_peer_reviews[1]]);
 });

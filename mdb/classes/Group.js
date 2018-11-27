@@ -23,7 +23,7 @@ class Group{
         return reviewer;
     }
     isThere(user){//checks if a user is in the group
-        var member = this.members.find(obj => obj === user);
+        var member = this.members.find(obj => obj.id === user.id);
         if(member !== undefined){
             return true;
         }
