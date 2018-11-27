@@ -25,6 +25,9 @@ class User{
 class Users extends Array{
     //ADD METHOD
     add(name, surname, email, password, type){
+
+        console.log('ADDING USER:' + name + ' ' + surname);
+
         var x = null;
         
         //Abort return 0 if one of the fields is null

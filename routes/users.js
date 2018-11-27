@@ -2,9 +2,24 @@
 const express = require('express');
 const router = express.Router();
 const mdb = require ('./../mdb/mdb.js');
+const ajvClass = require('ajv');
+const ajv = new ajvClass();
 
+var userInputSchema = {"type": "object", "required": ["name", "surname", "email", "password"], "properties": {"name": {"type": "string"}, "surname": {"type": "string"}, "email": {"type": "string"}, "password": {"type": "string"}, "type": {"type": "string"}}};
 
 //Functions
+
+function hasEmptyFields(body) {
+	let empty = false;
+	if (body.name === "" 
+		|| body.surname === "" 
+		|| body.email === "" 
+		|| body.password === "")
+	{
+			empty = true;
+	}
+	return empty;
+}
 
 // /users GET. As APIs specify, an array of type [User] w/o pwd fields is returned
 function routerGetUsers(token) {
@@ -51,6 +66,7 @@ function routerGetUsersExams(token, id, selection) {
 			exams = mdb.exams.filterByOwner(mdb.users.getUserById(id));
 		} else if (selection == 'assigned') {
 			exams = mdb.exams.filterByAssignedId(id);
+			//If assigned exams, delete task results in each taskset for
 		} else {
 			return 'Error in reading <selection> parameter'
 		}
@@ -72,6 +88,24 @@ function routerGetUsersExamSubmissions(token, id) {
 	}
 }
 
+// /users POST
+function routerPostUser(postBody) {
+	
+	let validate = ajv.compile(userInputSchema);
+	
+	if (!validate(postBody) || hasEmptyFields(postBody)) {
+		return '400 Invalid post input'
+	} else {
+		let name = postBody.name;
+		let surname = postBody.surname;
+		let email = postBody.email;
+		let password = postBody.password;
+		let type = postBody.type;
+
+		return mdb.users.add(name, surname, email, password, type);
+	}
+}
+
 
 
 //Verbs calls
@@ -87,13 +121,11 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-	let name = req.name;
-	let surname = req.surname;
-	let email = req.email;
-	let password = req.password;
-	let type = req.type;
-
-	if (mdb.users.add(name, surname, email, password, type) !== -1) {
+	
+	let postBody = req.body;
+	console.log("NAME: " + postBody.name);
+	
+	if (routerPostUser(postBody) === 1) {
 		res.sendStatus(201);
 	}
 	//Other stati determined automatically I guess
@@ -137,7 +169,6 @@ router.get('/:user_id/exam_submissions', function(req, res) {
 	//let data = routerGetUsersExamSubmissions(token, id)
 	res.send(JSON.stringify(routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(0), id), null, 3));
 })
-
 
 
 module.exports = router;
