@@ -62,6 +62,7 @@ class Exams extends Array {
         }
         //get all assingned exams by user id
         filterByAssingned(owner) {
+
                 //check su ogni esame
                 let arrayOfExam = this.filter(function (singleExam) {
                         let exist = false;
