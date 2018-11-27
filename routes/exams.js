@@ -1,16 +1,15 @@
 const express = require('express');
-const ajvClass = require('ajv');
-const ajv = new ajvClass();
 const router = express.Router();
 const mdb = require('./../mdb/mdb.js');
 const result400 = {status: 400, body: {code: 400, message: "Bad Request"}};
 const result401 = {status: 401, body: {code: 401, message: "Unauthorized, missing or invalid API Key"}};
 const result404 = {status: 404, body: {code: 404, message: "Not Found"}};
-var examInputSchema = {"type": "object", "required": ["title", "description", "group_id", "final_deadline", "review_deadline"], "properties": {"title": {"type": "string"}, "description": {"type": "string"}, "group_id": {"type": "string"}, "final_deadline": {"type": "string"}, "review_deadline": {"type": "string"}}};
+
+
 /**
  *  controlla se selection contiene valore giusto
  * @param {type} selection
- * @returns {int} se ®® valido ritorna 1 (created) o 2 (assingned), altrimenti 0
+ * @returns {int} se √® valido ritorna 1 (created) o 2 (assingned), altrimenti 0
  */
 function isValidselection(selection) {
         let valid = 0;
@@ -26,17 +25,41 @@ function isValidselection(selection) {
 }
 
 /**
- * controlla se input di post sia campo vuoto
+ * controlla se input di post e put sia valido
  * @param {type} body
  * @returns {isEmptyOnPostInput.empty|Boolean}
  */
-function isEmptyOnPostInput(body) {
-        let empty = false;
-        if (body.title === "" || body.description === "" || body.final_deadline === "" || body.review_deadline === "")
+function isValidInput(body) {
+        let valid = true;
+        
+        //controlla i dati sia definito e non sia vuoto
+        if (body.title === undefined || body.title === "" || body.description === undefined || body.description === "" || body.tasks_ids === undefined || body.group_id === undefined || body.final_deadline === undefined || body.final_deadline === "" || body.review_deadline === undefined || body.review_deadline === "")
         {
-                empty = true;
+                valid = false;
         }
-        return empty;
+        //controlla se le date sono valide e final_deadline √® almeno un giorno prima di review_deadline
+        else if (isNaN(Date.parse(body.final_deadline)) || isNaN(Date.parse(body.review_deadline)) || (Date.parse(body.final_deadline) + 86400000) > Date.parse(body.review_deadline))
+        {
+                valid = false;
+        }
+
+        return valid;
+
+}
+
+
+/**
+ * formattare la data per essere sicuro di avere formato giusto
+ * @param {type} date
+ * @returns {formatDate.formattedDate|String}
+ */
+function formatDate(date) {
+
+        let milliseconds = Date.parse(date);
+        let data = new Date();
+        data.setTime(milliseconds);
+        let formattedDate = data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate();
+        return formattedDate;
 }
 
 
@@ -78,7 +101,7 @@ function getExamlist(token, selection) {
                         body = mdb.exams.filterByAssingned(user.id);
                 }
 
-                //se body ®® un array vuoto, significa 404
+                //se body √® un array vuoto, significa 404
                 if (body.length === 0)
                 {
                         result = result404;
@@ -112,53 +135,53 @@ function postExam(token, postBody) {
         {
                 result = result401;
         }
+        //check validit√† di input
+        else if (!isValidInput(postBody))
+        {
+                result = result400;
+        }
         else
         {
-                //validare gli attributi necessari
-                let validate = ajv.compile(examInputSchema);
-                //se non ®® valido
-                if (!validate(postBody) || isEmptyOnPostInput(postBody))
-                {
-                        result = result400;
-                }
-                else
-                {
 
-                        //get parametri
-                        let title = postBody.title;
-                        let description = postBody.description;
-                        //get array di taskInExam
-                        let tasks_ids = postBody.tasks_ids;
-                        let taskset = [];
-                        if (tasks_ids !== "")
+                //get parametri
+                let title = postBody.title;
+                let description = postBody.description;
+                //get array di taskInExam
+                let tasks_ids = postBody.tasks_ids;
+                let taskset = [];
+                //se tasks_ids non √® vuoto
+                if (tasks_ids !== "")
+                {
+                        for (let i = 0; i < tasks_ids.length; i++)
                         {
-                                for (let i = 0; i < tasks_ids.length; i++)
+                                let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
+                                if (singleTask !== undefined)
                                 {
-                                        let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
-                                        if (singleTask !== undefined)
-                                        {
-                                                taskset.push({"task_id": singleTask.id, "description": singleTask.description});
-                                        }
-
+                                        taskset.push({"task_id": singleTask.id, "description": singleTask.description});
                                 }
+
                         }
-                        //get gruppo
-                        let group_id = postBody.group_id;
-                        let group;
-                        if (group_id !== "")
-                        {
-                                group = mdb.groups.getGroupById(parseInt(group_id));
-                        }
-                        //get parametri
-                        let final_deadline = postBody.final_deadline;
-                        let review_deadline = postBody.review_deadline;
-                        //insesce nella tabella
-                        let body = mdb.exams.add(user.id, title, description, taskset, group, final_deadline, review_deadline);
-                        result = {};
-                        result.status = 201;
-                        result.body = body;
                 }
+                //get gruppo
+                let group_id = postBody.group_id;
+                let group = "";
+                // se gruppo non √® vuoto
+                if (group_id !== "")
+                {
+                        group = mdb.groups.getGroupById(parseInt(group_id));
+                }
+                //get data con formatta giusta
+                let final_deadline = formatDate(postBody.final_deadline);
+                let review_deadline = formatDate(postBody.review_deadline);
+                
+                //insesce nella tabella
+                let body = mdb.exams.add(user.id, title, description, taskset, group, final_deadline, review_deadline);
+                
+                result = {};
+                result.status = 201;
+                result.body = body;
         }
+
 
         return result;
 }
@@ -190,7 +213,7 @@ function getExam(token, exam_id) {
         {
 
                 let body = mdb.exams.getExamById(parseInt(exam_id));
-                //se body ®® un array vuoto, significa 404
+                //se body √® un oggetto vuoto, significa 404
                 if (body === undefined)
                 {
                         result = result404;
@@ -208,7 +231,7 @@ function getExam(token, exam_id) {
 }
 
 /**
- * update un esame gi®§ esistente
+ * update un esame gi√† esistente
  * @param {type} token
  * @param {type} putBody
  * @param {type} exam_id
@@ -237,18 +260,14 @@ function putExam(token, putBody, exam_id) {
 
                 result = result404;
         }
+        //check validit√† di input
+        else if (!isValidInput(putBody))
+        {
+                result = result400;
+        }
+
         else
         {
-
-                //validare gli attributi necessari
-                let validate = ajv.compile(examInputSchema);
-                //se non ®® valido
-                if (!validate(putBody))
-                {
-                        result = result400;
-                }
-
-
 
 
                 //get parametri
@@ -257,6 +276,7 @@ function putExam(token, putBody, exam_id) {
                 //get array di taskInExam
                 let tasks_ids = putBody.tasks_ids;
                 let taskset = [];
+                //se tasks_ids non √® vuoto
                 if (tasks_ids !== "")
                 {
                         for (let i = 0; i < tasks_ids.length; i++)
@@ -271,16 +291,19 @@ function putExam(token, putBody, exam_id) {
                 }
                 //get gruppo
                 let group_id = putBody.group_id;
-                let group;
+                let group="";
+                //se group non √® vuoto
                 if (group_id !== "")
                 {
                         group = mdb.groups.getGroupById(parseInt(group_id));
                 }
-                //get parametri
-                let final_deadline = putBody.final_deadline;
-                let review_deadline = putBody.review_deadline;
+                //get data con formatta giusta
+                let final_deadline = formatDate(putBody.final_deadline);
+                let review_deadline = formatDate(putBody.review_deadline);
+                
                 //insesce nella tabella
                 mdb.exams[exam_id].update(title, description, taskset, group, final_deadline, review_deadline);
+                
                 result = {};
                 result.status = 200;
         }

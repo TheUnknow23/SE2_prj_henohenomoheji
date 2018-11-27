@@ -22,8 +22,8 @@ class Exam {
         update(title, description, taskset, group, final_deadline, review_deadline) {
                 (title !== "" || title !== undefined) ? this.title = title : console.log("T_T");
                 (description !== "" || description !== undefined) ? this.description = description : console.log("T_T");
-                (taskset !== "" || taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
-                (group !== "" || group !== undefined) ? this.group = group : console.log("T_T");
+                (taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
+                (group !== undefined) ? this.group = group : console.log("T_T");
                 (final_deadline !== "" || final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
                 (review_deadline !== "" || review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
         }
@@ -66,7 +66,7 @@ class Exams extends Array {
                 let arrayOfExam = this.filter(function (singleExam) {
                         let exist = false;
 
-                        //se esame ha uno gruppo e tale gruppo non ¡§¡§ vuoto
+                        //se esame ha uno gruppo e tale gruppo non ï¿½ï¿½ï¿½ï¿½ vuoto
                         if (singleExam.group !== undefined && singleExam.group.members !== undefined)
                         {
 

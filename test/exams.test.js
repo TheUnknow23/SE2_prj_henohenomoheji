@@ -6,13 +6,17 @@ const exams = require('./../routes/exams.js');
 const email = "geno@geno";
 const password = "pwd2";
 const token = mdb.active_users.add(mdb.users.getUserByEmail(email));
+const token2 = mdb.active_users.add(mdb.users.getUserByEmail("guno@geno"));
 
 
-
-
-
-var testDatiForPost = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "11/22", "review_deadline": "11/33"};
-var testDatiForPut = {"title": "geometria", "description": "", "tasks_ids": [1, 2], "group_id": "", "final_deadline": "", "review_deadline": ""};
+//dati giusta
+var testDati1 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
+var testDati2 = {"title": "geometria", "description": "sessione2018", "tasks_ids": "", "group_id": "", "final_deadline": "2018-11-22", "review_deadline": "2018-11-23"};
+//dati errata
+//manca dati description
+var testDati3 = {"title": "analisi", "description": "", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
+//review data errata
+var testDati4 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-25", "review_deadline": "2018-11-25"};
 
 //test for get exam list
 test("validate token for get a exam list ", function () {
@@ -23,6 +27,11 @@ test("validate token for get a exam list ", function () {
 test("validate selection value for get a exam  list ", function () {
 
         expect(exams.getExamlist(token, "sadasd")).toEqual(exams.result400);
+});
+
+test("validate response 404 for get a exam  list ", function () {
+
+        expect(exams.getExamlist(token2, "created")).toEqual(exams.result404);
 });
 
 test("validate response for get a exam  list ", function () {
@@ -49,13 +58,14 @@ test("validate token for post a exam", function () {
 
 test("validate input for post a exam", function () {
 
-        expect(exams.postExam(token, "sds")).toEqual(exams.result400);
-
+        expect(exams.postExam(token, testDati3)).toEqual(exams.result400);
+        expect(exams.postExam(token, testDati4)).toEqual(exams.result400);
+        
 });
 
 test("validate response for post a exam", function () {
 
-        expect(exams.postExam(token, testDatiForPost).body).toBeGreaterThan(0);
+        expect(exams.postExam(token, testDati1).body).toBeGreaterThan(0);
 
 
 });
@@ -91,18 +101,24 @@ test("validate response for get a exam", function () {
 
 //test for put a exam
 test("validate token for put a exam", function () {
-        expect(exams.putExam("dsadawd", testDatiForPut, 1)).toEqual(exams.result401);
+        expect(exams.putExam("dsadawd", testDati2, 1)).toEqual(exams.result401);
 
 });
 
 test("validate exam id for put a exam", function () {
 
-        expect(exams.putExam(token, testDatiForPut, 1999999)).toEqual(exams.result404);
+        expect(exams.putExam(token, testDati2, 1999999)).toEqual(exams.result404);
 });
 
+test("validate input for put a exam", function () {
+
+        expect(exams.putExam(token, testDati3, 0)).toEqual(exams.result400);
+        expect(exams.putExam(token, testDati4, 0)).toEqual(exams.result400);
+        
+});
 
 test("validate response for put a exam", function () {
 
-        expect(exams.putExam(token, testDatiForPut, 0).status).toBe(200);
+        expect(exams.putExam(token, testDati2, 0).status).toBe(200);
 
 });

@@ -1,5 +1,4 @@
-const ajvClass = require('ajv');
-const ajv = new ajvClass();
+
 const mdb = require('./../mdb/mdb.js');
 const exams = require('./../routes/exam_peer_reviews.js');
 
