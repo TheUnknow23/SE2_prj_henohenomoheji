@@ -1,0 +1,6 @@
+
+- Investigate if distinction between Teacher and User calls is necessary
+- Better definition of user.type ['teacher' / 'student' not splendid]
+- Security definition of /users GET, necessary only teacher?
+- Better definition of add/delete fail/success return codes (probably 0/1)
+- Understand how automated response status should be

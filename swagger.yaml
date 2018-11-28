@@ -136,6 +136,11 @@ paths:
       
       parameters:
         - $ref: '#/parameters/User_id_in_path'
+        - in: query
+          name: selection
+          schema:
+            type: string
+          description: Assumes values "created" or "assigned"
       responses:
                 '200':
                         description: OK
@@ -147,7 +152,7 @@ paths:
                         $ref: '#/responses/404_not_found'
                 '500':
                         $ref: '#/responses/500_internal_server_error'
-        
+
   '/users/{user_id}/exam_submissions':
     get:
       summary: get the submissions of a student
@@ -169,6 +174,7 @@ paths:
                         $ref: '#/responses/404_not_found'
                 '500':
                         $ref: '#/responses/500_internal_server_error'
+              
   /logout:
     post:
       summary: user logout
@@ -299,7 +305,28 @@ paths:
                 $ref: '#/responses/404_not_found'
         '500':
                 $ref: '#/responses/500_internal_server_error'
-
+                
+  '/exams/{exam_id}/exam_peer_reviews':
+    get:
+      summary: access the reviews of a specific exam
+      description: get the list of reviews of an exam
+      tags:
+        - Exams_resource
+      security:
+        - Api_key_teacher: []  #solo insegnante
+      parameters:
+        - $ref: '#/parameters/Exam_id_in_path'
+      responses:
+        '200':
+                description: OK
+                schema:
+                        $ref: '#/definitions/Exam_peer_reviews' 
+        '401':
+                $ref: '#/responses/401_unauthorized'
+        '404':
+                $ref: '#/responses/404_not_found'
+        '500':
+                $ref: '#/responses/500_internal_server_error'
           
   /tasks:
     get:
@@ -307,8 +334,6 @@ paths:
       description: As a teacher you get the list of created tasks
       tags:
         - Tasks_resource
-      security:
-        - Api_key_teacher: []  #solo insegnante può creare
       responses:
         '200':
           description: OK

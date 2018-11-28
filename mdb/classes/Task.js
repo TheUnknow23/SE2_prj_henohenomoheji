@@ -39,7 +39,7 @@ class Tasks extends Array{
         if(x !== null){
             this.push(x);
         }
-        console.log("last task id : " + this[this.length-1].id);
+        //console.log("last task id : " + this[this.length-1].id);
         return this[this.length-1].id;
     }
     //FILTER METHODS

@@ -14,12 +14,31 @@ class Group{
         (description !== "" || description !== undefined) ? this.description = description : console.log("T_T"); 
         (members !== "" || members !== undefined) ? this.members = members : console.log("T_T"); 
     }
-    getRandomMember(){
-        return this.members[Math.floor(Math.random()*this.members.length)];
+    getRandomMember(user){
+        do{
+            var reviewer = this.members[Math.floor(Math.random()*this.members.length)];
+            console.log(".");
+        }while(reviewer === user);
+        console.log("selected -> " + reviewer.name);
+        return reviewer;
+    }
+    isThere(user){//checks if a user is in the group
+        var member = this.members.find(obj => obj.id === user.id);
+        if(member !== undefined){
+            return true;
+        }
+        return false;
     }
     toString(){
         return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
                ", DESCRIPTION : " + this.description + "\nMEMBERS -> " + this.members;
+    }
+    getMembersId(){
+        let members_ids = [];
+        for (let i=0; i<this.members.length; i++){
+            members_ids[i]=this.members[i].id;
+        }
+        return members_ids;
     }
 }
 class Groups extends Array{
@@ -35,15 +54,31 @@ class Groups extends Array{
         }
         if(x !== null){
             this.push(x);
+            console.log("Groups length : " + this.length);
+            return true;
         }
-        console.log("last group id : " + this[this.length-1].id);
+        //console.log("last group id : " + this[this.length-1].id);
         return this[this.length-1].id;
+    }
+
+    //UPDATE METHOD
+    updateById(id, name, description, members){
+        var group = this.getGroupById(id);
+        if (group !== null&&group!==undefined){
+            group.update(name, description, members);
+            return 200;
+        } else{
+            return 400;
+        }
     }
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
     }
     //GET METHODS
+    getAll(){
+        return this;
+    }
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
@@ -64,6 +99,9 @@ class Groups extends Array{
         var index = this.indexOf(this.find(obj => obj.id === id));
         if(index>=0){
             this.splice(index,1);
+            return 200;
+        } else {
+            return 404;
         }
     }
 }

@@ -5,8 +5,8 @@ const exams = require('./../routes/exams.js');
 
 const email = "geno@geno";
 const password = "pwd2";
-const token = mdb.active_users.add(mdb.users.getUserByEmail(email));
-const token2 = mdb.active_users.add(mdb.users.getUserByEmail("guno@geno"));
+const token = mdb.active_users[0].token;
+const token2 = mdb.active_users[3].token;
 
 
 //dati giusta
@@ -24,7 +24,7 @@ test("validate token for get a exam list ", function () {
         expect(exams.getExamlist("dsadawd", "assigned")).toEqual(exams.result401);
 });
 
-test("validate selection value for get a exam  list ", function () {
+test("validate selection value for get a exam  list ", function () {//
 
         expect(exams.getExamlist(token, "sadasd")).toEqual(exams.result400);
 });
@@ -79,6 +79,10 @@ test("validate token for get a exam", function () {
 
 test("validate exam id for get a exam", function () {
 
+        expect(exams.getExam(token, "ersada")).toEqual(exams.result400);
+});
+test("validate response404  by exam not exist for get a exam", function () {
+
         expect(exams.getExam(token, 1999999)).toEqual(exams.result404);
 });
 
@@ -107,8 +111,13 @@ test("validate token for put a exam", function () {
 
 test("validate exam id for put a exam", function () {
 
+        expect(exams.putExam(token, testDati2, "dasd")).toEqual(exams.result400);
+});
+test("validate response404  by exam not exist ", function () {
+
         expect(exams.putExam(token, testDati2, 1999999)).toEqual(exams.result404);
 });
+
 
 test("validate input for put a exam", function () {
 
@@ -120,5 +129,41 @@ test("validate input for put a exam", function () {
 test("validate response for put a exam", function () {
 
         expect(exams.putExam(token, testDati2, 0).status).toBe(200);
+
+});
+
+
+
+//test for get submission list of exam
+test("validate token for get a submission list of exam ", function () {
+
+        expect(exams.getSubmissionsOfExam("dsadawd", 0)).toEqual(exams.result401);
+});
+
+test("validate exam id for get a submission list of exam ", function () {
+
+        expect(exams.getSubmissionsOfExam(token, "uno-due")).toEqual(exams.result400);
+});
+
+
+test("validate response 404 by there isn't exam with current id for get a submission list of exam", function () {
+
+        expect(exams.getSubmissionsOfExam(token, 99999)).toEqual(exams.result404);
+});
+
+test("validate response 404 by there aren't any submissions with current exam  for get a submission list of exam", function () {
+
+        expect(exams.getSubmissionsOfExam(token, 1)).toEqual(exams.result404);
+});
+
+test("validate response for get a submission list of exam", function () {
+
+        const body = exams.getSubmissionsOfExam(token, 0).body;
+        expect(body.length).toBeDefined();
+        expect(body[0].ref_exam).toBeDefined();
+        expect(body[0].submitter).toBeDefined();
+        expect(body[0].answer).toBeDefined();
+        expect(body[0].status).toBeDefined();
+        expect(body[0].evaluation).toBeDefined();
 
 });
