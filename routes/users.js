@@ -161,8 +161,8 @@ router.get('/', function(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	//Test call
-	let data = routerGetUsers(mdb.active_users.getTokenByUserId(0));
-	//let data = routerGetUsers(token);
+	//let data = routerGetUsers(mdb.active_users.getTokenByUserId(0));
+	let data = routerGetUsers(token);
 	res.send(JSON.stringify(data, null, 3));
 });
 
@@ -187,8 +187,8 @@ router.get('/:user_id', function(req, res) {
 	
 	res.setHeader('Content-Type', 'application/json');
 	//Test call
-	let data = routerGetUserById(mdb.active_users.getTokenByUserId(0), id);
-	//let data = routerGetUserById(token, id);
+	//let data = routerGetUserById(mdb.active_users.getTokenByUserId(0), id);
+	let data = routerGetUserById(token, id);
 	res.send(JSON.stringify(data, null, 3));
 })
 
@@ -201,8 +201,8 @@ router.get('/:user_id/exams', function(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	//test call
-	let data = routerGetUsersExams(mdb.active_users.getTokenByUserId(0), id, selection);
-	//let data = routerGetUsersExams(token, id, selection);
+	//let data = routerGetUsersExams(mdb.active_users.getTokenByUserId(0), id, selection);
+	let data = routerGetUsersExams(token, id, selection);
 	res.send(JSON.stringify(data, null, 3));
 })
 
@@ -212,8 +212,8 @@ router.get('/:user_id/exam_submissions', function(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	//test call
-	let data = routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(2), id);
-	//let data = routerGetUsersExamSubmissions(token, id)
+	//let data = routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(2), id);
+	let data = routerGetUsersExamSubmissions(token, id)
 	res.send(JSON.stringify(data, null, 3));
 })
 
