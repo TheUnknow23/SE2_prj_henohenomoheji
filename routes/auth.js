@@ -3,7 +3,7 @@ const router = express.Router();
 const mdb = require ('./../mdb/mdb.js');
 
 router.get('/', function(req, res) {
-        res.send('auth resources');
+        res.send(mdb.active_users.getTokenByUser({email: "gino@gino"}));
 });
 
 module.exports = router;

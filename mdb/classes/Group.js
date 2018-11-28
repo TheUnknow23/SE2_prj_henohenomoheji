@@ -14,8 +14,20 @@ class Group{
         (description !== "" || description !== undefined) ? this.description = description : console.log("T_T"); 
         (members !== "" || members !== undefined) ? this.members = members : console.log("T_T"); 
     }
-    getRandomMember(){
-        return this.members[Math.floor(Math.random()*this.members.length)];
+    getRandomMember(user){
+        do{
+            var reviewer = this.members[Math.floor(Math.random()*this.members.length)];
+            console.log(".");
+        }while(reviewer === user);
+        console.log("selected -> " + reviewer.name);
+        return reviewer;
+    }
+    isThere(user){//checks if a user is in the group
+        var member = this.members.find(obj => obj.id === user.id);
+        if(member !== undefined){
+            return true;
+        }
+        return false;
     }
     toString(){
         return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
@@ -45,7 +57,8 @@ class Groups extends Array{
             console.log("Groups length : " + this.length);
             return true;
         }
-        console.log("Groups length : " + this.length);
+        //console.log("last group id : " + this[this.length-1].id);
+        return this[this.length-1].id;
     }
 
     //UPDATE METHOD
