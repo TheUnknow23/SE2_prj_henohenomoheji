@@ -1,7 +1,8 @@
+
 class Exam {
         /* 
          id(integer) PRIMARY KEY
-         owner(integer) FOREIGN KEY
+         owner({id, email}) FOREIGN KEY
          title(string)
          description(string)
          taskset(taskInExam[]) "MULTIPLE" FOREIGN KEY
@@ -61,29 +62,42 @@ class Exams extends Array {
                 return this.filter(obj => obj.title === title);
         }
         //get all assingned exams by user id
-        filterByAssingned(user) {
-                //check su ogni esame
-                let arrayOfExam = this.filter(function (singleExam) {
-                        let exist = false;
+        filterByAssingned(owner) {
+            //check su ogni esame
+            let arrayOfExam = this.filter(function (singleExam) {
+                let exist = false;
 
-                        //se esame ha uno gruppo e tale gruppo non ���� vuoto
-                        if (singleExam.group !== undefined && singleExam.group.members !== undefined)
-                        {
-
-                                for (let j = 0; j < singleExam.group.members.length; j++)
-                                {
-                                        //se utente attuale appartiene a gruppo di quella esame
-                                        if (singleExam.group.members[j].id === user.id)
-                                        {
-                                                exist = true;
-                                        }
-                                }
+                //se esame ha uno gruppo e tale gruppo non ���� vuoto
+                if (singleExam.group !== undefined && singleExam.group.members !== undefined) {
+                    for (let j = 0; j < singleExam.group.members.length; j++) {
+                        //se utente attuale appartiene a gruppo di quella esame
+                        if (singleExam.group.members[j].id === owner.id) {
+                            exist = true;
                         }
-                        return exist;
+                    }
+                }
+                return exist;
+            });
+            return arrayOfExam;
+        }
 
-                });
-
-                return arrayOfExam;
+        filterByAssignedId(assignedId) {
+            let exams = [];
+            let currentExam;
+            let endInnerCycle = false;
+            //Take an exam
+            for (let i = 0; i < this.length; i++) {
+                currentExam = this[i];
+                //Cycle through all members of group to which exam was assigned
+                for (let j = 0; j < currentExam.group.members.length && endInnerCycle === false; j++) {
+                    if (currentExam.group.members[j].id === assignedId) {
+                        exams.push(currentExam);
+                        endInnerCycle = true;
+                    }
+                }
+            }
+            let retExams
+            return retExams = JSON.parse(JSON.stringify(exams));
         }
 
         //GET METHODS
@@ -111,4 +125,5 @@ class Exams extends Array {
                 }
         }
 }
+
 module.exports = Exams;

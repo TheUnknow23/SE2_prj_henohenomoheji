@@ -33,6 +33,13 @@ class Group{
         return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
                ", DESCRIPTION : " + this.description + "\nMEMBERS -> " + this.members;
     }
+    getMembersId(){
+        let members_ids = [];
+        for (let i=0; i<this.members.length; i++){
+            members_ids[i]=this.members[i].id;
+        }
+        return members_ids;
+    }
 }
 class Groups extends Array{
     //ADD METHOD
@@ -47,15 +54,31 @@ class Groups extends Array{
         }
         if(x !== null){
             this.push(x);
+            console.log("Groups length : " + this.length);
+            return true;
         }
         //console.log("last group id : " + this[this.length-1].id);
         return this[this.length-1].id;
+    }
+
+    //UPDATE METHOD
+    updateById(id, name, description, members){
+        var group = this.getGroupById(id);
+        if (group !== null&&group!==undefined){
+            group.update(name, description, members);
+            return 200;
+        } else{
+            return 400;
+        }
     }
     //FILTER METHODS
     filterByOwner(owner){
         return this.filter(obj => obj.owner.email === owner.email);
     }
     //GET METHODS
+    getAll(){
+        return this;
+    }
     getIndexById(id){
         return this.indexOf(this.find(obj => obj.id === id));
     }
@@ -76,6 +99,9 @@ class Groups extends Array{
         var index = this.indexOf(this.find(obj => obj.id === id));
         if(index>=0){
             this.splice(index,1);
+            return 200;
+        } else {
+            return 404;
         }
     }
 }
