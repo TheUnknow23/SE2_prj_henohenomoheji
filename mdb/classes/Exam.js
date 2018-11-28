@@ -1,3 +1,4 @@
+
 class Exam {
         /* 
          id(integer) PRIMARY KEY
@@ -112,4 +113,5 @@ class Exams extends Array {
                 }
         }
 }
+
 module.exports = Exams;
