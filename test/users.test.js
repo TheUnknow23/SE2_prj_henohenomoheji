@@ -34,27 +34,22 @@ test('GET /users NOT OK case with void arguments', () => {
 // POST /users
 
 test('POST /users OK case ', () => {
-    let result = routerPostUsers( {"name": "a", "surname": "b", "email": "c@d.e", "password": "fgh", "type": "banana" } );
+    let result = routerPostUsers( {"name": "a", "surname": "b", "email": "c@d.e", "password": "fgh"} );
     expect(result).toBe(mdb.users.getUserByEmail('c@d.e').id);
 });
 
-test('POST /users OK case without "type" parameter', () => {
-    let result = routerPostUsers( {"name": "a", "surname": "b", "email": "ba@na.na", "password": "fgh", "type": ""} );
-    expect(result).toBe((mdb.users.getUserByEmail('ba@na.na').id));
-});
-
 test('POST /users NOT OK case invalid payload (one required parameter missing)', () => {
-    let result = routerPostUsers( {"surname": "b", "email": "c@d.e", "password": "fgh", "type": "banana" } );
+    let result = routerPostUsers( {"surname": "b", "email": "c@d.e", "password": "fgh"} );
     expect(result).toBe('400 Invalid post input');
 });
 
 test('POST /users NOT OK case invalid payload (one required paramete rempty)', () => {
-    let result = routerPostUsers( {"name": "a", "surname": "", "email": "zzzz@z.z", "password": "fgh", "type": "banana" } );
+    let result = routerPostUsers( {"name": "a", "surname": "", "email": "zzzz@z.z", "password": "fgh"} );
     expect(result).toBe('400 Invalid post input');
 });
 
 test('POST /users NOT OK case user already subscribed (same email)', () => {
-    let result = routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gino", "password": "fgh", "type": "banana" } );
+    let result = routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gino", "password": "fgh"} );
     expect(result).toBe(-1);
 });
 
@@ -121,7 +116,6 @@ test('GET /users/:id/exams OK case with selection=created', () => {
         expect(result[i].id).toBeDefined();
         expect(result[i].owner).toBeDefined();
         expect(result[i].title).toBeDefined();
-        expect(result[i].subject).toBeDefined();
         expect(result[i].description).toBeDefined();
         expect(result[i].taskset).toBeDefined();
         expect(result[i].group).toBeDefined();
@@ -198,4 +192,6 @@ test('GET /users/:id/exam_submissions NOT OK case requester (token) not valid', 
     expect(result).toBe('requester not logged or not authorized');
 });
 
-
+test('Hudredth case yay', () => {
+    expect(100).toBe(100);
+});

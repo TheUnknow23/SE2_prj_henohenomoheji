@@ -27,16 +27,8 @@ groups.add({"id": users[1].id, "email": users[1].email}, "group2", "desc2", [{"i
 //console.log("\x1b[32mGROUPS _> \x1b[0m");//console.log("," + groups);//console.log("\n###################\n");
 
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
-let taskInExam1 = {"task_id": tasks[1].id, "description" : tasks[1].description};
-let taskInExam2 = {"task_id": tasks[2].id, "description" : tasks[2].description};
-exams.add({id: users[1].id,email: users[1].email} , "cool title",  "description", [taskInExam1, taskInExam2], groups[0], "2018-03-09", "2018-03-11");
-exams.add({id: users[2].id,email: users[2].email} , "cool title2",  "description2", [taskInExam1, taskInExam2], groups[0], "2018-04-01", "2018-04-11");
-//default active_users for testing purposes
-active_users.add(users.getUserById(0));
-active_users.add(users.getUserById(2));
-
-console.log("\x1b[31mEXAMS _> \x1b[0m");console.log("" + exams);console.log("\n###################\n");
-
+exams.add({"id": users[0].id, "email": users[0].email}, "cool title", "description", [{"id":tasks[0].id, "text": tasks[0].description}, {"id":tasks[2].id, "text": tasks[2].description}], groups[0], new Date("2018-12-01"), new Date("2018-12-03"));
+//console.log("\x1b[31mEXAMS _> \x1b[0m");//console.log("" + exams);//console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
 exam_submissions.add(exams[0], {"id": users[1].id, "email": users[1].email}, ["opt3", "opt2"], "on hold");

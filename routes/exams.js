@@ -98,7 +98,7 @@ function getExamlist(token, selection) {
                 }
                 else if (isValidselection(selection) === 2)
                 {
-                        body = mdb.exams.filterByAssingned(user);
+                        body = mdb.exams.filterByAssingned(user); //...........................................
                 }
                 console.log("FOUND");
                 console.log(body);

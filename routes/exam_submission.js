@@ -89,10 +89,6 @@ function display_exam_submission(token, id){
 			if(e_sub.submitter.id === user.id){
 				//prendo la submission
 				var submission = e_sub;
-				//elimino le soluzioni dal vettore dei task
-				for(let i = 0; i < submission.ref_exam.taskset.length; i++){
-					submission.ref_exam.taskset[i].solutions = undefined;
-				}
 				return submission;
 			}
 			//controllo se è l'owner dell'esame a cui appartiene la submission

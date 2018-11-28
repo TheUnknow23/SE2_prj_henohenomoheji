@@ -81,6 +81,25 @@ class Exams extends Array {
             return arrayOfExam;
         }
 
+        filterByAssignedId(assignedId) {
+            let exams = [];
+            let currentExam;
+            let endInnerCycle = false;
+            //Take an exam
+            for (let i = 0; i < this.length; i++) {
+                currentExam = this[i];
+                //Cycle through all members of group to which exam was assigned
+                for (let j = 0; j < currentExam.group.members.length && endInnerCycle === false; j++) {
+                    if (currentExam.group.members[j].id === assignedId) {
+                        exams.push(currentExam);
+                        endInnerCycle = true;
+                    }
+                }
+            }
+            let retExams
+            return retExams = JSON.parse(JSON.stringify(exams));
+        }
+
         //GET METHODS
         getIndexById(id)
         {

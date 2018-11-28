@@ -15,7 +15,7 @@ test('call display_exam_submission with no incorrect id', () => {
     expect(es.display_exam_submission(mdb.active_users[0].token, 928928)).toBe("error null");
 });
 test('call display_exam_submission with correct token and id(as owner)', () => {
-    expect(es.display_exam_submission(mdb.active_users[0].token, 0)).toBe(mdb.exam_submissions[0]);
+    expect(es.display_exam_submission(mdb.active_users.getTokenByUserId(1), 0)).toBe(mdb.exam_submissions[0]);
 });
 test('call display_exam_submission with correct token and id(as submitter)', () => {
     expect(es.display_exam_submission(mdb.active_users[1].token, 0)).toBe(mdb.exam_submissions[0]);
