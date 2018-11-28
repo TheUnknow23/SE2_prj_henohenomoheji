@@ -4,7 +4,7 @@ const mdb = require ('./../mdb/mdb.js');
 const Ajv = require ('ajv');
 const ajv = new Ajv();
 
-const postSchema = require('../schemas/post_schema.json');
+const postSchema = require('../schemas/group_post_schema.json');
 const putSchema = require('./../schemas/groups_put_schema.json');
 
 /*##### FUNCTION SECTION #####*/
@@ -15,7 +15,7 @@ function getGroups(token){
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         return mdb.groups.getAll();
     } else {
-        return 'Requester not logged or not authorized'
+        return '401 Requester not logged or not authorized'
     }
 }
 
@@ -30,7 +30,7 @@ function getGroup(token, id){
             return 'The specified resource doesn\'t exist'
         }
     } else {
-        return 'Requester not logged or not authorized'
+        return '401 Requester not logged or not authorized'
     }
 }
 
@@ -38,10 +38,17 @@ function getGroup(token, id){
 function createGroup(body){
     //console.log(body);
     if(ajv.validate(postSchema, body)) {
-        if (mdb.groups.add(mdb.active_users.getUserByToken(body.token), body.name, body.description, body.members)) {
-            return 201;
+        if (mdb.active_users.getUserByToken(body.token)!==null && mdb.active_users.getUserByToken(body.token)!==undefined) {
+            if (mdb.groups.add({
+                "id": mdb.active_users.getUserByToken(body.token).id,
+                "email": mdb.active_users.getUserByToken(body.token).email
+            }, body.name, body.description, body.members)) {
+                return 201;
+            } else {
+                return 400;
+            }
         } else {
-            return 400;
+            return 401;
         }
     } else {
         return 400;
@@ -50,13 +57,22 @@ function createGroup(body){
 
 // PUT on /groups/:group_id
 function updateGroup(id, body){
-    console.log("update "+body.members);
+    //console.log("update "+body.members);
     if (ajv.validate(putSchema, body)){
-        console.log("ValidJson")
-        return mdb.groups.updateById(id, body.name, body.description, body.members);
-    } else {
-        return 400;
+        //console.log("ValidJson")
+        if (mdb.groups.getGroupById(id)!==null && mdb.groups.getGroupById(id)!==undefined) {
+            if (mdb.active_users.getUserByToken(body.token)!==null && mdb.active_users.getUserByToken(body.token)!==undefined) {
+                if (mdb.active_users.getUserByToken(body.token).id === mdb.groups.getGroupById(id).owner.id) {
+                    return mdb.groups.updateById(id, body.name, body.description, body.members);
+                } else {
+                    return 403;
+                }
+            } else {
+                return 401;
+            }
+        }
     }
+    return 400;
 }
 
 /*##### ROUTES CATCH SECTION #####*/

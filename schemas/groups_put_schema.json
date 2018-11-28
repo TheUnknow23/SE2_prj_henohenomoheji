@@ -10,10 +10,10 @@
     "description": {
       "type": "string"
     },
-    "members_id": {
+    "members": {
       "type": "array",
       "items": {
-        "type": "number"
+        "type": "object"
       }
     }
   },
