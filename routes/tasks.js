@@ -34,8 +34,7 @@ function getTaskslist(token, selection) {
                 let body = [];
                 if (checkSelection(selection) === 1)
                 {
-                    for (int i = 0; i < mdb.tasks.length; i++)
-                        { body.push(mdb.tasks[i]); }
+                    body=mdb.tasks
                 }
                 else if (checkSelection(selection) === 2)
                 {
@@ -266,7 +265,7 @@ module.exports = router;
 module.exports.result400 = result400;
 module.exports.result401 = result401;
 module.exports.result404 = result404;
-module.exports.getTasksList = getTaskList;
+module.exports.getTaskslist = getTaskslist;
 module.exports.createTask = createTask;
 module.exports.accessSpecificTask = accessSpecificTask;
 module.exports.updateTask = updateTask;
