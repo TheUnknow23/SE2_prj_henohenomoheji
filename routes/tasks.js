@@ -11,14 +11,6 @@ function checkSelection(selection) {
     else { return 0; }
 }
 
-/**
- * get exam list
- * if user is teacher return all tasks created by him
- * if user is student return all of his assigned tasks
- * @param {type} token
- * @param {type} selection
- * @returns {getExamlist.result|nm$_exam_submission.getExamlist.result|nm$_exam_submission.result400|nm$_exam_submission.result401}
- */
 function getTaskslist(token, selection) {
 
         //il risultato da ritornare
@@ -271,3 +263,11 @@ router.delete('/:task_id', function(req, res) {
     });
 
 module.exports = router;
+module.exports.result400 = result400;
+module.exports.result401 = result401;
+module.exports.result404 = result404;
+module.exports.getTasksList = getTaskList;
+module.exports.createTask = createTask;
+module.exports.accessSpecificTask = accessSpecificTask;
+module.exports.updateTask = updateTask;
+module.exports.deleteTask = deleteTask;
