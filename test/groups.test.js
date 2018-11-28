@@ -47,8 +47,8 @@ test('call updateGroup correct id, wrong payload', ()=>{
     expect(groups.updateGroup(0, {"nome":545, "desh":"string", "members": ["test", "error"]})).toBe(400);
 });
 test('call updateGroup correct id, correct payload', ()=>{
-    expect(groups.updateGroup(0, {"name":"hgh", "description": "hfjvbj"})).toBe(200);
+    expect(groups.updateGroup(0, {"token": mdb.active_users[0].token, "name":"hgh", "description": "hfjvbj"})).toBe(200);
 });
 test('call updateGroup wrong id, correct payload', ()=>{
-    expect(groups.updateGroup(689, {"name":"hgh", "description": "hfjvbj"})).toBe(400);
+    expect(groups.updateGroup(689, {"token": mdb.active_users[0].token,"name":"hgh", "description": "hfjvbj"})).toBe(400);
 });
