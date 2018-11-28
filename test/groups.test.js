@@ -1,5 +1,5 @@
-const groups = require('./../routes/groups');
-const mdb = require('./../mdb/mdb');
+const groups = require('./../routes/groups.js');
+const mdb = require('./../mdb/mdb.js');
 
 test('dummy test', () => {
     console.log("Dummy test");
@@ -36,7 +36,7 @@ test('call createGroup wrong payload', ()=>{
     expect(groups.createGroup({"name": "hfsb", "description": "hfjdi"})).toBe(400);
 });
 test('call createGroup correct payload', ()=>{
-    expect(groups.createGroup({"token": mdb.active_users[0], "name": "hfsb", "description": "hfjdi", "members": mdb.groups[1].members})).toBe(201);
+    expect(groups.createGroup({"token": mdb.active_users[0].token, "name": "hfsb", "description": "hfjdi", "members_id": mdb.groups[0].getMembersId()})).toBe(201);
 });
 
 // updateGroup testing
@@ -44,7 +44,7 @@ test('call updateGroup wrong id, wrong payload', ()=>{
     expect(groups.updateGroup(987, {"nkme":545})).toBe(400);
 });
 test('call updateGroup correct id, wrong payload', ()=>{
-    expect(groups.updateGroup(0, {"nome":545})).toBe(400);
+    expect(groups.updateGroup(0, {"nome":545, "desh":"string", "members": ["test", "error"]})).toBe(400);
 });
 test('call updateGroup correct id, correct payload', ()=>{
     expect(groups.updateGroup(0, {"name":"hgh", "description": "hfjvbj"})).toBe(200);

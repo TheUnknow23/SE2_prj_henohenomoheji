@@ -4,7 +4,7 @@ const mdb = require ('./../mdb/mdb.js');
 const Ajv = require ('ajv');
 const ajv = new Ajv();
 
-const postSchema = require('./../schemas/groups_post_schema.json');
+const postSchema = require('../schemas/post_schema.json');
 const putSchema = require('./../schemas/groups_put_schema.json');
 
 /*##### FUNCTION SECTION #####*/
@@ -24,7 +24,6 @@ function getGroup(token, id){
     let requester = mdb.active_users.getUserByToken(token);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         let group = mdb.groups.getGroupById(id);
-        console.log(group);
         if (group !== null&&group !==undefined){
             return group;
         } else {
@@ -36,8 +35,8 @@ function getGroup(token, id){
 }
 
 // POST on /groups
-function createGroup (body){
-    console.log(body);
+function createGroup(body){
+    //console.log(body);
     if(ajv.validate(postSchema, body)) {
         if (mdb.groups.add(mdb.active_users.getUserByToken(body.token), body.name, body.description, body.members)) {
             return 201;
@@ -51,7 +50,9 @@ function createGroup (body){
 
 // PUT on /groups/:group_id
 function updateGroup(id, body){
+    console.log("update "+body.members);
     if (ajv.validate(putSchema, body)){
+        console.log("ValidJson")
         return mdb.groups.updateById(id, body.name, body.description, body.members);
     } else {
         return 400;
@@ -62,7 +63,6 @@ function updateGroup(id, body){
 
 router.get('/',function(req, res) {
     res.setHeader('Content-type', 'application/json');
-    console.log(req.query);
     res.send(JSON.stringify(getGroups(req.query.token), null, 3));
 });
 
@@ -73,7 +73,6 @@ router.post('/',function (req, res) {
 
 router.get('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    console.log(req.query);
     res.send(JSON.stringify(getGroup(req.query.token, req.params.id), null, 3));
 });
 

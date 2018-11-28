@@ -21,6 +21,13 @@ class Group{
         return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
                ", DESCRIPTION : " + this.description + "\nMEMBERS -> " + this.members;
     }
+    getMembersId(){
+        let members_ids = [];
+        for (let i=0; i<this.members.length; i++){
+            members_ids[i]=this.members[i].id;
+        }
+        return members_ids;
+    }
 }
 class Groups extends Array{
     //ADD METHOD
