@@ -40,13 +40,11 @@ class Exam_Submissions extends Array{
     filterBySubmitter(submitter){
         return this.filter(obj => obj.submitter.email === submitter.email);
     }
-<<<<<<< HEAD
     filterByExamOwner(owner){
         return this.filter(obj => obj.ref_exam.owner.email === owner.email);
-=======
+    }
     filterBySubmitterId(id) {
         return this.filter(obj => obj.submitter.id === id);
->>>>>>> users_verbs
     }
     //GET METHODS
     getIndexById(id){

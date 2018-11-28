@@ -35,12 +35,12 @@ test('GET /users NOT OK case with void arguments', () => {
 
 test('POST /users OK case ', () => {
     let result = routerPostUsers( {"name": "a", "surname": "b", "email": "c@d.e", "password": "fgh", "type": "banana" } );
-    expect(result).toBe(1);
+    expect(result).toBe(mdb.users.getUserByEmail('c@d.e').id);
 });
 
 test('POST /users OK case without "type" parameter', () => {
     let result = routerPostUsers( {"name": "a", "surname": "b", "email": "ba@na.na", "password": "fgh", "type": ""} );
-    expect(result).toBe(1);
+    expect(result).toBe((mdb.users.getUserByEmail('ba@na.na').id));
 });
 
 test('POST /users NOT OK case invalid payload (one required parameter missing)', () => {

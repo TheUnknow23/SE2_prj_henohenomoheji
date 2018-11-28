@@ -63,29 +63,22 @@ class Exams extends Array {
         }
         //get all assingned exams by user id
         filterByAssingned(owner) {
+            //check su ogni esame
+            let arrayOfExam = this.filter(function (singleExam) {
+                let exist = false;
 
-                //check su ogni esame
-                let arrayOfExam = this.filter(function (singleExam) {
-                        let exist = false;
-
-                        //se esame ha uno gruppo e tale gruppo non ���� vuoto
-                        if (singleExam.group !== undefined && singleExam.group.members !== undefined)
-                        {
-
-                                for (let j = 0; j < singleExam.group.members.length; j++)
-                                {
-                                        //se utente attuale appartiene a gruppo di quella esame
-                                        if (singleExam.group.members[j].id === owner.id)
-                                        {
-                                                exist = true;
-                                        }
-                                }
+                //se esame ha uno gruppo e tale gruppo non ���� vuoto
+                if (singleExam.group !== undefined && singleExam.group.members !== undefined) {
+                    for (let j = 0; j < singleExam.group.members.length; j++) {
+                        //se utente attuale appartiene a gruppo di quella esame
+                        if (singleExam.group.members[j].id === owner.id) {
+                            exist = true;
                         }
-                        return exist;
-
-                });
-
-                return arrayOfExam;
+                    }
+                }
+                return exist;
+            });
+            return arrayOfExam;
         }
 
         //GET METHODS
