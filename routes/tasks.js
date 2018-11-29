@@ -98,7 +98,6 @@ function createTask(token, body) {
                         result.body = id;
 
         }
-
         return result;
 }
 

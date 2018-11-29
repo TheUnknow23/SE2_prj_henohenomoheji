@@ -18,7 +18,9 @@ users.add("guno", "guno", "gono@gono", "pwd5");
 //default tasks | input schema: (owner, task_type, subject, description, description, answer[], solution)
 tasks.add({"id": users[0].id, "email": users[0].email}, "multiple choice", "CS", "title1", "my top desc 1", ["opt1", "opt2", "opt3"], "opt3");
 tasks.add({"id": users[0].id, "email": users[0].email}, "multiple choice", "CS", "title2", "my top desc 2", ["opt1", "opt2", "opt3"], "opt1");
-tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", undefined, "correct solution");
+tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", ["a caso"], "correct solution");
+tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", ["a caso"], "correct solution");
+tasks.add({"id": users[1].id, "email": users[1].email}, "text", "CooooooS", "title45354353", "my top desc 34", ["a caso"], "corrects solution");
 //console.log("\x1b[34mTASKS _> \x1b[0m");//console.log("," + tasks);//console.log("\n###################\n");
 
 //default groups | input schema: (owner, name, description, members[])
@@ -46,6 +48,7 @@ exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submiss
     console.log("token[3](GONO) is " + active_users[3].token);
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
 //console.log(exams);
+console.log(tasks);
 console.log(exams[0].final_deadline<exams[0].review_deadline);
 console.log(exams[0].final_deadline<new Date());
 //------------------------------------------
