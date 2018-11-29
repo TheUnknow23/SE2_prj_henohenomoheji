@@ -10,6 +10,11 @@ const putSchema = require('./../schemas/groups_put_schema.json');
 /*##### FUNCTION SECTION #####*/
 
 // GET on /groups
+/**
+ *  GET on /groups. This functions returns a list of all the groups if the user is logged, error otherwise
+ * @param {string}token used to identify the logged user
+ * @returns {*}
+ */
 function getGroups(token){
     const requester = mdb.active_users.getUserByToken(token);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
@@ -20,6 +25,12 @@ function getGroups(token){
 }
 
 // GET on /groups/:group_id
+/**
+ *  GET on /groups/:group_id. Returns a specific group object if the user is logged and the specified id exist, error otherwise
+ * @param {string}token used to identify the logged user
+ * @param {number}id used to identify a specific group
+ * @returns {*}
+ */
 function getGroup(token, id){
     let requester = mdb.active_users.getUserByToken(token);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
@@ -35,6 +46,12 @@ function getGroup(token, id){
 }
 
 // POST on /groups
+/**
+ *  POST on /groups. Allows the user to create a group. Returns 201 if the operation is successful, 401 if the user is not logged,
+ *  400 if there is an error in the body
+ * @param {JSON}body of the request
+ * @return {number}
+ */
 function createGroup(body){
     //console.log(body);
     if(ajv.validate(postSchema, body)) {
@@ -56,6 +73,12 @@ function createGroup(body){
 }
 
 // PUT on /groups/:group_id
+/**
+ *  PUT on /groups/:group_id. Allows the owner of a specific group to update the group's properties
+ * @param {number}id of the single group
+ * @param {JSON}body of the request
+ * @returns {*}
+ */
 function updateGroup(id, body){
     //console.log("update "+body.members);
     if (ajv.validate(putSchema, body)){
@@ -70,6 +93,8 @@ function updateGroup(id, body){
             } else {
                 return 401;
             }
+        } else {
+            return 'The specified id does not exist';
         }
     }
     return 400;
