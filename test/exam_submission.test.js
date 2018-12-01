@@ -76,7 +76,7 @@ test('call update_exam_submission with correct values as submitter', () => {
     expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"answers":["bob","bobby"], "status": "completed"}).body).toEqual(mdb.exam_submissions[0]);
 });
 test('call update_exam_submission with correct values as owner of the exam', () => {
-    expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"evaluation": "good"}).body).toEqual(mdb.exam_submissions[0]);
+    expect(es.update_exam_submission(mdb.active_users[0].token,  0, {"evaluation": "good"}).body).toEqual(mdb.exam_submissions[0]);
 });
 
 //exam_submission_peer_review_list() tests
