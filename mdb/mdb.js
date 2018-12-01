@@ -32,10 +32,13 @@ exams.add({"id": users[0].id, "email": users[0].email}, "cool title", "descripti
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
 exam_submissions.add(exams[0], {"id": users[1].id, "email": users[1].email}, ["opt3", "opt2"], "on hold");
+exam_submissions.add(exams[0], {"id": users[2].id, "email": users[2].email}, ["opt4", "opt1"], "on hold");
+
 //console.log("EXAM_SUBMISSIONS _>");//console.log(exam_submissions);//console.log("\n###################\n");
 
 //default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
 exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submissions[0], "");
+exam_peer_reviews.add({"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny");
 //console.log("EXAM_PEER_REVIEWS _>");//console.log(exam_peer_reviews);//console.log("\n###################\n");
 //login.get(/login)
     active_users.add({"id": users[0].id, "email": users[0].email});active_users.add({"id": users[1].id, "email": users[1].email});
@@ -46,8 +49,7 @@ exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submiss
     console.log("token[3](GONO) is " + active_users[3].token);
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
 //console.log(exams);
-console.log(exams[0].final_deadline<exams[0].review_deadline);
-console.log(exams[0].final_deadline<new Date());
+console.log(exam_submissions[0]);
 //------------------------------------------
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;
 module.exports.exams = exams; module.exports.exam_submissions = exam_submissions;
