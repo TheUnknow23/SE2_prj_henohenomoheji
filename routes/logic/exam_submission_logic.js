@@ -25,9 +25,9 @@ function display_exam_submission_list(token, type){
 		}else if(type === "owned"){
 			console.log("sending submissions of owned exams");
 			return {"status": 200, "body": mdb.exam_submissions.filterByExamOwner(user)};
-		}else if(type === "toreview"){
+		}else if(type === "toreview" || type === "reviewed"){
 			console.log("sending submissions to review");
-			return {"status": 200, "body": mdb.exam_peer_reviews.filterExamSubmissionByReviewer(user)};
+			return {"status": 200, "body": mdb.exam_peer_reviews.filterExamSubmissionByReviewer(user,type)};
 		}else{
 			return errors.error400;
 		}

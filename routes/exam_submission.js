@@ -3,7 +3,6 @@ const router = express.Router();
 const logic = require('./logic/exam_submission_logic');
 
 router.get('/', function(req, res) {
-	console.log(errors.error400);
 	console.log("GET exam_submissions/ -> token : " + req.query.token + " | select : " + req.query.select + ")");
 	var result = logic.display_exam_submission_list(req.query.token, req.query.select);
 	res.status(result.status);
