@@ -32,11 +32,20 @@ test('call display_exam_submission_list with no parameters', () => {
 test('call display_exam_submission_list with incorrect token', () => {
     expect(es.display_exam_submission_list("dsdsdsdssdsd", "toreview")).toBe(errors.error401);
 });
+test('call display_exam_submission_list with just the token', () => {
+    expect(es.display_exam_submission_list(mdb.active_users[0].token)).toEqual(errors.error400);
+});
 test('call display_exam_submission_list with incorrect query param', () => {
     expect(es.display_exam_submission_list(mdb.active_users[3].token, "torevifew")).toBe(errors.error400);
 });
-test('call display_exam_submission_list with correct values', () => {
+test('call display_exam_submission_list with correct values (select=owned)', () => {
     expect(es.display_exam_submission_list(mdb.active_users[0].token, "owned").body).toEqual(mdb.exam_submissions);
+});
+test('call display_exam_submission_list with correct values (select=toreview)', () => {
+    expect(es.display_exam_submission_list(mdb.active_users[3].token, "toreview").body).toEqual([mdb.exam_submissions[0]]);
+});
+test('call display_exam_submission_list with correct values (select=reviewed)', () => {
+    expect(es.display_exam_submission_list(mdb.active_users[3].token, "reviewed").body).toEqual([]);
 });
 
 //insert_exam_submission() tests
@@ -50,7 +59,7 @@ test('call insert_exam_submission with incorrect payload', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token, {"ref_exam": 0,"answers":["bob","bobby"], "status": 2})).toBe(errors.error400);
 });
 test('call insert_exam_submission with correct values', () => {
-    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"}).body).toEqual(mdb.exam_submissions[1]);
+    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"}).body).toEqual(mdb.exam_submissions[2]);
 });
 
 //update_exam_submission() tests
