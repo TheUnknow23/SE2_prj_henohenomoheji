@@ -92,5 +92,12 @@ class Exam_Peer_Reviews extends Array{
             }
         }
     }
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].reviewer.id === user.id){
+                this[i].reviewer.email = user.email;
+            }
+        }
+    }
 }
 module.exports = Exam_Peer_Reviews;

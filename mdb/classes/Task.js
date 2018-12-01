@@ -1,3 +1,4 @@
+const mdb = require('./../mdb');
 class Task{
     /* 
     id(integer) PRIMARY KEY
@@ -16,10 +17,14 @@ class Task{
     update(task_type, subject, title, description, answer, solutions){
         (task_type !== "" && task_type !== undefined) ? this.task_type = task_type : console.log("T_T");
         (subject !== "" && subject !== undefined) ? this.subject = subject : console.log("T_T"); 
-        (title !== "" && title !== undefined) ? this.title = title : console.log("T_T"); 
-        (description !== "" && description !== undefined) ? this.description = description : console.log("T_T");
+        (title !== "" && title !== undefined) ? this.title = title : console.log("T_T");
         (answer !== "" && answer !== undefined) ? this.answer = answer : console.log("T_T"); 
         (solutions !== "" && solutions !== undefined) ? this.solutions = solutions : console.log("T_T"); 
+        if(description !== "" && description !== undefined){
+            this.description = description;
+            mdb.exams.updateTask(this);
+        }
+        return this;
     }
     toString(){
         return "\x1b[34mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TASK TYPE : " + this.task_type +
@@ -63,6 +68,13 @@ class Tasks extends Array{
             this.splice(index,1);
         }
     }
-    
+    //UPDATE METHODS
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].owner.id === user.id){
+                this[i].owner.email = user.email;
+            }
+        }
+    }
 }
 module.exports = Tasks;

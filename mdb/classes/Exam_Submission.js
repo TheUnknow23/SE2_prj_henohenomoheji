@@ -12,11 +12,12 @@ class Exam_Submission{
         this.id = id; this.ref_exam = ref_exam; this.submitter = submitter; this.answer = answer; 
         this.status = status; this.evaluation = "";
     }
-    update(answer, status, evaluation, ref_exam){
+    update(answer, status, evaluation, ref_exam, submitter_email){
         (answer !== "" && answer !== undefined) ? this.answer = answer : console.log("T_T");
         (status !== "" && status !== undefined) ? this.status = status : console.log("T_T"); 
         (evaluation !== "" && evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
         (ref_exam !== "" && ref_exam !== undefined) ? this.ref_exam = ref_exam : console.log("T_T");
+        (submitter_email !== "" && submitter_email !== undefined) ? this.submitter.email = submitter_email : console.log("T_T");
         mdb.exam_peer_reviews.updateSubmission(this);
         return this;
     }
@@ -76,6 +77,13 @@ class Exam_Submissions extends Array{
         for(let i = 0; i < this.length; i++){
             if(this[i].ref_exam.id === exam.id){
                 this[i].update("","","",exam);
+            }
+        }
+    }
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].submitter.id === user.id){
+                this[i].update("", "", "", "", user.email);
             }
         }
     }

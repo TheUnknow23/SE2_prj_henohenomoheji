@@ -1,3 +1,4 @@
+const mdb = require('./../mdb');
 class Group{
     /* 
     id(integer) PRIMARY KEY
@@ -9,10 +10,22 @@ class Group{
     constructor(id, owner, name, description, members){
         this.id = id; this.owner = owner; this.name = name; this.description = description; this.members = members;
     }
-    update(name, description, members){
+    update(name, description, members, user){
         (name !== "" && name !== undefined) ? this.name = name : console.log("T_T");
         (description !== "" && description !== undefined) ? this.description = description : console.log("T_T"); 
         (members !== "" && members !== undefined) ? this.members = members : console.log("T_T"); 
+        if(user !== "" && user !== undefined){
+            if(this.owner.id === user.id){
+                this.owner.email = user.email;
+            }
+            for(let i = 0; i < this.members.length; i++){
+                if(this.members[i].id === user.id){
+                    this.members[i].email = user.email;
+                }
+            }
+        }
+        mdb.exams.updateGroup(this);
+        return this;
     }
     getRandomMember(user){
         do{
@@ -39,6 +52,9 @@ class Group{
             members_ids[i]=this.members[i].id;
         }
         return members_ids;
+    }
+    updateMember(user){
+
     }
 }
 class Groups extends Array{
@@ -102,6 +118,12 @@ class Groups extends Array{
             return 200;
         } else {
             return 404;
+        }
+    }
+    //UPDATE METHODS
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            this[i].update("","","",user);
         }
     }
 }

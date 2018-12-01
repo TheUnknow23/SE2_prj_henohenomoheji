@@ -1,5 +1,7 @@
-var Users = require('./classes/User'); var Tasks = require('./classes/Task');
-var Groups = require('./classes/Group'); var Exams = require('./classes/Exam');
+var Groups = require('./classes/Group');
+var Users = require('./classes/User'); 
+var Tasks = require('./classes/Task');
+var Exams = require('./classes/Exam');
 var Exam_Submissions = require('./classes/Exam_Submission');
 var Exam_Peer_Reviews = require('./classes/Exam_Peer_Review');
 var Active_Users = require('./classes/Active_Users');
@@ -7,8 +9,9 @@ var users = new Users(); var tasks = new Tasks(); var groups = new Groups();
 var exams = new Exams(); var exam_submissions = new Exam_Submissions();
 var exam_peer_reviews = new Exam_Peer_Reviews(); var active_users = new Active_Users();
 //------------------------------------------
-
-
+function toString(){
+    return "I'm db";
+}
 //default users | input schema: (name, surname, email, password, type)
 users.add("gano", "gano", "gino@gino", "pwd1");users.add("geno", "genovese", "geno@geno", "pwd2");
 users.add("gino", "gino", "gano@gsno", "pwd3");users.add("gono", "gonovese", "guno@geno", "pwd4");

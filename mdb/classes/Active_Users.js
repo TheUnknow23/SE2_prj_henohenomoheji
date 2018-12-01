@@ -85,6 +85,14 @@ class Active_Users extends Array {
             return -1;
         }
     }
+    //UPDATE METHODS
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].user.id === user.id){
+                this[i].user.email = user.email;
+            }
+        }
+    }
 }
 
 

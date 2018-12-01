@@ -1,3 +1,4 @@
+const mdb = require('./../mdb');
 class User{
     /*
     id(integer) PRIMARY KEY
@@ -13,8 +14,17 @@ class User{
     update(name, surname, email, password){
         (name !== "" && name !== undefined) ? this.name = name : console.log("T_T"); 
         (surname !== "" && surname !== undefined) ? this.surname = surname : console.log("T_T");
-        (email !== "" && email !== undefined) ? this.email = email : console.log("T_T"); 
         (password !== "" && password !== undefined) ? this.password = password : console.log("T_T"); 
+        if(email !== "" && email !== undefined){
+            this.email = email;
+            mdb.active_users.updateUser(this);
+            mdb.exam_peer_reviews.updateUser(this);
+            mdb.exam_submissions.updateUser(this);
+            mdb.exams.updateUser(this);
+            mdb.groups.updateUser(this);
+            mdb.tasks.updateUser(this);
+        }
+        return this;
     }
     toString(){
         return "\x1b[36m ID : " + this.id + "\x1b[0m (NAME : " + this.name + ", SURNAME : " + this.surname + 
