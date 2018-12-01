@@ -27,7 +27,7 @@ groups.add({"id": users[1].id, "email": users[1].email}, "group2", "desc2", [{"i
 //console.log("\x1b[32mGROUPS _> \x1b[0m");//console.log("," + groups);//console.log("\n###################\n");
 
 //default exams | input schema: (owner, title, subject, description, taskset[], final_deadline, review_deadline)
-exams.add({"id": users[0].id, "email": users[0].email}, "cool title", "description", [{"id":tasks[0].id, "text": tasks[0].description}, {"id":tasks[2].id, "text": tasks[2].description}], groups[0], new Date("2018-12-01"), new Date("2018-12-03"));
+exams.add({"id": users[0].id, "email": users[0].email}, "cool title", "description", [{"id":tasks[0].id, "text": tasks[0].description}, {"id":tasks[2].id, "text": tasks[2].description}], groups[0], new Date("2018-12-31"), new Date("2019-02-01"));
 //console.log("\x1b[31mEXAMS _> \x1b[0m");//console.log("" + exams);//console.log("\n###################\n");
 
 //default exam_submissions | input schema: (ref_exam, submitter, answer[], status)
