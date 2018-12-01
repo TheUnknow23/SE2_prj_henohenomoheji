@@ -1,4 +1,4 @@
-
+const mdb = require('./../mdb');
 class Exam {
         /* 
          id(integer) PRIMARY KEY
@@ -21,12 +21,13 @@ class Exam {
                 this.review_deadline = review_deadline;
         }
         update(title, description, taskset, group, final_deadline, review_deadline) {
-                (title !== "" || title !== undefined) ? this.title = title : console.log("T_T");
-                (description !== "" || description !== undefined) ? this.description = description : console.log("T_T");
-                (taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
-                (group !== undefined) ? this.group = group : console.log("T_T");
-                (final_deadline !== "" || final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
-                (review_deadline !== "" || review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
+                (title !== "" && title !== undefined) ? this.title = title : console.log("T_T");
+                (description !== "" && description !== undefined) ? this.description = description : console.log("T_T");
+                (taskset !== "" && taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
+                (group !== "" && group !== undefined) ? this.group = group : console.log("T_T");
+                (final_deadline !== "" && final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
+                (review_deadline !== "" && review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
+                mdb.exam_submissions.updateRef_Exam(this);
         }
         toString() {
                 return "\x1b[31mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TITLE : " + this.title + ", DESCRIPTION : " + this.description + "\n\nTASK SET -> \n" + JSON.stringify(this.taskset) +

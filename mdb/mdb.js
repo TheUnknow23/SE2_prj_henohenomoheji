@@ -49,7 +49,7 @@ exam_peer_reviews.add({"id": users[1].id, "email": users[1].email}, exam_submiss
     console.log("token[3](GONO) is " + active_users[3].token);
 //console.log("ACTIVE_USERS _>");//console.log(active_users);//console.log("\n###################\n");
 //console.log(exams);
-console.log(exam_submissions[0]);
+//console.log(exam_submissions[0]);
 //------------------------------------------
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;
 module.exports.exams = exams; module.exports.exam_submissions = exam_submissions;

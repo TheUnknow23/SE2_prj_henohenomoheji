@@ -10,9 +10,9 @@ class Group{
         this.id = id; this.owner = owner; this.name = name; this.description = description; this.members = members;
     }
     update(name, description, members){
-        (name !== "" || name !== undefined) ? this.name = name : console.log("T_T");
-        (description !== "" || description !== undefined) ? this.description = description : console.log("T_T"); 
-        (members !== "" || members !== undefined) ? this.members = members : console.log("T_T"); 
+        (name !== "" && name !== undefined) ? this.name = name : console.log("T_T");
+        (description !== "" && description !== undefined) ? this.description = description : console.log("T_T"); 
+        (members !== "" && members !== undefined) ? this.members = members : console.log("T_T"); 
     }
     getRandomMember(user){
         do{

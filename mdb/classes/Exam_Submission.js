@@ -1,3 +1,4 @@
+const mdb = require('./../mdb');
 class Exam_Submission{
     /*
     id(integer) PRIMARY KEY
@@ -11,10 +12,12 @@ class Exam_Submission{
         this.id = id; this.ref_exam = ref_exam; this.submitter = submitter; this.answer = answer; 
         this.status = status; this.evaluation = "";
     }
-    update(answer, status, evaluation){
-        (answer !== "" || answer !== undefined) ? this.answer = answer : console.log("T_T");
-        (status !== "" || status !== undefined) ? this.status = status : console.log("T_T"); 
-        (evaluation !== "" || evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
+    update(answer, status, evaluation, ref_exam){
+        (answer !== "" && answer !== undefined) ? this.answer = answer : console.log("T_T");
+        (status !== "" && status !== undefined) ? this.status = status : console.log("T_T"); 
+        (evaluation !== "" && evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
+        (ref_exam !== "" && ref_exam !== undefined) ? this.ref_exam = ref_exam : console.log("T_T");
+        mdb.exam_peer_reviews.updateSubmission(this);
         return this;
     }
 }
@@ -67,6 +70,14 @@ class Exam_Submissions extends Array{
             return true;
         }
         return false;
+    }
+    //UPDATE METHODS
+    updateRef_Exam(exam){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].ref_exam.id === exam.id){
+                this[i].update("","","",exam);
+            }
+        }
     }
 }
 module.exports = Exam_Submissions;

@@ -11,10 +11,10 @@ class User{
         this.email = email; this.password = password;
     }
     update(name, surname, email, password){
-        (name !== "" || name !== undefined) ? this.name = name : console.log("T_T"); 
-        (surname !== "" || surname !== undefined) ? this.surname = surname : console.log("T_T");
-        (email !== "" || email !== undefined) ? this.email = email : console.log("T_T"); 
-        (password !== "" || password !== undefined) ? this.password = password : console.log("T_T"); 
+        (name !== "" && name !== undefined) ? this.name = name : console.log("T_T"); 
+        (surname !== "" && surname !== undefined) ? this.surname = surname : console.log("T_T");
+        (email !== "" && email !== undefined) ? this.email = email : console.log("T_T"); 
+        (password !== "" && password !== undefined) ? this.password = password : console.log("T_T"); 
     }
     toString(){
         return "\x1b[36m ID : " + this.id + "\x1b[0m (NAME : " + this.name + ", SURNAME : " + this.surname + 

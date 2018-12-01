@@ -8,8 +8,10 @@ class Exam_Peer_Review{
     constructor(id, reviewer, submission, review){
         this.id = id;this.reviewer = reviewer; this.submission = submission; this.review = review;
     }
-    update(review){
-        (review !== "" || review !== undefined) ? this.review = review : console.log("T_T");
+    update(review, submission){
+        (review !== "" && review !== undefined) ? this.review = review : console.log("T_T");
+        (submission !== "" && submission !== undefined) ? this.submission = submission : console.log("T_T");
+        return this;
     }
 }
 class Exam_Peer_Reviews extends Array{
@@ -81,6 +83,14 @@ class Exam_Peer_Reviews extends Array{
             return true;
         }
         return false;
+    }
+    //UPDATE METHODS
+    updateSubmission(submission){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].submission.id === submission.id){
+                this[i].update("",submission);
+            }
+        }
     }
 }
 module.exports = Exam_Peer_Reviews;

@@ -14,12 +14,12 @@ class Task{
         this.title = title; this.description = description; this.answer = answer; this.solutions = solutions;
     }
     update(task_type, subject, title, description, answer, solutions){
-        (task_type !== "" || task_type !== undefined) ? this.task_type = task_type : console.log("T_T");
-        (subject !== "" || subject !== undefined) ? this.subject = subject : console.log("T_T"); 
-        (title !== "" || title !== undefined) ? this.title = title : console.log("T_T"); 
-        (description !== "" || description !== undefined) ? this.description = description : console.log("T_T");
-        (answer !== "" || answer !== undefined) ? this.answer = answer : console.log("T_T"); 
-        (solutions !== "" || solutions !== undefined) ? this.solutions = solutions : console.log("T_T"); 
+        (task_type !== "" && task_type !== undefined) ? this.task_type = task_type : console.log("T_T");
+        (subject !== "" && subject !== undefined) ? this.subject = subject : console.log("T_T"); 
+        (title !== "" && title !== undefined) ? this.title = title : console.log("T_T"); 
+        (description !== "" && description !== undefined) ? this.description = description : console.log("T_T");
+        (answer !== "" && answer !== undefined) ? this.answer = answer : console.log("T_T"); 
+        (solutions !== "" && solutions !== undefined) ? this.solutions = solutions : console.log("T_T"); 
     }
     toString(){
         return "\x1b[34mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TASK TYPE : " + this.task_type +
