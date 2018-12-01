@@ -1,6 +1,6 @@
-const es = require('./../routes/exam_submission');
+const es = require('./../routes/logic/exam_submission_logic');
 const mdb = require('./../mdb/mdb');
-const errors = require('./../errors/generic.json');
+const errors = require('./../schemas/errors/generic.json');
 test('dummy test', () => {
     console.log("sdsadasdaddadd");
     expect(3).toBe(3);
