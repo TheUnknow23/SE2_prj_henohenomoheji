@@ -45,7 +45,12 @@ router.get('/', function(req, res) {
 	res.status(result.status);
 	res.json(result.body);
 });
-
+/**
+ * requires an exam_submssion object with an id reffering to an exam and adds it to the mdb
+ * @param {string} token 
+ * @param {object} exam_submission 
+ * @returns {object} copy of created exam submission or error
+ */
 function insert_exam_submission(token, exam_submission){
 	var now = new Date();
 	console.log("GETTING THE FOLLOWING EXAM SUBMISSION");
@@ -67,33 +72,48 @@ function insert_exam_submission(token, exam_submission){
 						console.log("HE IS IN THE GROUP");
 						if(!mdb.exam_submissions.hasSubmission(ref_exam, user)){//se non ha già submittato per l'esame
 							console.log("HE HASN'T SUBMITTED YET");
-							var id = mdb.exam_submissions.add(ref_exam, user, exam_submission.answers, exam_submission.status);
+							var submission = mdb.exam_submissions.add(ref_exam, user, exam_submission.answers, exam_submission.status);
 							//after I add the exam submission I serch for a suitable reviewer
 							do{
 								var r_member = ref_exam.group.getRandomMember(user);
 								console.log("..");
 							}while(mdb.exam_peer_reviews.hasReview(ref_exam,r_member))
-							mdb.exam_peer_reviews.add(r_member, id, "");
+							mdb.exam_peer_reviews.add(r_member, submission, "");
 							console.log("ASSIGNED THE FOLLOWING REVIEW");console.log(mdb.exam_peer_reviews[mdb.exam_peer_reviews.length-1]);
-							return id.id;
-						}else{
-							console.log("HE ALREADY SUBMITTED AN ANSWER");
+							return {"status": 201, "body": submission};
+						}else{//there's already a submission
+							return errors.error400;
 						}
-					}else{
-						console.log("HE IS NOT IN THE GROUP");
+					}else{//the user is not in the group
+						return errors.error401;
 					}
+				}else{//the deadline expired
+					return errors.error400;
 				}
+			}else{//the exam does not exist
+				return errors.error400;
 			}
+		}else{//the token is not correct
+			return errors.error401;
 		}
+	}else{//the payload doesn't respect the schema
+		return errors.error400;
 	}
-	return "error null";
 }
 
 router.post('/', function(req, res){
 	console.log("POST exam_submissions/ -> token : " + req.query.token);
-	res.send("" + insert_exam_submission(req.query.token, req.body));
+	var result = insert_exam_submission(req.query.token, req.body);
+	res.status(result.status);
+	res.json(result.body);
 });
-
+/**
+ * displays the details of the requested exam_submission, this works only if you're the submitter or
+ * the owner of the exam the submission refers to
+ * @param {string} token 
+ * @param {int} id
+ * @returns {object} an exam submission or an error 
+ */
 function display_exam_submission(token, id){
 	var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
 	if(user !== null){
@@ -104,29 +124,38 @@ function display_exam_submission(token, id){
 			//controllo se è il submitter
 			if(e_sub.submitter.id === user.id){
 				//prendo la submission
-				var submission = e_sub;
-				return submission;
+				return {"status": 200, "body": e_sub};
 			}
 			//controllo se è l'owner dell'esame a cui appartiene la submission
 			if(e_sub.ref_exam.owner.id === user.id){ 
-				return e_sub;
+				return {"status": 200, "body": e_sub};
 			}
 			//controllo se è un reviewer della submission
 			console.log("gonna check if " + user.email + " is the reviewer");
 			if(mdb.exam_peer_reviews.getReviewerByExamSubmission(e_sub).id === user.id){
-				return e_sub;
+				return {"status": 200, "body": e_sub};
 			}
+		}else{
+			return errors.error404;
 		}
+	}else{
+		return errors.error401;
 	}
-	return "error null";
 }
 
 router.get('/:id/', function(req, res){
 	console.log("GET exam_submissions/:id -> id : " + req.params.id + " | token : " + req.query.token);
-	res.send(display_exam_submission(req.query.token, req.params.id));
-	//res.send();
+	var result = display_exam_submission(req.query.token, req.params.id);
+	res.status(result.status);
+	res.json(result.body);
 });
-
+/**
+ * 
+ * @param {string} token 
+ * @param {int} id 
+ * @param {object} updated_submission 
+ * @returns {object} the updated version of the submission or an error
+ */
 function update_exam_submission(token, id, updated_submission){
 	var now = new Date();
 	console.log("GETTING THE FOLLOWING UPDATED SUBMISSION(" + id +")");
@@ -147,24 +176,37 @@ function update_exam_submission(token, id, updated_submission){
 						var index = mdb.exam_submissions.getIndexById(id)
 						console.log("index -> " + index);
 						var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update(updated_submission.answers,updated_submission.status);
-						return updated.id;
+						return {"status": 200, "body": updated};
 					}
 				}else if(ref_sub.ref_exam.owner.id === user.id){
 					console.log("USER IS OWNER");
 					var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update("","",updated_submission.evaluation);
-					return updated.id;
+					return {"status": 200, "body": updated};
 				}
+			}else{//the requested resource does not exists
+				return errors.error404;
 			}
+		}else{//the user has incorrect token
+			return errors.error401;
 		}
+	}else{//the payload has not a valid format
+		return errors.error400;
 	}
-	return "error null";
 }
 
 router.put('/:id/', function(req, res){
 	console.log("PUT exam_submissions/:id -> id : " + req.params.id + " | token : " + req.query.token);
-	res.send("" + update_exam_submission(req.query.token, req.params.id, req.body));
+	result = update_exam_submission(req.query.token, req.params.id, req.body);
+	res.status(result.status);
+	res.json(result.body);
 });
-
+/**
+ * returns the reviews array of a submission, this works if you're the creator of the submission,
+ * the owner of the exam regarding the submission or one of the exam assignees
+ * @param {string} token 
+ * @param {int} id
+ * @returns {object} reviews array of the selected submission or an error 
+ */
 function exam_submission_peer_review_list(token, id){
 	var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
 	if(user !== null){//controllo che l'utente sia loggato
@@ -174,22 +216,27 @@ function exam_submission_peer_review_list(token, id){
 			console.log("SUBMISSION EXISTS");
 			if(ref_sub.submitter.id === user.id){//se è submitter della submission
 				console.log("USER IS SUBMITTER");
-				return mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub);
+				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
 			}else if(ref_sub.ref_exam.owner.id === user.id){
 				console.log("USER IS OWNER");
-				return mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub);
+				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
 			}else if(ref_sub.ref_exam.group.isThere(user)){
 				console.log("USER IS IN GROUP")
-				return mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub);
+				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
 			}
+		}else{//the submissions does not exist
+			return errors.error404;
 		}
+	}else{//incorrect token
+		return errors.error401;
 	}
-	return "error null";
 }
 
 router.get('/:id/exam_peer_reviews', function(req, res){
 	console.log("GET /:id/exam_peer_reviews -> id : " + req.params.id + " | token : " + req.query.token);
-	res.send(exam_submission_peer_review_list(req.query.token, req.params.id));
+	var result = exam_submission_peer_review_list(req.query.token, req.params.id);
+	res.status(result.status);
+	res.json(result.body);
 });
 
 module.exports = router;
