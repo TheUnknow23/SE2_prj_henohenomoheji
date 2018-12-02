@@ -15,7 +15,7 @@ function toString(){
 //default users | input schema: (name, surname, email, password, type)
 users.add("gano", "gano", "gino@gino", "pwd1");users.add("geno", "genovese", "geno@geno", "pwd2");
 users.add("gino", "gino", "gano@gsno", "pwd3");users.add("gono", "gonovese", "guno@geno", "pwd4");
-users.add("guno", "guno", "gono@gono", "pwd5");
+users.add("guno", "guno", "gono@gono", "pwd5");users.add("billy", "bill", "billy@b", "pwd1");
 //console.log("\x1b[36mUSERS _> \x1b[0m");//console.log("," + users);//console.log("\n###################\n");
 
 //default tasks | input schema: (owner, task_type, subject, description, description, answer[], solution)

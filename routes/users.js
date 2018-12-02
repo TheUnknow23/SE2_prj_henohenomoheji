@@ -42,6 +42,8 @@ function routerGetUsers(token) {
 
 /**
  * /users/:id GET. Gets single user once id specified. If requested user is same of Id, also password is returned
+ * This function has a lot of debug comments
+ * Had issues with returning a copy of the user, so that the pwd is not modified in the "database"
  * @param {string} token used to verify request coming from logged user
  * @param {number} id id of the user to return
  */
@@ -54,14 +56,16 @@ function routerGetUserById(token, id) {
 		//console.log("SPECIFIED USER ID: " + retUser.id);
 		//There exist a returned user
 		if (retUser !== undefined) {
-			console.log('RETUSER: ' + retUser);
-			console.log('REQUESTER: ' + requester);
-			//COPY OF USER TO MODIFY PASSWORD FIELD
+			//console.log('................................................................RETUSER: ' + retUser);
+			//console.log('REQUESTER: ' + requester);
 			let responseUser = JSON.parse(JSON.stringify(retUser));
+			//console.log("................................................................COPY OF USER: " + responseUser);
 			//If requesting user is not the same he selected, do not include user.password
-			console.log("TEST: " + responseUser.id + "=?=" + requester.id);
+			//console.log("TEST: " + responseUser.id + "=?=" + requester.id);
 			if (responseUser.id !== requester.id) {
 				responseUser.password = undefined;
+				let temp = mdb.users.getUserById(id);
+				//console.log("....................................TEMP OUTPUT-MODIFIED PWD: " + temp.password);
 			}
 			return responseUser;
 		} else {

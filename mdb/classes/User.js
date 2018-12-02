@@ -79,10 +79,20 @@ class Users extends Array{
         return this.indexOf(this.find(obj => obj.email === email));
     }
     getUserByEmail(email){
-        return this.find(obj => obj.email === email);
+        let userFound = this.find(obj => obj.email === email);
+        if (userFound !== undefined) {
+            return userFound;
+        } else {
+            return null;
+        }
     }
     getUserById(id){
-        return this.find(obj => obj.id === id);
+        let userFound = this.filter(obj => obj.id === id);
+        if (userFound !== undefined) {
+            return userFound[0];
+        } else {
+            return null;
+        }
     }
 
     //DELETE METHODS
