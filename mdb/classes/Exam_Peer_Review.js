@@ -9,8 +9,8 @@ class Exam_Peer_Review{
         this.id = id;this.reviewer = reviewer; this.submission = submission; this.review = review;
     }
     update(review, submission){
-        (review !== "" && review !== undefined) ? this.review = review : console.log("T_T");
-        (submission !== "" && submission !== undefined) ? this.submission = submission : console.log("T_T");
+        if(review !== "" && review !== undefined) this.review = review;
+        if(submission !== "" && submission !== undefined) this.submission = submission;
         return this;
     }
 }

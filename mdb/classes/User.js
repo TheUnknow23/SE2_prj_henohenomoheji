@@ -12,9 +12,9 @@ class User{
         this.email = email; this.password = password;
     }
     update(name, surname, email, password){
-        (name !== "" && name !== undefined) ? this.name = name : console.log("T_T"); 
-        (surname !== "" && surname !== undefined) ? this.surname = surname : console.log("T_T");
-        (password !== "" && password !== undefined) ? this.password = password : console.log("T_T"); 
+        if(name !== "" && name !== undefined) this.name = name; 
+        if(surname !== "" && surname !== undefined) this.surname = surname;
+        if(password !== "" && password !== undefined) this.password = password; 
         if(email !== "" && email !== undefined){
             this.email = email;
             mdb.active_users.updateUser(this);
