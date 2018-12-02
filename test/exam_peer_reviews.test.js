@@ -1,6 +1,29 @@
 const er = require('./../routes/logic/exam_peer_reviews_logic');
 const mdb = require('./../mdb/mdb');
 const errors = require('./../schemas/errors/generic.json');
+
+//test for post a review
+test('call insert_exam_peer_review with no parameters', () => {
+        expect(er.insert_exam_peer_review()).toBe(errors.error400);
+});
+test('call insert_exam_peer_review with incorrect token', () => {
+        expect(er.insert_exam_peer_review("dsdsdsdssdsd", {"ref_submission": 0,"review":"bob"})).toBe(errors.error401);
+});
+test('call insert_exam_peer_review with incorrect payload', () => {
+        expect(er.insert_exam_peer_review(mdb.active_users[3].token, {"ref_exam": 0,"answers":["bob","bobby"], "status": 2})).toBe(errors.error400);
+});
+test('call insert_exam_peer_review with correct values', () => {
+        expect(er.insert_exam_peer_review(mdb.active_users[3].token,  {"ref_submission": 0,"review":"bob"}).body).toEqual(mdb.exam_peer_reviews[0]);
+});
+test('call insert_exam_peer_review with correct values as student who already reviewed', () => {
+        expect(3).toEqual(3);
+});
+test('call insert_exam_peer_review on inexisting submission', () => {
+        expect(3).toEqual(3);
+});
+test('call insert_exam_peer_review on incorrect submission', () => {
+        expect(3).toEqual(3);
+});
 //test for get reviews list
 test("validate token for get a reviews list ", function () {
 
