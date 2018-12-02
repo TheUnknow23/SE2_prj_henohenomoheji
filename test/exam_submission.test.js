@@ -1,6 +1,7 @@
 const es = require('./../routes/logic/exam_submission_logic');
 const mdb = require('./../mdb/mdb');
 const errors = require('./../schemas/errors/generic.json');
+
 test('dummy test', () => {
     console.log("sdsadasdaddadd");
     expect(3).toBe(3);
