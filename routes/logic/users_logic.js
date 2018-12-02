@@ -1,5 +1,5 @@
 
-const mdb = require ('./../../mdb/mdb');
+const mdb = require ('./../../mdb/mdb.js');
 const errors = require('./../../schemas/errors/generic.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
