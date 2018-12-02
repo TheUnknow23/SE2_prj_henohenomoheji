@@ -69,7 +69,7 @@ test('GET /users/:id OK case with requester != requested', () => {
 test('GET /users/:id OK case with requester == requested', () => {
     let user = routerGetUserById(mdb.active_users.getTokenByUserId(0), 0);
     console.log('..............................................................................TOKEN: ' + mdb.active_users.getTokenByUserId(0));
-    console.log('..............................................................................USER: ' + user);
+    console.log('..............................................................................USER: ' + JSON.stringify(user));
     expect(user.id).toBeDefined();
     expect(user.name).toBeDefined();
     expect(user.surname).toBeDefined();
