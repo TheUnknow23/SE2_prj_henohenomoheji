@@ -1,6 +1,7 @@
 const mdb = require ('./../../mdb/mdb');
-const errors = require('./../../schemas/errors/generic.json');
+const  generic_e = require('./../../schemas/errors/generic.json');
 const Ajv = require('ajv');
+const submission_e = require('./../../schemas/errors/submission.json');
 var ajv = new Ajv();
 
 /**
@@ -15,7 +16,7 @@ var ajv = new Ajv();
  */
 function display_exam_submission_list(token, type){
 	if(token === undefined || type === undefined){
-		return errors.error400;
+		return  generic_e.error400;
 	}
 	var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
 	if(user !== null){
@@ -30,10 +31,10 @@ function display_exam_submission_list(token, type){
 			console.log("sending submissions to review");
 			return {"status": 200, "body": mdb.exam_peer_reviews.filterExamSubmissionByReviewer(user,type)};
 		}else{
-			return errors.error400;
+			return  generic_e.error400;
 		}
 	}else{
-		return errors.error401;
+		return  generic_e.error401;
 	}
 }
 
@@ -74,22 +75,22 @@ function insert_exam_submission(token, exam_submission){
 							console.log("ASSIGNED THE FOLLOWING REVIEW");console.log(mdb.exam_peer_reviews[mdb.exam_peer_reviews.length-1]);
 							return {"status": 201, "body": submission};
 						}else{//there's already a submission
-							return errors.error400;
+							return  submission_e.existent_submission;
 						}
 					}else{//the user is not in the group
-						return errors.error401;
+						return  generic_e.error401;
 					}
 				}else{//the deadline expired
-					return errors.error400;
+					return  submission_e.expired_deadline;
 				}
 			}else{//the exam does not exist
-				return errors.error400;
+				return  generic_e.error404;
 			}
 		}else{//the token is not correct
-			return errors.error401;
+			return  generic_e.error401;
 		}
 	}else{//the payload doesn't respect the schema
-		return errors.error400;
+		return  generic_e.error400;
 	}
 }
 
@@ -122,10 +123,10 @@ function display_exam_submission(token, id){
 				return {"status": 200, "body": e_sub};
 			}
 		}else{
-			return errors.error404;
+			return  generic_e.error404;
 		}
 	}else{
-		return errors.error401;
+		return  generic_e.error401;
 	}
 }
 
@@ -164,13 +165,13 @@ function update_exam_submission(token, id, updated_submission){
 					return {"status": 200, "body": updated};
 				}
 			}else{//the requested resource does not exists
-				return errors.error404;
+				return  generic_e.error404;
 			}
 		}else{//the user has incorrect token
-			return errors.error401;
+			return  generic_e.error401;
 		}
 	}else{//the payload has not a valid format
-		return errors.error400;
+		return  generic_e.error400;
 	}
 }
 
@@ -199,10 +200,10 @@ function exam_submission_peer_review_list(token, id){
 				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
 			}
 		}else{//the submissions does not exist
-			return errors.error404;
+			return  generic_e.error404;
 		}
 	}else{//incorrect token
-		return errors.error401;
+		return  generic_e.error401;
 	}
 }
 console.log("YEE HAW!");
