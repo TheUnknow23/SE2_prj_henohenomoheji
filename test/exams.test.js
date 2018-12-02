@@ -153,7 +153,7 @@ test("validate response 404 by there isn't exam with current id for get a submis
 
 test("validate response 404 by there aren't any submissions with current exam  for get a submission list of exam", function () {
 
-        expect(exams.getSubmissionsOfExam(token, 1)).toEqual(exams.result404);
+        expect(exams.getSubmissionsOfExam(token, 2)).toEqual(exams.result404);
 });
 
 test("validate response for get a submission list of exam", function () {

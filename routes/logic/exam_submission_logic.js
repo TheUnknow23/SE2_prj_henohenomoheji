@@ -206,18 +206,6 @@ function exam_submission_peer_review_list(token, id){
 		return  generic_e.error401;
 	}
 }
-console.log("YEE HAW!");
-console.log(mdb.groups);
-mdb.users[3].update("", "", "3@3", "");
-console.log(mdb.exam_peer_reviews[0]);
-mdb.users[2].update("", "", "2@2", "");
-mdb.users[1].update("", "", "1@1", "");
-mdb.users[0].update("", "", "0@0", "");
-mdb.tasks[2].update("", "", "", "updated description", "", "");
-console.log("updated exam submission");
-console.log(mdb.exam_submissions[0]);
-console.log("updated review");
-console.log(mdb.exam_peer_reviews[0]);
 
 module.exports.display_exam_submission = display_exam_submission;/**/
 module.exports.display_exam_submission_list = display_exam_submission_list;/**/

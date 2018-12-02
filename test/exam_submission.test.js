@@ -43,7 +43,7 @@ test('call display_exam_submission_list with correct values (select=owned)', () 
     expect(es.display_exam_submission_list(mdb.active_users[0].token, "owned").body).toEqual(mdb.exam_submissions);
 });
 test('call display_exam_submission_list with correct values (select=toreview)', () => {
-    expect(es.display_exam_submission_list(mdb.active_users[3].token, "toreview").body).toEqual([mdb.exam_submissions[0]]);
+    expect(es.display_exam_submission_list(mdb.active_users[3].token, "toreview").body).toEqual([mdb.exam_submissions[0],mdb.exam_submissions[2]]);
 });
 test('call display_exam_submission_list with correct values (select=reviewed)', () => {
     expect(es.display_exam_submission_list(mdb.active_users[3].token, "reviewed").body).toEqual([]);
@@ -60,7 +60,7 @@ test('call insert_exam_submission with incorrect payload', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token, {"ref_exam": 0,"answers":["bob","bobby"], "status": 2})).toBe(generic_e.error400);
 });
 test('call insert_exam_submission with correct values', () => {
-    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"}).body).toEqual(mdb.exam_submissions[2]);
+    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"}).body).toEqual(mdb.exam_submissions[3]);
 });
 test('call insert_exam_submission with correct values as student who already submitted', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "heck"})).toEqual(submission_e.existent_submission);

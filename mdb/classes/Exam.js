@@ -21,13 +21,13 @@ class Exam {
                 this.review_deadline = review_deadline;
         }
         update(title, description, taskset, group, final_deadline, review_deadline, owner_email, task) {
-                (title !== "" && title !== undefined) ? this.title = title : console.log("T_T");
-                (description !== "" && description !== undefined) ? this.description = description : console.log("T_T");
-                (taskset !== "" && taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
-                (group !== "" && group !== undefined) ? this.group = group : console.log("T_T");
-                (final_deadline !== "" && final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
-                (review_deadline !== "" && review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
-                (owner_email !== "" && owner_email !== undefined) ? this.owner.email = owner_email : console.log("T_T");
+                if(title !== "" && title !== undefined)  this.title = title;
+                if(description !== "" && description !== undefined)  this.description = description;
+                if(taskset !== "" && taskset !== undefined)  this.taskset = taskset;
+                if(group !== "" && group !== undefined)  this.group = group;
+                if(final_deadline !== "" && final_deadline !== undefined)  this.final_deadline = final_deadline;
+                if(review_deadline !== "" && review_deadline !== undefined)  this.review_deadline = review_deadline;
+                if(owner_email !== "" && owner_email !== undefined)  this.owner.email = owner_email;
                 if(task !== "" && task !== undefined){
                         for(let i = 0; i < this.taskset.length; i++){
                                 if(this.taskset[i].id === task.id){

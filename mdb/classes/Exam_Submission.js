@@ -13,11 +13,11 @@ class Exam_Submission{
         this.status = status; this.evaluation = "";
     }
     update(answer, status, evaluation, ref_exam, submitter_email){
-        (answer !== "" && answer !== undefined) ? this.answer = answer : console.log("T_T");
-        (status !== "" && status !== undefined) ? this.status = status : console.log("T_T"); 
-        (evaluation !== "" && evaluation !== undefined) ? this.evaluation = evaluation : console.log("T_T");
-        (ref_exam !== "" && ref_exam !== undefined) ? this.ref_exam = ref_exam : console.log("T_T");
-        (submitter_email !== "" && submitter_email !== undefined) ? this.submitter.email = submitter_email : console.log("T_T");
+        if(answer !== "" && answer !== undefined) this.answer = answer;
+        if(status !== "" && status !== undefined) this.status = status; 
+        if(evaluation !== "" && evaluation !== undefined) this.evaluation = evaluation;
+        if(ref_exam !== "" && ref_exam !== undefined) this.ref_exam = ref_exam;
+        if(submitter_email !== "" && submitter_email !== undefined) this.submitter.email = submitter_email;
         mdb.exam_peer_reviews.updateSubmission(this);
         return this;
     }
