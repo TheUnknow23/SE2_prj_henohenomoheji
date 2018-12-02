@@ -69,6 +69,11 @@ class Exam_Peer_Reviews extends Array{
     findById(id){
         return this.find(obj => obj.id === id);
     }
+    getIndexByUserAndSubmission(user, ref_sub){
+        var index = this.indexOf(this.find(obj => (obj.submission.id === ref_sub.id && obj.reviewer.id === user.id)));
+        //console.log("found the following review ->");console.log(rev);
+        return index;
+    }
     //DELETE METHODS
     deleteById(id){
         var index = this.indexOf(this.find(obj => obj.id === id));
@@ -76,6 +81,7 @@ class Exam_Peer_Reviews extends Array{
             this.splice(index,1);
         }
     }
+    //CHECK METHODS
     hasReview(exam, user){//checks is there's already an review for the given exam and user
         var rev = this.find(obj => (obj.submission.ref_exam === exam && obj.reviewer === user));
         //console.log("found the following review ->");console.log(rev);
