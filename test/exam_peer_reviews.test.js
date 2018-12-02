@@ -1,7 +1,6 @@
-
-const mdb = require('./../mdb/mdb.js');
-const exams = require('./../routes/exam_peer_reviews.js');
-
+const er = require('./../routes/logic/exam_peer_reviews_logic');
+const mdb = require('./../mdb/mdb');
+const errors = require('./../schemas/errors/generic.json');
 //test for get reviews list
 test("validate token for get a reviews list ", function () {
 
