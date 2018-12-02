@@ -30,16 +30,21 @@ class Active_Users extends Array {
         } else {
             if (this.find(obj => obj.user.email === user.email) === undefined) {
                 x = new Active_User(user);
+            } else {
+                return 'user already logged';
             }
         } if (x !== null) {
             this.push(x);
+            return x.token;
         }
         //console.log("Active users length : " + this.length);
     }
 
     //GET METHODS
-    getAll() {
-        return this;
+    filterAll() {
+        //returned copy of resource
+        let copy = JSON.parse(JSON.stringify(this));
+        return copy;
     }
     getTokenByUser(user){
         let userFound = this.find(obj => obj.user.email === user.email);

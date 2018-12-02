@@ -54,12 +54,12 @@ function routerGetUserById(token, id) {
 		//console.log("SPECIFIED USER ID: " + retUser.id);
 		//There exist a returned user
 		if (retUser !== undefined) {
-			console.log('RETUSER: ' + retUser);
-			console.log('REQUESTER: ' + requester);
+			//console.log('RETUSER: ' + retUser);
+			//console.log('REQUESTER: ' + requester);
 			//COPY OF USER TO MODIFY PASSWORD FIELD
 			let responseUser = JSON.parse(JSON.stringify(retUser));
 			//If requesting user is not the same he selected, do not include user.password
-			console.log("TEST: " + responseUser.id + "=?=" + requester.id);
+			//console.log("TEST: " + responseUser.id + "=?=" + requester.id);
 			if (responseUser.id !== requester.id) {
 				responseUser.password = undefined;
 			}
