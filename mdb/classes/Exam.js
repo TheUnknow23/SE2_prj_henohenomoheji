@@ -1,4 +1,4 @@
-
+const mdb = require('./../mdb');
 class Exam {
         /* 
          id(integer) PRIMARY KEY
@@ -20,13 +20,23 @@ class Exam {
                 this.final_deadline = final_deadline;
                 this.review_deadline = review_deadline;
         }
-        update(title, description, taskset, group, final_deadline, review_deadline) {
-                (title !== "" || title !== undefined) ? this.title = title : console.log("T_T");
-                (description !== "" || description !== undefined) ? this.description = description : console.log("T_T");
-                (taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
-                (group !== undefined) ? this.group = group : console.log("T_T");
-                (final_deadline !== "" || final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
-                (review_deadline !== "" || review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
+        update(title, description, taskset, group, final_deadline, review_deadline, owner_email, task) {
+                (title !== "" && title !== undefined) ? this.title = title : console.log("T_T");
+                (description !== "" && description !== undefined) ? this.description = description : console.log("T_T");
+                (taskset !== "" && taskset !== undefined) ? this.taskset = taskset : console.log("T_T");
+                (group !== "" && group !== undefined) ? this.group = group : console.log("T_T");
+                (final_deadline !== "" && final_deadline !== undefined) ? this.final_deadline = final_deadline : console.log("T_T");
+                (review_deadline !== "" && review_deadline !== undefined) ? this.review_deadline = review_deadline : console.log("T_T");
+                (owner_email !== "" && owner_email !== undefined) ? this.owner.email = owner_email : console.log("T_T");
+                if(task !== "" && task !== undefined){
+                        for(let i = 0; i < this.taskset.length; i++){
+                                if(this.taskset[i].id === task.id){
+                                        this.taskset[i].text = task.description;
+                                }
+                        }
+                }
+                mdb.exam_submissions.updateRef_Exam(this);
+                return this;
         }
         toString() {
                 return "\x1b[31mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TITLE : " + this.title + ", DESCRIPTION : " + this.description + "\n\nTASK SET -> \n" + JSON.stringify(this.taskset) +
@@ -122,6 +132,26 @@ class Exams extends Array {
                 if (index >= 0)
                 {
                         this.splice(index, 1);
+                }
+        }
+        //UPDATE METHODS
+        updateGroup(group){
+                for(let i = 0; i < this.length; i++){
+                        if(this[i].group.id === group.id){
+                                this[i].update("", "", "", group, "", "");
+                        }
+                }
+        }
+        updateUser(user){
+                for(let i = 0; i < this.length; i++){
+                        if(this[i].owner.id === user.id){
+                                this[i].update("", "", "", "", "", "", user.email);
+                        }
+                }
+        }
+        updateTask(task){
+                for(let i = 0; i < this.length; i++){
+                        this[i].update("", "", "", "", "", "", "", task);
                 }
         }
 }

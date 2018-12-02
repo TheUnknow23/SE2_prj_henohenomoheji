@@ -4,8 +4,8 @@ const mdb = require ('./../mdb/mdb.js');
 const Ajv = require ('ajv');
 const ajv = new Ajv();
 
-const postSchema = require('../schemas/group_post_schema.json');
-const putSchema = require('./../schemas/groups_put_schema.json');
+const postSchema = require('../schemas/payloads/group_post_schema.json');
+const putSchema = require('./../schemas/payloads/groups_put_schema.json');
 
 /*##### FUNCTION SECTION #####*/
 

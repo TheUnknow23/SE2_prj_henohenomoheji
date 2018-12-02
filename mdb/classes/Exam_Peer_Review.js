@@ -8,8 +8,10 @@ class Exam_Peer_Review{
     constructor(id, reviewer, submission, review){
         this.id = id;this.reviewer = reviewer; this.submission = submission; this.review = review;
     }
-    update(review){
-        (review !== "" || review !== undefined) ? this.review = review : console.log("T_T");
+    update(review, submission){
+        (review !== "" && review !== undefined) ? this.review = review : console.log("T_T");
+        (submission !== "" && submission !== undefined) ? this.submission = submission : console.log("T_T");
+        return this;
     }
 }
 class Exam_Peer_Reviews extends Array{
@@ -30,9 +32,17 @@ class Exam_Peer_Reviews extends Array{
     filterBySubmitter(reviewer){
         return this.filter(obj => obj.reviewer.email === reviewer.email);
     }
-    filterExamSubmissionByReviewer(reviewer){
-        var a = this.filter(obj => obj.reviewer.email === reviewer.email);
-        return a.map(obj => obj.submission);
+    filterExamSubmissionByReviewer(reviewer, type){
+        var rev = undefined;
+        if(type === "toreview"){
+            rev = this.filter(obj => (obj.reviewer.email === reviewer.email && obj.review === ""));
+        }else if(type === "reviewed"){
+            rev = this.filter(obj => (obj.reviewer.email === reviewer.email && obj.review !== ""));
+        }else{
+            rev = this.filter(obj => (obj.reviewer.email === reviewer.email));
+        }
+        rev = rev.map(obj => obj.submission);
+        return rev;
     }
     filterByExam(exam){
         return this.filter(obj => obj.submission.ref_exam.id === exam.id);
@@ -40,9 +50,10 @@ class Exam_Peer_Reviews extends Array{
     filterPeerReviewBySubmission(submission){
         console.log("SERACHING THE FOLLOWING SUBMISSION");
         console.log(submission);
-        var rev = this.filter(obj => obj.submission === submission);
+        var rev;
+        rev = this.filter(obj => (obj.submission === submission));
         console.log("FOUND THIS");console.log(rev);
-        return this.filter(obj => obj.submission === submission);
+        return rev;
     }
     //GET METHODS
     getIndexById(id){
@@ -72,6 +83,21 @@ class Exam_Peer_Reviews extends Array{
             return true;
         }
         return false;
+    }
+    //UPDATE METHODS
+    updateSubmission(submission){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].submission.id === submission.id){
+                this[i].update("",submission);
+            }
+        }
+    }
+    updateUser(user){
+        for(let i = 0; i < this.length; i++){
+            if(this[i].reviewer.id === user.id){
+                this[i].reviewer.email = user.email;
+            }
+        }
     }
 }
 module.exports = Exam_Peer_Reviews;
