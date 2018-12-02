@@ -1,5 +1,6 @@
 const mdb = require ('./../../mdb/mdb');
-const errors = require('./../../schemas/errors/generic.json');
+const  generic_e = require('./../../schemas/errors/generic.json');
+const  review_e = require('./../../schemas/errors/review.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
@@ -22,22 +23,22 @@ function insert_exam_peer_review(token, exam_review){
 							var review = mdb.exam_peer_reviews[idx].update("", "", exam_review.review);
 							return {"status": 201, "body": review};
 						}else{//there's already a review
-							return errors.error400;
+							return  review_e.existent_review;
 						}
 					}else{//the user is not the reviewer
-						return errors.error401;
+						return  generic_e.error401;
 					}
 				}else{//the deadline expired
-					return errors.error400;
+					return  review_e.expired_deadline;
 				}
 			}else{//the submission does not exist
-				return errors.error400;
+				return  generic_e.error404;
 			}
 		}else{//the token is not correct
-			return errors.error401;
+			return  generic_e.error401;
 		}
 	}else{//the payload doesn't respect the schema
-		return errors.error400;
+		return  generic_e.error400;
 	}
 }
 
