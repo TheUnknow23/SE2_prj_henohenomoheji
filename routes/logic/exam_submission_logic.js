@@ -2,6 +2,7 @@ const mdb = require ('./../../mdb/mdb');
 const errors = require('./../../schemas/errors/generic.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
+
 /**
  * gets the list of exam_submissions, the user can select a type of exam submissions >
  * - submitted: submissions made by the user requesting the service
