@@ -30,8 +30,6 @@ class Active_Users extends Array {
         } else {
             if (this.find(obj => obj.user.email === user.email) === undefined) {
                 x = new Active_User(user);
-            } else {
-                return 'user already logged';
             }
         } if (x !== null) {
             this.push(x);

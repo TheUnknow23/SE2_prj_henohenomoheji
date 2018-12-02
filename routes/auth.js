@@ -16,6 +16,8 @@ function loginFunction(email, password) {
 			} else {
 				return 'some error occurred';
 			}
+		} else {
+			return 'incorrect password';
 		}
 	} else {
 		return 'login failed';

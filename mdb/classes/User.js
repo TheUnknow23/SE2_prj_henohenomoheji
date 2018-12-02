@@ -77,9 +77,9 @@ class Users extends Array{
         }
     }
     getUserById(id){
-        let userFound = this.find(obj => obj.id === id);
+        let userFound = this.filter(obj => obj.id === id);
         if (userFound !== undefined) {
-            return userFound;
+            return userFound[0];
         } else {
             return null;
         }
