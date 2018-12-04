@@ -4,7 +4,7 @@ const errors = require('./../../schemas/errors/generic.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
-var userInputSchema = {"type": "object", "required": ["name", "surname", "email", "password"], "properties": {"name": {"type": "string"}, "surname": {"type": "string"}, "email": {"type": "string"}, "password": {"type": "string"}, "type": {"type": "string"}}};
+var userInputSchema = {"type": "object", "required": ["name", "surname", "email", "password"], "properties": {"name": {"type": "string"}, "surname": {"type": "string"}, "email": {"type": "string"}, "password": {"type": "string"}}};
 
 //Functions
 
@@ -162,9 +162,41 @@ function routerPostUsers(postBody) {
 	}
 }
 
+/**
+ * Updates
+ * @param {*} token 
+ * @param {*} putBody 
+ */
+function routerUpdateUser(token, putBody) {
+	let validate = ajv.compile(userInputSchema);
+	let requester = mdb.active_users.getUserByToken(token);
+	
+	if (!validate(putBody)) {
+		return errors.error400;
+	}
+	if (requester === null) {
+		return errors.error401;
+	} else {
+		let name = putBody.name;
+		let surname = putBody.surname;
+		let email = putBody.email;
+		let password = putBody.password;
+
+		let updatedUser = mdb.users[mdb.users.getIndexByEmail(requester.email)].update(name, surname, email, password);
+		if (updatedUser !== -1) {
+			return {"status": 200, "body": "user updated"};
+		} else {
+			//User changed email with already existing one
+			return errors.error400;
+		}
+	}
+}
+
+
 
 module.exports.routerGetUsers = routerGetUsers;
+module.exports.routerPostUsers = routerPostUsers;
+module.exports.routerUpdateUser = routerUpdateUser;
 module.exports.routerGetUserById = routerGetUserById;
 module.exports.routerGetUsersExams = routerGetUsersExams;
 module.exports.routerGetUsersExamSubmissions = routerGetUsersExamSubmissions;
-module.exports.routerPostUsers = routerPostUsers;
