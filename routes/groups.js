@@ -59,7 +59,7 @@ function createGroup(body){
             if (mdb.groups.add({
                 "id": mdb.active_users.getUserByToken(body.token).id,
                 "email": mdb.active_users.getUserByToken(body.token).email
-            }, body.name, body.description, body.members)) {
+            }, body.name, body.description, body.members_id)) {
                 return 201;
             } else {
                 return 400;
@@ -79,14 +79,14 @@ function createGroup(body){
  * @param {JSON}body of the request
  * @returns {*}
  */
-function updateGroup(id, body){
+function updateGroup(id, body, token){
     //console.log("update "+body.members);
     if (ajv.validate(putSchema, body)){
         //console.log("ValidJson")
         if (mdb.groups.getGroupById(id)!==null && mdb.groups.getGroupById(id)!==undefined) {
-            if (mdb.active_users.getUserByToken(body.token)!==null && mdb.active_users.getUserByToken(body.token)!==undefined) {
-                if (mdb.active_users.getUserByToken(body.token).id === mdb.groups.getGroupById(id).owner.id) {
-                    return mdb.groups.updateById(id, body.name, body.description, body.members);
+            if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
+                if (mdb.active_users.getUserByToken(token).id === mdb.groups.getGroupById(id).owner.id) {
+                    return mdb.groups.updateById(id, body.name, body.description, body.members_id);
                 } else {
                     return 403;
                 }
@@ -119,8 +119,8 @@ router.get('/:group_id', function (req, res) {
 
 router.put('/:group_id', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(updateGroup(req.params.id, req.body));
-    //res.sendStatus(mdb.groups.updateById(req.params.id, req.body.name, req.body.description, req.body.members));
+    res.sendStatus(updateGroup(req.params.id, req.body, req.query.token));
+    //res.sendStatus(mdb.groups.updateById(req.params.id, req.body.name, req.body.description, req.body.members_id));
 });
 
 router.delete('/:group_id', function (req, res) {
