@@ -20,8 +20,14 @@ router.post('/', function(req, res) {
 	let postBody = req.body;
 
 	let result = logic.routerPostUsers(postBody);
-	if (result === 1) {
-		res.sendStatus(201);
+	if (result.status === 200) {
+		res.status(201);
+		res.send(result.body 
+			+ "<br>"
+			+ "<a href='/'>Home</a>"
+			+ "<form action='/' method='GET'>"
+			+ "<input type='submit'>"
+			+ "</form>");
 	} else {
 		res.send(result + ': user probably already registered, try using another email');
 	}
