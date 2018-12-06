@@ -1,4 +1,4 @@
-const groups = require('./../routes/groups.js');
+const groups = require('./../routes/logic/groups_logic.js');
 const mdb = require('./../mdb/mdb.js');
 
 test('dummy test', () => {
