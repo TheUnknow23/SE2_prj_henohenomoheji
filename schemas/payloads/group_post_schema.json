@@ -10,12 +10,12 @@
     "description": {
       "type": "string"
     },
-    "members": {
+    "members_id": {
       "type": "array",
       "items": {
-        "type": "object"
+        "type": "number"
       }
     }
   },
-  "required": ["token","name", "description", "members"]
+  "required": ["token","name", "description", "members_id"]
 }

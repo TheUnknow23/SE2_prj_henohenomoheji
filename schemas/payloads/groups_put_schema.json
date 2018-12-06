@@ -1,21 +1,18 @@
 {
   "type": "object",
   "properties": {
-    "token": {
-      "type": "string"
-    },
     "name": {
       "type": "string"
     },
     "description": {
       "type": "string"
     },
-    "members": {
+    "members_id": {
       "type": "array",
       "items": {
-        "type": "object"
+        "type": "number"
       }
     }
   },
-  "required": ["token"]
+  "required": ["name", "description", "members_id"]
 }

@@ -49,6 +49,31 @@ test('POST /users NOT OK case user already subscribed (same email)', () => {
 });
 
 
+// PUT /users
+test('PUT /users OK case logged user updating info unchanged pwd', () => {
+    let result = logic.routerUpdateUser(mdb.active_users.getTokenByUserId(0), {"name": "z", "surname": "z", "email": "zeta@zeta", "password": ""}).body;
+    console.log("...............................................PUT OK USER: " + mdb.users.getUserById(0));
+    expect(result).toBe('user updated');
+});
+
+test('PUT /users OK case logged user updating info only name', () => {
+    let result = logic.routerUpdateUser(mdb.active_users.getTokenByUserId(0), {"name": "BANANANANANAN", "surname": "", "email": "", "password": ""}).body;
+    console.log("...............................................PUT OK USER: " + mdb.users.getUserById(0));
+    expect(result).toBe('user updated');
+});
+
+test('PUT /users NOT OK case logged user updating info email already registered', () => {
+    let result = logic.routerUpdateUser(mdb.active_users.getTokenByUserId(1), {"name": "ac", "surname": "blah", "email": "zeta@zeta", "password": ""}).body.code;
+    console.log("...............................................PUT OK USER: " + mdb.users.getUserById(0));
+    expect(result).toBe(400);
+});
+
+test('PUT /users NOT OK case Unlogged user updating info', () => {
+    let result = logic.routerUpdateUser(mdb.active_users.getTokenByUserId(6), {"name": "z", "surname": "z", "email": "alas@imcalm", "password": ""}).body.code;
+    console.log("...............................................PUT OK USER: " + mdb.users.getUserById(0));
+    expect(result).toBe(401);
+});
+
 
 // GET /users/:id
 

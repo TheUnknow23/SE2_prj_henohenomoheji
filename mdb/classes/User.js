@@ -12,19 +12,29 @@ class User{
         this.email = email; this.password = password;
     }
     update(name, surname, email, password){
-        (name !== "" && name !== undefined) ? this.name = name : console.log("T_T"); 
-        (surname !== "" && surname !== undefined) ? this.surname = surname : console.log("T_T");
-        (password !== "" && password !== undefined) ? this.password = password : console.log("T_T"); 
-        if(email !== "" && email !== undefined){
-            this.email = email;
-            mdb.active_users.updateUser(this);
-            mdb.exam_peer_reviews.updateUser(this);
-            mdb.exam_submissions.updateUser(this);
-            mdb.exams.updateUser(this);
-            mdb.groups.updateUser(this);
-            mdb.tasks.updateUser(this);
+        let acceptUpdate = true;
+        if (email !== "" && email !== undefined) {
+            if (mdb.users.getUserByEmail(email) !== null) {
+                acceptUpdate = false;
+            }
         }
-        return this;
+        if (acceptUpdate) {
+            if(name !== "" && name !== undefined) this.name = name; 
+            if(surname !== "" && surname !== undefined) this.surname = surname;
+            if(password !== "" && password !== undefined) this.password = password; 
+            if(email !== "" && email !== undefined){
+                this.email = email;
+                mdb.active_users.updateUser(this);
+                mdb.exam_peer_reviews.updateUser(this);
+                mdb.exam_submissions.updateUser(this);
+                mdb.exams.updateUser(this);
+                mdb.groups.updateUser(this);
+                mdb.tasks.updateUser(this);
+            }
+            return this;
+        } else {
+            return -1;
+        }
     }
     toString(){
         return "\x1b[36m ID : " + this.id + "\x1b[0m (NAME : " + this.name + ", SURNAME : " + this.surname + 

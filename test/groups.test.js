@@ -36,10 +36,10 @@ test('call createGroup wrong payload', ()=>{
     expect(groups.createGroup({"name": "hfsb", "description": "hfjdi"})).toBe(400);
 });
 test('call createGroup correct payload', ()=>{
-    expect(groups.createGroup({"token": mdb.active_users[0].token, "name": "hfsb", "description": "hfjdi", "members": [{"id": mdb.groups[0].members[0].id, "email":mdb.groups[0].members[0].email}]})).toBe(201);
+    expect(groups.createGroup({"token": mdb.active_users[0].token, "name": "hfsb", "description": "hfjdi", "members_id": [mdb.groups[0].members[0].id]})).toBe(201);
 });
 test('call createGroup with non-existing user', ()=>{
-    expect(groups.createGroup({"token": "hhgvj68H", "name": "hfsb", "description": "hfjdi", "members": [{"id": mdb.groups[0].members[0].id, "email":mdb.groups[0].members[0].email}]})).toBe(401);
+    expect(groups.createGroup({"token": "hhgvj68H", "name": "hfsb", "description": "hfjdi", "members_id": [mdb.groups[0].members[0].id]})).toBe(401);
 });
 
 // updateGroup testing
@@ -47,17 +47,17 @@ test('call updateGroup wrong id, wrong payload', ()=>{
     expect(groups.updateGroup(987, {"nkme":545})).toBe(400);
 });
 test('call updateGroup correct id, wrong payload', ()=>{
-    expect(groups.updateGroup(0, {"nome":545, "desh":"string", "members": ["test", "error"]})).toBe(400);
+    expect(groups.updateGroup(0, {"nome":545, "desh":"string", "members_id": ["test", "error"]})).toBe(400);
 });
 test('call updateGroup correct id, correct payload', ()=>{
-    expect(groups.updateGroup(0, {"token": mdb.active_users[0].token, "name":"hgh", "description": "hfjvbj"})).toBe(200);
+    expect(groups.updateGroup(0, {"name":"hgh", "description": "hfjvbj", "members_id": []}, mdb.active_users[0].token)).toBe(200);
 });
 test('call updateGroup wrong id, correct payload', ()=>{
-    expect(groups.updateGroup(689, {"token": mdb.active_users[0].token,"name":"hgh", "description": "hfjvbj"})).toBe('The specified id does not exist');
+    expect(groups.updateGroup(689, {"name":"hgh", "description": "hfjvbj", "members_id": []})).toBe('The specified id does not exist');
 });
 test('call updateGroup wrong owner, correct payload and id', ()=>{
-    expect(groups.updateGroup(0, {"token": mdb.active_users[2].token,"name":"hgh", "description": "hfjvbj"})).toBe(403);
+    expect(groups.updateGroup(0, {"name":"hgh", "description": "hfjvbj", "members_id": []}, mdb.active_users[2].token)).toBe(403);
 });
 test('call updateGroup non-existing user, correct payload and id', ()=>{
-    expect(groups.updateGroup(0, {"token": "ghj67GG","name":"hgh", "description": "hfjvbj"})).toBe(401);
+    expect(groups.updateGroup(0, {"name":"hgh", "description": "hfjvbj", "members_id": []})).toBe(401);
 });
