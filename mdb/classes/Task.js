@@ -45,7 +45,7 @@ class Tasks extends Array{
             this.push(x);
         }
         //console.log("last task id : " + this[this.length-1].id);
-        return this[this.length-1].id;
+        return this[this.length-1];
     }
     //FILTER METHODS
     filterByOwner(owner){
