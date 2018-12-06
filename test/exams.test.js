@@ -1,6 +1,6 @@
 
 const mdb = require('./../mdb/mdb.js');
-const exams = require('./../routes/exams.js');
+const exams = require('./../routes/logic/exam_logic');
 
 
 const email = "geno@geno";
