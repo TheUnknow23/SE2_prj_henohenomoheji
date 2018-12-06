@@ -54,47 +54,58 @@ const result404 = {status: 404, body: {code: 404, message: "Not Found"}};
 }*/
 
 function getTaskslist(token, selection) {
+    console.log("GETTTNG LIST OF TASKS");
     let user = mdb.active_users.getUserByToken(token);
+    console.log(user);
+    
     if (user !==null && user!==undefined){
         switch (selection) {
             case 'all': {
-                return mdb.tasks;
+                return {status: 200, body: {code: 200, message: mdb.tasks}};
             }
             case 'created': {
-                return mdb.tasks.filterByOwner(user);
+                return {status: 200, body: {code: 200, message: mdb.tasks.filterByOwner(user)}};
             }
             default:{
                 return result400;
             }
         }
     }
+    return result401;
 }
 
 function checkAtt(body){
-    if (body.task_type == undefined || body.subject == undefined || body.title == undefined || body.description == undefined || body.options === undefined || body.solutions == undefined || body.task_type == "" || body.subject == "" || body.title == "" || body.description == "" || body.options == "" || body.solutions == "")
-    { return false; }
-    else if (body.options !== "" && (body.options.length === undefined || body.options.length < 2)) { return false; } else { return true; }
+    if (body.task_type == undefined || body.subject == undefined || body.title == undefined || body.description == undefined || body.solutions == undefined || body.task_type == "" || body.subject == "" || body.title == "" || body.description == "" || body.solutions == "")
+    { return false; } else { return true; }
 }
 
-function createTask(body) {
+function createTask(token, body) {
     //get user
-    let user = mdb.active_users.getUserByToken(body.token);
+    let user = mdb.active_users.getUserByToken(token);
     //if isn't empty
     if (user !== null&&user !==undefined){
-        if (ajv.validate(tasksPostSchema, body)&&checkAtt(body)){
-            let id = mdb.tasks.add({id:user.id, email: user.email}, body.task_type,
-                body.task_subject, body.task_title, body.task_description, body.task_options, body.task_solutions)
-            let result = {};
-            result.body=id;
-            result.status=200;
+        if (ajv.validate(require('./../schemas/tasks_post.json'), body)&&checkAtt(body)){
+            console.log("VALIDATE PASS");
+            let result = mdb.tasks.add({id:user.id, email: user.email}, body.task_type,
+                body.title, body.subject, body.description, body.answer, body.solutions)
+            console.log("RESUKKTT");
+            console.log(result);
             return result;
         } else {
+            console.log("VALIDATE ERROR");
             return result400;
         }
     } else {
         return result401;
     }
-}
+} 
+/*let token = mdb.active_users[0].token;
+let body = {"id": 20, "owner":{"id":mdb.active_users[0].user.id, "email":mdb.active_users[0].user.email}, "task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+console.log("......................................................................................"); console.log(body);
+let result = createTask(token, body).body.message;
+console.log(result);
+var check = ajv.validate(require('./../schemas/tasks_array_schema.json'), result);
+console.log(check);*/
 
 
 
@@ -118,7 +129,7 @@ function accessSpecificTask(token, task_id) {
     else
     {
 
-        let idtask = mdb.getTasksbyId(task_id);
+        let idtask = mdb.getTasksById(task_id);
         if (idtask === undefined) {
             return undefined;
         } else {
@@ -137,8 +148,6 @@ function updateTask(token, body, task_id) {
     let result;
     //get user
     let user = mdb.active_users.getUserByToken(token);
-    //if isn't empty
-    let task = mdb.tasks.getTasksbyId(task_id);
     if (user === null)
     {
         result = result401;
@@ -153,7 +162,7 @@ function updateTask(token, body, task_id) {
     {
         result = result400;
     }
-    else if (mdb.tasks.getTasksbyId(task_id === undefined))
+    else if (mdb.tasks.getTaskById(task_id /* === undefined */) === undefined)
     {
         result = result404;
     } else {
@@ -164,7 +173,7 @@ function updateTask(token, body, task_id) {
         let Tdescription = body.task_description;
         let Toptions = body.task_options;
         let Tsolutions = body.task_solutions;
-        let index = mdb.tasks.getIndexbyId(task_id);
+        let index = mdb.tasks.getIndexById(task_id);
 
         mdb.tasks[index].update(Ttype, Tsubj, Ttitle, Tdescription, Toptions, Tsolutions);
 
@@ -183,7 +192,6 @@ function deleteTask(token, task_id) {
     //get user
     let user = mdb.active_users.getUserByToken(token);
     //if isn't empty
-    let task = mdb.tasks.getTasksbyId(task_id);
     if (user === null)
     {
         result = result401;
@@ -194,7 +202,7 @@ function deleteTask(token, task_id) {
         result = result400;
     }
     //if isn't valid selection value
-    else  if (mdb.tasks.getTasksbyId(task_id === undefined))
+    else  if (mdb.tasks.getTaskById(task_id) === undefined)
     {
         result = result404;
     } else {
@@ -213,6 +221,7 @@ function deleteTask(token, task_id) {
 router.get('/', function(req, res) {
     let token = req.query.token;
     let selection = req.query.selection;
+    console.log("T " + token + ", selection " + selection);
     //get list task
     let result = getTaskslist(token, selection);
     //set codice di stato e risultato
