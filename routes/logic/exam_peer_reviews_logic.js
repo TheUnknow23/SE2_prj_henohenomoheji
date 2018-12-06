@@ -4,6 +4,7 @@ const  review_e = require('./../../schemas/errors/review.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
+
 function insert_exam_peer_review(token, exam_review){
     var now = new Date();
 	var scheck = ajv.validate(require('./../../schemas/payloads/exam_peer_review_post.json'), exam_review);
@@ -39,6 +40,30 @@ function insert_exam_peer_review(token, exam_review){
 		}
 	}else{//the payload doesn't respect the schema
 		return  generic_e.error400;
+	}
+}
+
+
+/**
+ * Serves as logic response to PUT call to /exam_peer_review/:id
+ * @param {*} token token of calling user
+ * @param {*} id id of review to update
+ */
+function routerUpdateReview(token, id, updatedReview){
+	let requester = mdb.active_users.getUserByToken(token);
+	//Index call returns actual saved object to be modified
+	let examReviewToUpdate = mdb.exam_peer_reviews[mdb.exam_peer_reviews.getIndexById(id)];
+	let schemaCheck = ajv.validate(require('./../../schemas/payloads/exam_peer_review_put.json'), updatedReview);
+
+	if (requester !== null && requester.id === examReviewToUpdate.reviewer.id) {
+		if (schemaCheck) {
+			let res = mdb.exam_peer_reviews.update(updatedReview, "").id;
+			return ('Modified review with id: ' + res);
+		} else {
+			return generic_e.error400;
+		}
+	} else {
+		return generic_e.error401;
 	}
 }
 

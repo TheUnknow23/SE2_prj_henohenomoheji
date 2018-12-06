@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const logic = require('./logic/exam_peer_reviews_logic');
+const genericErrors = require('./../schemas/errors/generic');
+const reviewsErrors = require('./../schemas/errors/review');
 
-const result400 = {status: 400, body: {code: 400, message: "Bad Request"}};
-const result401 = {status: 401, body: {code: 401, message: "Unauthorized, missing or invalid API Key"}};
-const result404 = {status: 404, body: {code: 404, message: "Not Found"}};
 
 router.get('/', function(req, res) {
-        res.send('exam_peer_reviews resources');
+	res.send('exam_peer_reviews resources');
+});
+
+router.put('/:id', function(req, res) {
+	let id = req.params.id;
+	let token = req.query.token;
+	//Just a string of the new review
+	let updatedReview = req.body;
+	let result = logic.routerUpdateReview(token, id, updatedReview);
+	res.send(result);
 });
 
 router.post('/', function(req, res){
@@ -17,6 +25,3 @@ router.post('/', function(req, res){
 });
 
 module.exports.router = router;
-module.exports.result400 = result400;
-module.exports.result401 = result401;
-module.exports.result404 = result404;

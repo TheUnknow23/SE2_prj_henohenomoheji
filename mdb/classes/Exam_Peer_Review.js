@@ -10,6 +10,8 @@ class Exam_Peer_Review{
     }
     update(review, submission){
         if(review !== "" && review !== undefined) this.review = review;
+        //Submission updated when a submission resource is changed. For cascading update purposes
+        //Does not change the referred review
         if(submission !== "" && submission !== undefined) this.submission = submission;
         return this;
     }
