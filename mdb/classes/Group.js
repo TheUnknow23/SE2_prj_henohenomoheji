@@ -1,4 +1,4 @@
-const mdb = require('./../mdb');
+var mdb = require('./../mdb');
 class Group{
     /* 
     id(integer) PRIMARY KEY
@@ -8,6 +8,7 @@ class Group{
     members(User[]) "MULTIPLE" FOREIGN KEY
     */
     constructor(id, owner, name, description, members){
+
         this.id = id; this.owner = owner; this.name = name; this.description = description; this.members = members;
     }
     update(name, description, members, user){
@@ -60,12 +61,20 @@ class Group{
 class Groups extends Array{
     //ADD METHOD
     add(owner, name, description, members){
-        var x = null;
+        var x = null; var m = [];
+        if(members[0].id !== undefined && members[0].email !== undefined){
+            m = members;
+        }else{
+            for(let i = 0; i < members.length; i++){
+                console.log("id : " + members[i]);
+                m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+            }
+        }
         if(this.length === 0){
-            x = new Group(0, owner, name, description, members);
+            x = new Group(0, owner, name, description, m);
         }else{
             if(this.find(obj => obj.name === name) === undefined){
-                x = new Group(this[this.length-1].id+1, owner, name, description, members);
+                x = new Group(this[this.length-1].id+1, owner, name, description, m);
             }
         }
         if(x !== null){
@@ -79,9 +88,14 @@ class Groups extends Array{
 
     //UPDATE METHOD
     updateById(id, name, description, members){
-        var group = this.getGroupById(id);
+        var group = this.getGroupById(id); var m = [];
+        console.log(".................UPDATE GROUP");
+        for(let i = 0; i < members.length; i++){
+            console.log("id : " + members[i]);
+            m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+        }
         if (group !== null&&group!==undefined){
-            group.update(name, description, members);
+            group.update(name, description, m);
             return 200;
         } else{
             return 400;
@@ -99,7 +113,9 @@ class Groups extends Array{
         return this.indexOf(this.find(obj => obj.id === id));
     }
     getGroupById(id){
-        return this.find(obj => obj.id === id);
+        console.log(mdb.exams[0]);
+        var x = this.find(obj => obj.id === parseInt(id));
+        return x;
     }
     getGroupByName(name){
         return this.find(obj => obj.name === name);

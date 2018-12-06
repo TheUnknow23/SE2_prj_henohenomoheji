@@ -36,7 +36,7 @@ test('call createGroup wrong payload', ()=>{
     expect(groups.createGroup({"name": "hfsb", "description": "hfjdi"})).toBe(400);
 });
 test('call createGroup correct payload', ()=>{
-    expect(groups.createGroup({"token": mdb.active_users[0].token, "name": "hfsb", "description": "hfjdi", "members_id": [mdb.groups[0].members[0].id]})).toBe(201);
+    expect(groups.createGroup({"name": "hfsb", "description": "hfjdi", "members_id": [mdb.groups[0].members[0].id]}, mdb.active_users[0].token)).toBe(201);
 });
 test('call createGroup with non-existing user', ()=>{
     expect(groups.createGroup({"token": "hhgvj68H", "name": "hfsb", "description": "hfjdi", "members_id": [mdb.groups[0].members[0].id]})).toBe(401);

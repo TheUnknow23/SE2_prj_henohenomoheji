@@ -52,13 +52,13 @@ function getGroup(token, id){
  * @param {JSON}body of the request
  * @return {number}
  */
-function createGroup(body){
+function createGroup(body, token){
     //console.log(body);
     if(ajv.validate(postSchema, body)) {
-        if (mdb.active_users.getUserByToken(body.token)!==null && mdb.active_users.getUserByToken(body.token)!==undefined) {
+        if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
             if (mdb.groups.add({
-                "id": mdb.active_users.getUserByToken(body.token).id,
-                "email": mdb.active_users.getUserByToken(body.token).email
+                "id": mdb.active_users.getUserByToken(token).id,
+                "email": mdb.active_users.getUserByToken(token).email
             }, body.name, body.description, body.members_id)) {
                 return 201;
             } else {
@@ -109,21 +109,21 @@ router.get('/',function(req, res) {
 
 router.post('/',function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(createGroup(req.body));
+    res.sendStatus(createGroup(req.body, req.query.token));
 });
 
-router.get('/:group_id', function (req, res) {
+router.get('/:group_id/', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.send(JSON.stringify(getGroup(req.query.token, req.params.id), null, 3));
+    res.send(JSON.stringify(getGroup(req.query.token, req.params.group_id), null, 3));
 });
 
-router.put('/:group_id', function (req, res) {
+router.put('/:group_id/', function (req, res) {
     res.setHeader('Content-type', 'application/json');
-    res.sendStatus(updateGroup(req.params.id, req.body, req.query.token));
+    res.sendStatus(updateGroup(req.params.group_id, req.body, req.query.token));
     //res.sendStatus(mdb.groups.updateById(req.params.id, req.body.name, req.body.description, req.body.members_id));
 });
 
-router.delete('/:group_id', function (req, res) {
+router.delete('/:group_id/', function (req, res) {
     res.setHeader('Content-type', 'application/json');
     res.sendStatus(mdb.groups.deleteById(req.params.id));
 });

@@ -17,5 +17,5 @@
       }
     }
   },
-  "required": ["token","name", "description", "members_id"]
+  "required": ["name", "description", "members_id"]
 }
