@@ -28,7 +28,6 @@ class Exam_Peer_Reviews extends Array{
         if(x !== null){
             this.push(x);
         }
-        //console.log("Reviews length : " + this.length);
     }
     //FILTER METHODS
     filterBySubmitter(reviewer){
@@ -50,11 +49,8 @@ class Exam_Peer_Reviews extends Array{
         return this.filter(obj => obj.submission.ref_exam.id === exam.id);
     }
     filterPeerReviewBySubmission(submission){
-        console.log("SERACHING THE FOLLOWING SUBMISSION");
-        console.log(submission);
         var rev;
         rev = this.filter(obj => (obj.submission === submission));
-        console.log("FOUND THIS");console.log(rev);
         return rev;
     }
     //GET METHODS
@@ -78,7 +74,6 @@ class Exam_Peer_Reviews extends Array{
     }
     getIndexByUserAndSubmission(user, ref_sub){
         var index = this.indexOf(this.find(obj => (obj.submission.id === ref_sub.id && obj.reviewer.id === user.id)));
-        //console.log("found the following review ->");console.log(rev);
         return index;
     }
     //DELETE METHODS
@@ -91,7 +86,6 @@ class Exam_Peer_Reviews extends Array{
     //CHECK METHODS
     hasReview(exam, user){//checks is there's already an review for the given exam and user
         var rev = this.find(obj => (obj.submission.ref_exam === exam && obj.reviewer === user));
-        //console.log("found the following review ->");console.log(rev);
         if(rev !== undefined){
             return true;
         }

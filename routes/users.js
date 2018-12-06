@@ -58,8 +58,6 @@ router.get('/:user_id/exams', function(req, res) {
 	let id = parseInt(req.params.user_id, 10);
 	let selection = req.query.selection;
 
-	console.log('Selection query: ' + selection);
-
 	res.setHeader('Content-Type', 'application/json');
 	//test call
 	//let data = routerGetUsersExams(mdb.active_users.getTokenByUserId(0), id, selection);

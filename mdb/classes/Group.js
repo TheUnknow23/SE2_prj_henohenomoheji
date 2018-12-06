@@ -31,9 +31,7 @@ class Group{
     getRandomMember(user){
         do{
             var reviewer = this.members[Math.floor(Math.random()*this.members.length)];
-            console.log(".");
         }while(reviewer === user);
-        console.log("selected -> " + reviewer.name);
         return reviewer;
     }
     isThere(user){//checks if a user is in the group
@@ -42,10 +40,6 @@ class Group{
             return true;
         }
         return false;
-    }
-    toString(){
-        return "\x1b[32mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "NAME : " + this.name +
-               ", DESCRIPTION : " + this.description + "\nMEMBERS -> " + this.members;
     }
     getMembersId(){
         let members_ids = [];
@@ -66,7 +60,6 @@ class Groups extends Array{
             m = members;
         }else{
             for(let i = 0; i < members.length; i++){
-                console.log("id : " + members[i]);
                 m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
             }
         }
@@ -79,19 +72,15 @@ class Groups extends Array{
         }
         if(x !== null){
             this.push(x);
-            console.log("Groups length : " + this.length);
             return true;
         }
-        //console.log("last group id : " + this[this.length-1].id);
         return this[this.length-1].id;
     }
 
     //UPDATE METHOD
     updateById(id, name, description, members){
         var group = this.getGroupById(id); var m = [];
-        console.log(".................UPDATE GROUP");
         for(let i = 0; i < members.length; i++){
-            console.log("id : " + members[i]);
             m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
         }
         if (group !== null&&group!==undefined){
@@ -113,7 +102,6 @@ class Groups extends Array{
         return this.indexOf(this.find(obj => obj.id === id));
     }
     getGroupById(id){
-        console.log(mdb.exams[0]);
         var x = this.find(obj => obj.id === parseInt(id));
         return x;
     }

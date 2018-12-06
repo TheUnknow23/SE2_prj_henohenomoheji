@@ -2,7 +2,6 @@ const groups = require('./../routes/logic/groups_logic.js');
 const mdb = require('./../mdb/mdb.js');
 
 test('dummy test', () => {
-    console.log("Dummy test");
     expect(3).toBe(3);
 });
 

@@ -26,11 +26,6 @@ class Task{
         }
         return this;
     }
-    toString(){
-        return "\x1b[34mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TASK TYPE : " + this.task_type +
-               ", SUBJECT : " + this.subject + ", TITLE : " + this.title + ", DESCRIPTION : " + this.description +
-               ", ANSWERS : " + this.answer + ", SOLUTIONS : " + this.solutions + "\n";
-    }
 }
 class Tasks extends Array{
     //ADD METHOD
@@ -44,7 +39,6 @@ class Tasks extends Array{
         if(x !== null){
             this.push(x);
         }
-        //console.log("last task id : " + this[this.length-1].id);
         return this[this.length-1];
     }
     //FILTER METHODS

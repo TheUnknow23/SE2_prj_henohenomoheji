@@ -10,10 +10,8 @@ function loginFunction(email, password) {
 	//If user is registered
 	if (reqUser !== null) {
 		if (password === reqUser.password) {
-			//console.log('REQUSER: ' + reqUser);
 			let sessionToken = mdb.active_users.add(reqUser);
 			if (sessionToken !== undefined) {
-				//console.log(sessionToken);
 				return {"status": 200, "body": sessionToken.toString()};
 			} else {
 				return errors.error400; //possibly user is already logged

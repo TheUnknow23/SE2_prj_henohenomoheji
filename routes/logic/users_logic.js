@@ -51,23 +51,16 @@ function routerGetUserById(token, id) {
 		return errors.error400;
 	}
 	let requester = mdb.active_users.getUserByToken(token);
-	//console.log("REQUESTER ID: " + requester.id);
 	//There exist a requester
 	if (requester !== null) {
 		let retUser = mdb.users.getUserById(id);
-		//console.log("SPECIFIED USER ID: " + retUser.id);
 		//There exist a returned user
 		if (retUser !== undefined) {
-			//console.log('................................................................RETUSER: ' + retUser);
-			//console.log('REQUESTER: ' + requester);
 			let responseUser = JSON.parse(JSON.stringify(retUser));
-			//console.log("................................................................COPY OF USER: " + responseUser);
 			//If requesting user is not the same he selected, do not include user.password
-			//console.log("TEST: " + responseUser.id + "=?=" + requester.id);
 			if (responseUser.id !== requester.id) {
 				responseUser.password = undefined;
 				let temp = mdb.users.getUserById(id);
-				//console.log("....................................TEMP OUTPUT-MODIFIED PWD: " + temp.password);
 			}
 			return {"status": 200, "body": responseUser};
 		} else {
@@ -114,15 +107,11 @@ function routerGetUsersExams(token, id, selection) {
  * @param {number} id 
  */
 function routerGetUsersExamSubmissions(token, id) {
-	console.log('TOKEN: ' + token);
 	let submissions = [];
 	let requester = mdb.active_users.getUserByToken(token);
-	//console.log("ID PARAMETER: " + id);
-	//console.log("REQUESTER ID: " + requester.id);
 	if (requester !== null) {
 		let specifiedUser = mdb.users.getUserById(id);
 		if (specifiedUser !== undefined) {
-			//console.log("SPECIFIED USER ID: " + specifiedUser.id);
 			if (specifiedUser.id === requester.id) {
 				submissions = mdb.exam_submissions.filterBySubmitter(mdb.users.getUserById(id));
 				return {"status": 200, "body": submissions};

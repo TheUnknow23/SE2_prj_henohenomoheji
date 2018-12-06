@@ -50,7 +50,6 @@ function getGroup(token, id){
  * @return {number}
  */
 function createGroup(body, token){
-    //console.log(body);
     if(ajv.validate(postSchema, body)) {
         if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
             if (mdb.groups.add({
@@ -77,9 +76,7 @@ function createGroup(body, token){
  * @returns {*}
  */
 function updateGroup(id, body, token){
-    //console.log("update "+body.members);
     if (ajv.validate(putSchema, body)){
-        //console.log("ValidJson")
         if (mdb.groups.getGroupById(id)!==null && mdb.groups.getGroupById(id)!==undefined) {
             if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
                 if (mdb.active_users.getUserByToken(token).id === mdb.groups.getGroupById(id).owner.id) {

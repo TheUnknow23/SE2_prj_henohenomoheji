@@ -43,10 +43,10 @@ exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submiss
 active_users.add({"id": users[0].id, "email": users[0].email});active_users.add({"id": users[1].id, "email": users[1].email});
 active_users.add({"id": users[2].id, "email": users[2].email}); active_users.add({"id": users[3].id, "email": users[3].email});
 
-console.log("token[0](GANO is an exam owner) is " + active_users[0].token);
-console.log("token[1](GENO is an exam submitter) is " + active_users[1].token);
-console.log("token[2](GINO) is " + active_users[2].token);
-console.log("token[3](GONO) is " + active_users[3].token);
+console.log("token[0](GANO is an exam owner) is " + active_users[0].token + " \n" +
+    "token[1](GENO is an exam submitter) is " + active_users[1].token) + " \n" +
+    "token[2](GINO) is " + active_users[2].token +" \n" +
+    "token[3](GONO) is " + active_users[3].token;
 module.exports.users = users; module.exports.tasks = tasks; module.exports.groups = groups;
 module.exports.exams = exams; module.exports.exam_submissions = exam_submissions;
 module.exports.exam_peer_reviews = exam_peer_reviews; module.exports.active_users = active_users;

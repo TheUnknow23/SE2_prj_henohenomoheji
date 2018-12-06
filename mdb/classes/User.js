@@ -36,16 +36,11 @@ class User{
             return -1;
         }
     }
-    toString(){
-        return "\x1b[36m ID : " + this.id + "\x1b[0m (NAME : " + this.name + ", SURNAME : " + this.surname + 
-        ", EMAIL : " + this.email + ", PWD : " + this.password +")\n";
-    }
 }
 class Users extends Array{
     //ADD METHOD
     add(name, surname, email, password, type){
 
-        console.log('ADDING USER:' + name + ' ' + surname);
 
         var x = null;
         
@@ -54,7 +49,6 @@ class Users extends Array{
             return 0;
         }
         
-        console.log("Users length : " + this.length);
 
         //First user
         if(this.length === 0){
@@ -71,7 +65,6 @@ class Users extends Array{
             return -1;
         }
 
-        //console.log("last user id : " + this[this.length-1].id);
         return this[this.length-1].id;
     }
 

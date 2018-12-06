@@ -38,10 +38,6 @@ class Exam {
                 mdb.exam_submissions.updateRef_Exam(this);
                 return this;
         }
-        toString() {
-                return "\x1b[31mID : " + this.id + "\x1b[0m\nOWNER -> " + this.owner + "TITLE : " + this.title + ", DESCRIPTION : " + this.description + "\n\nTASK SET -> \n" + JSON.stringify(this.taskset) +
-                        "\nGROUP -> " + this.group + "\nFINAL_DEADLINE : " + this.final_deadline + ", REVIEW_DEADLINE : " + this.review_deadline;
-        }
 }
 class Exams extends Array {
         //ADD METHOD
@@ -59,8 +55,6 @@ class Exams extends Array {
                 {
                         this.push(x);
                 }
-                //console.log("Exams add : " + x.toString());
-                //console.log("last exams id : " + this[this.length - 1].id);
                 return this[this.length - 1].id;
 
         }

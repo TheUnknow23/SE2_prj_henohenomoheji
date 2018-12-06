@@ -34,7 +34,6 @@ class Exam_Submissions extends Array{
         if(x !== null){
             this.push(x);
         }
-        //console.log("Submissions length : " + this.length);
         return this[this.length-1];
     }
     //FILTER METHODS
@@ -66,7 +65,6 @@ class Exam_Submissions extends Array{
     }
     hasSubmission(exam, user){//checks is there's already an exam_submission for the given exam and user
         var sub = this.find(obj => (obj.ref_exam === exam && obj.submitter === user));
-        console.log("found the following submission ->");console.log(sub);
         if(sub !== undefined){
             return true;
         }

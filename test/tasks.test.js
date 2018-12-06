@@ -67,8 +67,6 @@ test('createtask returns 200 ok', () => {
     let token = mdb.active_users[0].token;
     let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1", "opt3"], "solutions": "opt3"}
     let result = tasks.createTask(token, body);
-    console.log("...........RESULT");
-    console.log(result);
     var check = ajv.validate(require('./../schemas/tasks_schema.json'), result);
     expect(check).toBe(true);
 });
