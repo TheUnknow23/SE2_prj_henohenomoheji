@@ -50,21 +50,35 @@ function insert_exam_peer_review(token, exam_review){
  * @param {*} id id of review to update
  */
 function routerUpdateReview(token, id, updatedReview){
+
+	if (arguments.length !== 3 ) {
+		return generic_e.error400;
+	}
+
 	let requester = mdb.active_users.getUserByToken(token);
 	//Index call returns actual saved object to be modified
-	let examReviewToUpdate = mdb.exam_peer_reviews[mdb.exam_peer_reviews.getIndexById(id)];
+	let dataIndex = mdb.exam_peer_reviews.getIndexById(id);
+	//Review to update not found
+	if (dataIndex === -1) {
+		return generic_e.error404;
+	}
+	
+	let examReviewToUpdate = mdb.exam_peer_reviews[dataIndex];
 	let schemaCheck = ajv.validate(require('./../../schemas/payloads/exam_peer_review_put.json'), updatedReview);
 
-	if (requester !== null && requester.id === examReviewToUpdate.reviewer.id) {
-		if (schemaCheck) {
-			let res = mdb.exam_peer_reviews.update(updatedReview, "").id;
-			return ('Modified review with id: ' + res);
-		} else {
-			return generic_e.error400;
-		}
-	} else {
+	//Input not valid
+	if (!schemaCheck) {
+		return generic_e.error400;
+	}
+	//Requester non logged or non reviewer
+	if (!(requester !== null && requester.id === examReviewToUpdate.reviewer.id)) {
 		return generic_e.error401;
 	}
+
+	//Actual code
+	let res = examReviewToUpdate.update(updatedReview, "").id;
+	return ('Modified review with id: ' + res);
 }
 
 module.exports.insert_exam_peer_review = insert_exam_peer_review;
+module.exports.routerUpdateReview = routerUpdateReview;

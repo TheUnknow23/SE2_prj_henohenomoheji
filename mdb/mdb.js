@@ -41,7 +41,7 @@ exam_submissions.add(exams[1], {"id": users[2].id, "email": users[2].email}, ["o
 
 //console.log("EXAM_SUBMISSIONS _>");//console.log(exam_submissions);//console.log("\n###################\n");
 
-//default exam_peer_reviews | input schema: (group_member_of_exam, exam_submission, review[])
+//default exam_peer_reviews | input schema: (group_member_of_exam (reviewer), exam_submission, review[])
 exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submissions[0], "");
 exam_peer_reviews.add({"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny");
 exam_peer_reviews.add({"id": users[3].id, "email": users[3].email}, exam_submissions[2], "");

@@ -51,30 +51,68 @@ test("validate review id for get a review", function () {
 });
 
 test("validate response for get a review", function () {
-
-        expect(1).toBe(1);
-
+	expect(1).toBe(1);
 });
 
 
-
-//test for put a review
-test("validate token for put a review", function () {
-
-        expect(1).toBe(1);
-});
-
-test("validate review id for put a review", function () {
-
-        expect(1).toBe(1);
-});
-
-
-test("validate response for put a exam", function () {
-
-        expect(1).toBe(1);
+// PUT /exam_peer_reviews/:id
+test('PUT /exam_peer_reviews/:id OK case logged user udates a review that exists and he is the reviewer', function(){
+	let updatedReview = {"review": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(1);
+	let reviewId = 1; //in mdb: {"id": users[3].id, "email": users[3].email}, exam_submissions[2], ""
+	let result = er.routerUpdateReview(token, reviewId, updatedReview);
+	expect(result).toBe("Modified review with id: " + reviewId);
 
 });
+
+test('PUT /exam_peer_reviews/:id NOT OK case logged user udates a review that exists and he is NOT the reviewer', function(){
+	let updatedReview = {"review": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(2);
+	let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview(token, reviewId, updatedReview);
+	expect(result).toBe(generic_e.error401);
+});
+
+test('PUT /exam_peer_reviews/:id NOT OK case unlogged user / invalid token', function(){
+	let updatedReview = {"review": 'Yeah but I like bananas more'};
+	//let token = mdb.active_users.getTokenByUserId(6);
+	let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview("B4nAna", reviewId, updatedReview);
+	expect(result).toBe(generic_e.error401);
+});
+
+test('PUT /exam_peer_reviews/:id NOT OK case logged user udates a review that does not exist', function(){
+	let updatedReview = {"review": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(6);
+	let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview(token, 392, updatedReview);
+	expect(result).toBe(generic_e.error404);
+});
+
+test('PUT /exam_peer_reviews/:id NOT OK case logged user reviewId invalid parameter updatedReview', function(){
+	let updatedReview = {"Yeet": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(1);
+	let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview(token, reviewId, updatedReview);
+	expect(result).toBe(generic_e.error400);
+});
+
+test('PUT /exam_peer_reviews/:id NOT OK case logged user invalid parameter reviewId', function(){
+	let updatedReview = {"Yeet": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(1);
+	//let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview(token, "aaaaaaaAà", updatedReview);
+	expect(result).toBe(generic_e.error404);
+});
+
+test('PUT /exam_peer_reviews/:id NOT OK case missing some parameter', function(){
+	let updatedReview = {"Yeet": 'Yeah but I like bananas more'};
+	let token = mdb.active_users.getTokenByUserId(1);
+	let reviewId = 1; //in mdb:{"id": users[1].id, "email": users[1].email}, exam_submissions[1], "funny"
+	let result = er.routerUpdateReview(reviewId, updatedReview);
+	expect(result).toBe(generic_e.error400);
+});
+
 
 
 //test for delete a review

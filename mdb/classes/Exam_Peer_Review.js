@@ -59,7 +59,12 @@ class Exam_Peer_Reviews extends Array{
     }
     //GET METHODS
     getIndexById(id){
-        return this.indexOf(this.find(obj => obj.id === id));
+        let result = this.indexOf(this.find(obj => obj.id === id));
+        if (result !== undefined) {
+            return result;
+        } else {
+            return -1;
+        }
     }
     getReviewerByExamSubmission(submission){
         var rev = this.find(obj => obj.submission === submission);
