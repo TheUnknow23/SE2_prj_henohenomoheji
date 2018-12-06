@@ -28,6 +28,13 @@ router.post('/', function(req, res) {
 	//Other stati determined automatically I guess
 });
 
+router.put('/', function(req, res) {
+	let putBody = req.body;
+	let token = req.query.token;
+	let result = logic.routerUpdateUser(token, putBody);
+	res.send(result);
+});
+
 router.get('/:user_id', function(req, res) {
 	let token = req.query.token;
 
