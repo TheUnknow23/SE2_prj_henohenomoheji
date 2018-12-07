@@ -1,6 +1,7 @@
 
 const mdb = require('./../mdb/mdb.js');
 const exams = require('./../routes/logic/exam_logic');
+const generic_e = require('./../schemas/errors/generic.json');
 
 
 const email = "geno@geno";
@@ -21,17 +22,17 @@ var testDati4 = {"title": "analisi", "description": "sessione2018", "tasks_ids":
 //test for get exam list
 test("validate token for get a exam list ", function () {
 
-        expect(exams.getExamlist("dsadawd", "assigned")).toEqual(exams.result401);
+        expect(exams.getExamlist("dsadawd", "assigned")).toEqual(generic_e.error401);
 });
 
 test("validate selection value for get a exam  list ", function () {//
 
-        expect(exams.getExamlist(token, "sadasd")).toEqual(exams.result400);
+        expect(exams.getExamlist(token, "sadasd")).toEqual(generic_e.error400);
 });
 
 test("validate response 404 for get a exam  list ", function () {
 
-        expect(exams.getExamlist(token2, "created")).toEqual(exams.result404);
+        expect(exams.getExamlist(token2, "created")).toEqual(generic_e.error404);
 });
 
 test("validate response for get a exam  list ", function () {
@@ -52,20 +53,20 @@ test("validate response for get a exam  list ", function () {
 //test for post a exam
 test("validate token for post a exam", function () {
 
-        expect(exams.postExam("dsadawd", {})).toEqual(exams.result401);
+        expect(exams.postExam("dsadawd", {})).toEqual(generic_e.error401);
 
 });
 
 test("validate input for post a exam", function () {
 
-        expect(exams.postExam(token, testDati3)).toEqual(exams.result400);
-        expect(exams.postExam(token, testDati4)).toEqual(exams.result400);
+        expect(exams.postExam(token, testDati3)).toEqual(generic_e.error400);
+        expect(exams.postExam(token, testDati4)).toEqual(generic_e.error400);
         
 });
 
 test("validate response for post a exam", function () {
 
-        expect(exams.postExam(token, testDati1).body).toBeGreaterThan(0);
+        expect(exams.postExam(token, testDati1).body.id).toBeGreaterThan(0);
 
 
 });
@@ -73,17 +74,17 @@ test("validate response for post a exam", function () {
 //test for get a exam
 test("validate token for get a exam", function () {
 
-        expect(exams.getExam("dsadawd", 1)).toEqual(exams.result401);
+        expect(exams.getExam("dsadawd", 1)).toEqual(generic_e.error401);
 });
 
 
 test("validate exam id for get a exam", function () {
 
-        expect(exams.getExam(token, "ersada")).toEqual(exams.result400);
+        expect(exams.getExam(token, "ersada")).toEqual(generic_e.error400);
 });
 test("validate response404  by exam not exist for get a exam", function () {
 
-        expect(exams.getExam(token, 1999999)).toEqual(exams.result404);
+        expect(exams.getExam(token, 1999999)).toEqual(generic_e.error404);
 });
 
 test("validate response for get a exam", function () {
@@ -105,24 +106,24 @@ test("validate response for get a exam", function () {
 
 //test for put a exam
 test("validate token for put a exam", function () {
-        expect(exams.putExam("dsadawd", testDati2, 1)).toEqual(exams.result401);
+        expect(exams.putExam("dsadawd", testDati2, 1)).toEqual(generic_e.error401);
 
 });
 
 test("validate exam id for put a exam", function () {
 
-        expect(exams.putExam(token, testDati2, "dasd")).toEqual(exams.result400);
+        expect(exams.putExam(token, testDati2, "dasd")).toEqual(generic_e.error400);
 });
 test("validate response404  by exam not exist ", function () {
 
-        expect(exams.putExam(token, testDati2, 1999999)).toEqual(exams.result404);
+        expect(exams.putExam(token, testDati2, 1999999)).toEqual(generic_e.error404);
 });
 
 
 test("validate input for put a exam", function () {
 
-        expect(exams.putExam(token, testDati3, 0)).toEqual(exams.result400);
-        expect(exams.putExam(token, testDati4, 0)).toEqual(exams.result400);
+        expect(exams.putExam(token, testDati3, 0)).toEqual(generic_e.error400);
+        expect(exams.putExam(token, testDati4, 0)).toEqual(generic_e.error400);
         
 });
 
@@ -137,23 +138,23 @@ test("validate response for put a exam", function () {
 //test for get submission list of exam
 test("validate token for get a submission list of exam ", function () {
 
-        expect(exams.getSubmissionsOfExam("dsadawd", 0)).toEqual(exams.result401);
+        expect(exams.getSubmissionsOfExam("dsadawd", 0)).toEqual(generic_e.error401);
 });
 
 test("validate exam id for get a submission list of exam ", function () {
 
-        expect(exams.getSubmissionsOfExam(token, "uno-due")).toEqual(exams.result400);
+        expect(exams.getSubmissionsOfExam(token, "uno-due")).toEqual(generic_e.error400);
 });
 
 
 test("validate response 404 by there isn't exam with current id for get a submission list of exam", function () {
 
-        expect(exams.getSubmissionsOfExam(token, 99999)).toEqual(exams.result404);
+        expect(exams.getSubmissionsOfExam(token, 99999)).toEqual(generic_e.error404);
 });
 
 test("validate response 404 by there aren't any submissions with current exam  for get a submission list of exam", function () {
 
-        expect(exams.getSubmissionsOfExam(token, 2)).toEqual(exams.result404);
+        expect(exams.getSubmissionsOfExam(token, 2)).toEqual(generic_e.error404);
 });
 
 test("validate response for get a submission list of exam", function () {

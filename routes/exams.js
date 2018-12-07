@@ -43,7 +43,8 @@ router.put('/:id', function (req, res) {
         let putBody = req.body;
         let result = logic.putExam(token, putBody, id);
         //set codice di stato 
-        res.sendStatus(result.status);
+        res.status(result.status);
+        res.json();
 });
 
 

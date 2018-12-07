@@ -77,8 +77,8 @@ function routerUpdateReview(token, id, updatedReview){
 	}
 
 	//Actual code
-	let res = examReviewToUpdate.update(updatedReview, "").id;
-	return ('Modified review with id: ' + res);
+	let res = examReviewToUpdate.update(updatedReview, "");
+	return {"status": 200, "body": res};
 }
 
 /**

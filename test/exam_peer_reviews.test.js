@@ -72,7 +72,7 @@ test('PUT /exam_peer_reviews/:id OK case logged user udates a review that exists
 	let token = mdb.active_users.getTokenByUserId(1);
 	let reviewId = 1; //in mdb: {"id": users[3].id, "email": users[3].email}, exam_submissions[2], ""
 	let result = er.routerUpdateReview(token, reviewId, updatedReview);
-	expect(result).toBe("Modified review with id: " + reviewId);
+	expect(result.status).toBe(200);
 
 });
 

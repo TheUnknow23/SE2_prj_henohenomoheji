@@ -74,7 +74,7 @@ class Groups extends Array{
             this.push(x);
             return true;
         }
-        return this[this.length-1].id;
+        return this[this.length-1];
     }
 
     //UPDATE METHOD
@@ -84,8 +84,7 @@ class Groups extends Array{
             m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
         }
         if (group !== null&&group!==undefined){
-            group.update(name, description, m);
-            return 200;
+            return group.update(name, description, m);
         } else{
             return 400;
         }

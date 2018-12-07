@@ -13,13 +13,13 @@ router.get('/', function(req, res) {
 	res.json(result.body);
 });
 
-router.put('/:id', function(req, res) {
+router.put('/:id/', function(req, res) {
 	let id = req.params.id;
 	let token = req.query.token;
 	//Just a string of the new review
 	let updatedReview = req.body;
 	let result = logic.routerUpdateReview(token, id, updatedReview);
-	res.send(result);
+	res.sendStatus(result.status);
 });
 
 router.post('/', function(req, res){

@@ -61,7 +61,7 @@ class Active_Users extends Array {
     }
 
     getTokenByUserId(id) {
-        let userFound = this.find(obj => obj.user.id === id);
+        let userFound = this.find(obj => obj.user.id === parseInt(id));
         if (userFound !== undefined) {
             return this[this.indexOf(userFound)].token;
         } else {
@@ -79,7 +79,7 @@ class Active_Users extends Array {
         }
     }
     deleteById(id) {
-        var index = this.indexOf(this.find(obj => obj.id === id));
+        var index = this.indexOf(this.find(obj => obj.id === parseInt(id)));
         if(index>=0){
             this.splice(index,1);
         } else {

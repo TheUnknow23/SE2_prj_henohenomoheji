@@ -1,8 +1,5 @@
 const mdb = require('./../../mdb/mdb');
-const result400 = {status: 400, body: {code: 400, message: "Bad Request"}};
-const result401 = {status: 401, body: {code: 401, message: "Unauthorized, missing or invalid API Key"}};
-const result404 = {status: 404, body: {code: 404, message: "Not Found"}};
-
+const errors = require('./../../schemas/errors/generic.json');
 
 /**
  *  controlla se selection contiene valore giusto
@@ -67,7 +64,7 @@ function formatDate(date) {
  * if user is student return all his assigned  exam
  * @param {type} token
  * @param {type} selection
- * @returns {getExamlist.result|nm$_exam_submission.getExamlist.result|nm$_exam_submission.result400|nm$_exam_submission.result401}
+ * @returns {getExamlist.result|nm$_exam_submission.getExamlist.result|nm$_exam_submission.errors.error400|nm$_exam_submission.errors.error401}
  */
 function getExamlist(token, selection) {
         //il risultato da ritornare
@@ -77,12 +74,12 @@ function getExamlist(token, selection) {
         //if isn't empty
         if (user === null)
         {
-                result = result401;
+                result = errors.error401;
         }
         //if isn't valid selection value
         else if (isValidselection(selection) === 0)
         {
-                result = result400;
+                result = errors.error400;
         }
         else
         {
@@ -98,7 +95,7 @@ function getExamlist(token, selection) {
                 //se body è un array vuoto, significa 404
                 if (body.length === 0)
                 {
-                        result = result404;
+                        result = errors.error404;
                 }
                 else
                 {
@@ -116,7 +113,7 @@ function getExamlist(token, selection) {
  * crea nuovo exam attraverso post
  * @param {type} token
  * @param {type} postBody
- * @returns {nm$_exams.result400|nm$_exams.postExam.result|postExam.result|nm$_exams.result401}
+ * @returns {nm$_exams.errors.error400|nm$_exams.postExam.result|postExam.result|nm$_exams.errors.error401}
  */
 function postExam(token, postBody) {
 
@@ -127,12 +124,12 @@ function postExam(token, postBody) {
         //if isn't empty
         if (user === null)
         {
-                result = result401;
+                result = errors.error401;
         }
         //check validità di input
         else if (!isValidInput(postBody))
         {
-                result = result400;
+                result = errors.error400;
         }
         else
         {
@@ -189,7 +186,7 @@ function postExam(token, postBody) {
  * get a single exam
  * @param {type} token
  * @param {type} exam_id
- * @returns {nm$_exams.result400|nm$_exams.getExam.result|nm$_exams.result401|nm$_exams.result404|getExam.result}
+ * @returns {nm$_exams.errors.error400|nm$_exams.getExam.result|nm$_exams.errors.error401|nm$_exams.errors.error404|getExam.result}
  */
 function getExam(token, exam_id) {
 
@@ -200,13 +197,13 @@ function getExam(token, exam_id) {
         //if isn't empty
         if (user === null)
         {
-                result = result401;
+                result = errors.error401;
         }
         //if isn't valid id
         else if (exam_id === undefined || isNaN(parseInt(exam_id)))
         {
 
-                result = result400;
+                result = errors.error400;
         }
         else
         {
@@ -215,7 +212,7 @@ function getExam(token, exam_id) {
                 //se body è un oggetto vuoto, significa 404
                 if (body === undefined)
                 {
-                        result = result404;
+                        result = errors.error404;
                 }
                 else
                 {
@@ -234,7 +231,7 @@ function getExam(token, exam_id) {
  * @param {type} token
  * @param {type} putBody
  * @param {type} exam_id
- * @returns {nm$_exams.putExam.result|nm$_exams.result401|putExam.result}
+ * @returns {nm$_exams.putExam.result|nm$_exams.errors.error401|putExam.result}
  */
 function putExam(token, putBody, exam_id) {
 
@@ -245,19 +242,19 @@ function putExam(token, putBody, exam_id) {
         //if isn't empty
         if (user === null)
         {
-                result = result401;
+                result = errors.error401;
         }
         //if isn't valid id
         else if (exam_id === undefined || isNaN(parseInt(exam_id)))
         {
 
-                result = result400;
+                result = errors.error400;
         }
 
         //check validità di input
         else if (!isValidInput(putBody))
         {
-                result = result400;
+                result = errors.error400;
         }
 
         else
@@ -268,7 +265,7 @@ function putExam(token, putBody, exam_id) {
                 if (exam === undefined)
                 {
 
-                        result = result404;
+                        result = errors.error404;
                 }
                 else
                 {
@@ -331,13 +328,13 @@ function getSubmissionsOfExam(token, exam_id) {
         //if isn't empty
         if (user === null)
         {
-                result = result401;
+                result = errors.error401;
         }
         //if isn't valid id
         else if (exam_id === undefined || isNaN(parseInt(exam_id)))
         {
 
-                result = result400;
+                result = errors.error400;
         }
 
 
@@ -348,7 +345,7 @@ function getSubmissionsOfExam(token, exam_id) {
                 if (exam === undefined)
                 {
 
-                        result = result404;
+                        result = errors.error404;
                 }
                 else
                 {
@@ -360,7 +357,7 @@ function getSubmissionsOfExam(token, exam_id) {
                         //se body è un array vuoto, significa 404
                         if (body.length === 0)
                         {
-                                result = result404;
+                                result = errors.error404;
                         }
                         else
                         {
@@ -378,9 +375,6 @@ function getSubmissionsOfExam(token, exam_id) {
 
 }
 
-module.exports.result400 = result400;
-module.exports.result401 = result401;
-module.exports.result404 = result404;
 module.exports.getExamlist = getExamlist;
 module.exports.postExam = postExam;
 module.exports.getExam = getExam;

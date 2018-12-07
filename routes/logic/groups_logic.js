@@ -3,6 +3,7 @@ const ajv = new Ajv();
 const mdb = require ('./../../mdb/mdb.js');
 const postSchema = require('../../schemas/payloads/group_post_schema.json');
 const putSchema = require('./../../schemas/payloads/groups_put_schema.json');
+const errors = require('./../../schemas/errors/generic.json');
 
 /*##### FUNCTION SECTION #####*/
 
@@ -15,9 +16,9 @@ const putSchema = require('./../../schemas/payloads/groups_put_schema.json');
 function getGroups(token){
     const requester = mdb.active_users.getUserByToken(token);
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
-        return mdb.groups.getAll();
+        return {"status": 200, "body": mdb.groups.getAll()};
     } else {
-        return '401 Requester not logged or not authorized'
+        return errors.error401;
     }
 }
 
@@ -33,12 +34,12 @@ function getGroup(token, id){
     if (requester !== null /*&& (requester.type === 'teacher' || requester.type === 'student')*/){
         let group = mdb.groups.getGroupById(id);
         if (group !== null&&group !==undefined){
-            return group;
+            return {"status" : 200, "body" : group};
         } else {
-            return 'The specified resource doesn\'t exist'
+            return errors.error404;
         }
     } else {
-        return '401 Requester not logged or not authorized'
+        return errors.error401;
     }
 }
 
@@ -52,19 +53,20 @@ function getGroup(token, id){
 function createGroup(body, token){
     if(ajv.validate(postSchema, body)) {
         if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
-            if (mdb.groups.add({
+            var group = mdb.groups.add({
                 "id": mdb.active_users.getUserByToken(token).id,
                 "email": mdb.active_users.getUserByToken(token).email
-            }, body.name, body.description, body.members_id)) {
-                return 201;
+            }, body.name, body.description, body.members_id);
+            if (group) {
+                return {"status": 201, "body": group};
             } else {
-                return 400;
+                return errors.error400;
             }
         } else {
-            return 401;
+            return errors.error401;
         }
     } else {
-        return 400;
+        return errors.error400;
     }
 }
 
@@ -80,18 +82,18 @@ function updateGroup(id, body, token){
         if (mdb.groups.getGroupById(id)!==null && mdb.groups.getGroupById(id)!==undefined) {
             if (mdb.active_users.getUserByToken(token)!==null && mdb.active_users.getUserByToken(token)!==undefined) {
                 if (mdb.active_users.getUserByToken(token).id === mdb.groups.getGroupById(id).owner.id) {
-                    return mdb.groups.updateById(id, body.name, body.description, body.members_id);
+                    return {"status" : 200, "body" : mdb.groups.updateById(id, body.name, body.description, body.members_id)};
                 } else {
-                    return 403;
+                    return errors.error403;
                 }
             } else {
-                return 401;
+                return errors.error401;
             }
         } else {
-            return 'The specified id does not exist';
+            return errors.error404;
         }
     }
-    return 400;
+    return errors.error400;
 }
 
 module.exports.getGroups = getGroups;

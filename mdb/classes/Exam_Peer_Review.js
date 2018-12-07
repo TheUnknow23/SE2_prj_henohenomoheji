@@ -58,7 +58,7 @@ class Exam_Peer_Reviews extends Array{
     }
     //GET METHODS
     getIndexById(id){
-        let result = this.indexOf(this.find(obj => obj.id === id));
+        let result = this.indexOf(this.find(obj => obj.id === parseInt(id)));
         if (result !== undefined) {
             return result;
         } else {
@@ -73,7 +73,7 @@ class Exam_Peer_Reviews extends Array{
         return undefined;
     }
     findById(id){
-        return this.find(obj => obj.id === id);
+        return this.find(obj => obj.id === parseInt(id));
     }
     getIndexByUserAndSubmission(user, ref_sub){
         var index = this.indexOf(this.find(obj => (obj.submission.id === ref_sub.id && obj.reviewer.id === user.id)));
@@ -81,7 +81,7 @@ class Exam_Peer_Reviews extends Array{
     }
     //DELETE METHODS
     deleteById(id){
-        var index = this.indexOf(this.find(obj => obj.id === id));
+        var index = this.indexOf(this.find(obj => obj.id === parseInt(id)));
         if(index>=0){
             this.splice(index,1);
         }

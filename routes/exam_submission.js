@@ -23,7 +23,7 @@ router.get('/:id/', function(req, res){
 router.put('/:id/', function(req, res){
 	result = logic.update_exam_submission(req.query.token, req.params.id, req.body);
 	res.status(result.status);
-	res.json(result.body);
+	res.json();
 });
 
 router.get('/:id/exam_peer_reviews', function(req, res){

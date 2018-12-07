@@ -55,7 +55,7 @@ class Exams extends Array {
                 {
                         this.push(x);
                 }
-                return this[this.length - 1].id;
+                return this[this.length - 1];
 
         }
         //FILTER METHODS
@@ -107,11 +107,11 @@ class Exams extends Array {
         //GET METHODS
         getIndexById(id)
         {
-                return this.indexOf(this.find(obj => obj.id === id));
+                return this.indexOf(this.find(obj => obj.id === parseInt(id)));
         }
         getExamById(id)
         {
-                return this.find(obj => obj.id === id);
+                return this.find(obj => obj.id === parseInt(id));
         }
         //DELETE METHODS
         deleteByTitleAndOwner(title, owner) {
@@ -122,7 +122,7 @@ class Exams extends Array {
                 }
         }
         deleteById(id) {
-                var index = this.indexOf(this.find(obj => obj.id === id));
+                var index = this.indexOf(this.find(obj => obj.id === parseInt(id)));
                 if (index >= 0)
                 {
                         this.splice(index, 1);
