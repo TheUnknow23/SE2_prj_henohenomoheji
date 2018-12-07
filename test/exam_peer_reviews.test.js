@@ -16,6 +16,12 @@ test('call insert_exam_peer_review with incorrect payload', () => {
 test('call insert_exam_peer_review with correct values', () => {
         expect(er.insert_exam_peer_review(mdb.active_users[3].token,  {"ref_submission": 0,"review":"bob"}).body).toEqual(mdb.exam_peer_reviews[0]);
 });
+test('call insert_exam_peer_review with undefined values', () => {
+        expect(er.insert_exam_peer_review(mdb.active_users[3].token,  {"ref_submission": undefined,"review":"bob"})).toEqual(generic_e.error400);
+});
+test('call insert_exam_peer_review with null values', () => {
+        expect(er.insert_exam_peer_review(mdb.active_users[3].token,  {"ref_submission": 0,"review": null})).toEqual(generic_e.error400);
+});
 test('call insert_exam_peer_review with correct values as student who already reviewed', () => {
         expect(3).toEqual(3);
 });
@@ -30,15 +36,20 @@ test('call insert_exam_peer_review with correct values on expired deadline', () 
 });
 
 //test for get reviews list
-test("validate token for get a reviews list ", function () {
-        expect(1).toBe(1);
+test("call display_exam_peer_reviews_list with correct values - created", function () {
+	expect(er.display_exam_peer_reviews_list(mdb.active_users[1].token, "created").body).toEqual([mdb.exam_peer_reviews[1]]);
+
 });
 
-test("validate response for get a reviews  list ", function () {
-
-        expect(1).toBe(1);
+test("call display_exam_peer_reviews_list with correct values - received", function () {
+        expect(er.display_exam_peer_reviews_list(mdb.active_users[2].token, "received").body).toEqual([mdb.exam_peer_reviews[1]]);
 });
-
+test('call display_exam_peer_reviews_list with incorrect token', () => {
+        expect(er.display_exam_peer_reviews_list("sssssss", "received")).toEqual(generic_e.error401);
+});
+test('call display_exam_peer_reviews_list with incorrect parameter', () => {
+        expect(er.display_exam_peer_reviews_list(mdb.active_users[2].token, "recdeived")).toEqual(generic_e.error400);
+});
 //test for get a review
 test("validate token for get a review", function () {
 
