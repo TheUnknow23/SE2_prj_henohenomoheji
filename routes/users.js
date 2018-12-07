@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
 	//Test call
 	//let data = routerGetUsers(mdb.active_users.getTokenByUserId(0));
 	let data = logic.routerGetUsers(token);
-	res.send(JSON.stringify(data, null, 3));
+	res.send(JSON.stringify(data.body, null, 3));
 });
 
 router.post('/', function(req, res) {
@@ -28,6 +28,7 @@ router.post('/', function(req, res) {
 			+ "<input type='submit' value='home'>"
 			+ "</form>");
 	} else {
+		res.status(500);
 		res.send(result + ': user probably already registered, try using another email');
 	}
 	//Other stati determined automatically I guess
@@ -37,7 +38,8 @@ router.put('/', function(req, res) {
 	let putBody = req.body;
 	let token = req.query.token;
 	let result = logic.routerUpdateUser(token, putBody);
-	res.send(result);
+	res.status(result.status);
+	res.json();
 });
 
 router.get('/:user_id', function(req, res) {
@@ -50,18 +52,20 @@ router.get('/:user_id', function(req, res) {
 	//Test call
 	//let data = routerGetUserById(mdb.active_users.getTokenByUserId(0), id);
 	let data = logic.routerGetUserById(token, id);
-	res.send(JSON.stringify(data, null, 3));
+	res.status(data.status);
+	res.send(JSON.stringify(data.body, null, 3));
 })
 
 router.get('/:user_id/exams', function(req, res) {
 	let token = req.query.token;
 	let id = parseInt(req.params.user_id, 10);
-	let selection = req.query.selection;
+	let selection = req.query.select;
 
 	res.setHeader('Content-Type', 'application/json');
 	//test call
 	//let data = routerGetUsersExams(mdb.active_users.getTokenByUserId(0), id, selection);
 	let data = logic.routerGetUsersExams(token, id, selection);
+	res.status(data.status);
 	res.send(JSON.stringify(data, null, 3));
 })
 
@@ -73,6 +77,7 @@ router.get('/:user_id/exam_submissions', function(req, res) {
 	//test call
 	//let data = routerGetUsersExamSubmissions(mdb.active_users.getTokenByUserId(2), id);
 	let data = logic.routerGetUsersExamSubmissions(token, id)
+	res.status(data.status);
 	res.send(JSON.stringify(data, null, 3));
 })
 

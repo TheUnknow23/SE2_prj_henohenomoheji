@@ -14,5 +14,5 @@
             "type": "string"
         }
     },
-    "required" : ["answers", "status"]
+    "required" : ["evaluation"]
 }

@@ -4,7 +4,7 @@ const errors = require('./../../schemas/errors/generic.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
-var userInputSchema = {"type": "object", "required": ["name", "surname", "email", "password"], "properties": {"name": {"type": "string"}, "surname": {"type": "string"}, "email": {"type": "string"}, "password": {"type": "string"}}};
+var userInputSchema = require('./../../schemas/payloads/user_post_schema.json');
 
 //Functions
 

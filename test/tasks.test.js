@@ -1,5 +1,5 @@
 const mdb = require ('../mdb/mdb.js');
-const tasks = require('./../routes/tasks.js');
+const tasks = require('./../routes/logic/task_logic.js');
 var Ajv = require('ajv');
 var ajv = new Ajv();
 
@@ -10,14 +10,14 @@ test('dummy test', () => {
 test('Get list of all tasks.', () => {
     let token = mdb.active_users[0].token;
     let result = tasks.getTaskslist(token, "all").body.message;
-    var check = ajv.validate(require('./../schemas/tasks_array_schema.json'), result);
+    var check = ajv.validate(require('./../schemas/payloads/tasks_array_schema.json'), result);
     expect(check).toBe(true);
 });
 
 test('Get list of created tasks.', () => {
     let token = mdb.active_users[1].token;
     let result = tasks.getTaskslist(token, "created").body.message;
-    var check = ajv.validate(require('./../schemas/tasks_array_schema.json'), result);
+    var check = ajv.validate(require('./../schemas/payloads/tasks_array_schema.json'), result);
     var car = true;
     if(check){
         for (let i=0; i<result.length && car; i++){
@@ -66,8 +66,8 @@ test('createTask, body format is wrong', () => {
 test('createtask returns 200 ok', () => {
     let token = mdb.active_users[0].token;
     let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1", "opt3"], "solutions": "opt3"}
-    let result = tasks.createTask(token, body);
-    var check = ajv.validate(require('./../schemas/tasks_schema.json'), result);
+    let result = tasks.createTask(token, body).body;
+    var check = ajv.validate(require('./../schemas/payloads/tasks_schema.json'), result);
     expect(check).toBe(true);
 });
 

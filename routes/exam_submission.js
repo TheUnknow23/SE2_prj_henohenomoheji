@@ -26,6 +26,12 @@ router.put('/:id/', function(req, res){
 	res.json();
 });
 
+router.patch('/:id/', function(req, res){
+	result = logic.assign_submission_evaluation(req.query.token, req.params.id, req.body);
+	res.status(result.status);
+	res.json();
+});
+
 router.get('/:id/exam_peer_reviews', function(req, res){
 	var result = logic.exam_submission_peer_review_list(req.query.token, req.params.id);
 	res.status(result.status);

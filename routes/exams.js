@@ -6,7 +6,7 @@ router.get('/', function (req, res) {
 
         //get parametri necessari
         let token = req.query.token;
-        let selection = req.query.selection;
+        let selection = req.query.select;
         //get lista di esame
         let result = logic.getExamlist(token, selection);
         //set codice di stato e risultato

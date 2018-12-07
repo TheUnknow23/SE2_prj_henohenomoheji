@@ -52,12 +52,11 @@ class Active_Users extends Array {
     }
 
     getUserByToken(token){
-        let idx = this.indexOf(this.find(obj => obj.token === token));
-        if(idx === -1){
-            return null;
-        }else{
-            return this[idx].user;
+        var x = this.find(obj => obj.token === token);
+        if(x !== undefined){
+            return x.user;
         }
+        return null;
     }
 
     getTokenByUserId(id) {

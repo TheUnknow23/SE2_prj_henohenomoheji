@@ -80,14 +80,14 @@ test('call update_exam_submission with incorrect token', () => {
     expect(es.update_exam_submission("dsdsdsdssdsd", 0, {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"})).toBe(generic_e.error401);
 });
 test('call update_exam_submission with incorrect payload', () => {
-    expect(es.update_exam_submission(mdb.active_users[1].token, {"ref_exam": 0})).toBe(generic_e.error400);
+    expect(es.update_exam_submission(mdb.active_users[1].token, 0, {"ref_exam": 0})).toBe(generic_e.error400);
 });
 test('call update_exam_submission with correct values as submitter', () => {
-    expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"answers":["bob","bobby"], "status": "completed"}).body).toEqual(mdb.exam_submissions[0]);
+    expect(es.update_exam_submission(mdb.active_users[1].token,  0, {"answers":["bob","bobbbbbby"], "status": "completed"}).body).toEqual(mdb.exam_submissions[0]);
 });
 //check for update on expired deadline
 test('call update_exam_submission with correct values as owner of the exam', () => {
-    expect(es.update_exam_submission(mdb.active_users[0].token,  0, {"evaluation": "good"}).body).toEqual(mdb.exam_submissions[0]);
+    expect(es.assign_submission_evaluation(mdb.active_users[0].token,  0, {"evaluation": "good"}).body).toEqual(mdb.exam_submissions[0]);
 });
 
 //exam_submission_peer_review_list() tests

@@ -132,9 +132,8 @@ function update_exam_submission(token, id, updated_submission){
 						var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update(updated_submission.answers,updated_submission.status);
 						return {"status": 200, "body": updated};
 					}
-				}else if(ref_sub.ref_exam.owner.id === user.id){
-					var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update("","",updated_submission.evaluation);
-					return {"status": 200, "body": updated};
+				}else{//se non è submitter
+					return  generic_e.error401;
 				}
 			}else{//the requested resource does not exists
 				return  generic_e.error404;
@@ -147,6 +146,37 @@ function update_exam_submission(token, id, updated_submission){
 	}
 }
 
+/**
+ * 
+ * @param {string} token 
+ * @param {int} id 
+ * @param {object} evaluation
+ * @returns {object} the updated version of the submission or an error
+ */
+function assign_submission_evaluation(token, id, updated_submission){
+	var now = new Date();
+	var scheck = ajv.validate(require('./../../schemas/payloads/exam_submission_patch.json'), updated_submission);
+	if(scheck){//se il payload ha un formato valido
+		var user = mdb.active_users.getUserByToken(token);
+		if(user !== null){//se l'utente loggato esiste
+			var ref_sub = mdb.exam_submissions.getExamSubmissionById(id);
+			if(ref_sub !== undefined){//se esiste la submission
+				if(ref_sub.ref_exam.owner.id === user.id){
+					var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update("","",updated_submission.evaluation);
+					return {"status": 200, "body": updated};
+				}else{//se non è owner
+					return  generic_e.error401;
+				}
+			}else{//the requested resource does not exists
+				return  generic_e.error404;
+			}
+		}else{//the user has incorrect token
+			return  generic_e.error401;
+		}
+	}else{//the payload has not a valid format
+		return  generic_e.error400;
+	}
+}
 /**
  * returns the reviews array of a submission, this works if you're the creator of the submission,
  * the owner of the exam regarding the submission or one of the exam assignees
@@ -179,3 +209,4 @@ module.exports.display_exam_submission_list = display_exam_submission_list;/**/
 module.exports.exam_submission_peer_review_list = exam_submission_peer_review_list;/**/
 module.exports.insert_exam_submission = insert_exam_submission;/**/
 module.exports.update_exam_submission = update_exam_submission;/**/
+module.exports.assign_submission_evaluation = assign_submission_evaluation;
