@@ -4,7 +4,12 @@ const  review_e = require('./../../schemas/errors/review.json');
 const Ajv = require('ajv');
 var ajv = new Ajv();
 
-
+/**
+ * requires an exam_review object with an id reffering to a submission and adds it to the mdb
+ * @param {string} token 
+ * @param {object} exam_submission 
+ * @returns {object} copy of created exam submission or error
+ */
 function insert_exam_peer_review(token, exam_review){
     var now = new Date();
 	var scheck = ajv.validate(require('./../../schemas/payloads/exam_peer_review_post.json'), exam_review);
@@ -76,5 +81,31 @@ function routerUpdateReview(token, id, updatedReview){
 	return ('Modified review with id: ' + res);
 }
 
+/**
+ * gets the list of reviews, there are two type of reviews that can be selected:
+ * - created: the ones the user wrote
+ * - received: the ones associated with the user's submissions
+ * @param {*} token token of calling user
+ * @param {*} type type of reviews to display
+ */
+function display_exam_peer_reviews_list(token, type){
+	if(token === undefined || type === undefined){
+		return  generic_e.error400;
+	}
+	var user = mdb.active_users.getUserByToken(token); //mi prendo l'utente attivo relativo al token
+	if(user !== null){
+		if(type === "created"){
+			return {"status": 200, "body": mdb.exam_peer_reviews.filterBySubmitter(user)};
+		}else if(type === "received"){
+			return {"status": 200, "body": mdb.exam_peer_reviews.filterByExamSubmitter(user)};
+		}else{
+			return  generic_e.error400;
+		}
+	}else{
+		return  generic_e.error401;
+	}
+}
+
 module.exports.insert_exam_peer_review = insert_exam_peer_review;
 module.exports.routerUpdateReview = routerUpdateReview;
+module.exports.display_exam_peer_reviews_list = display_exam_peer_reviews_list;

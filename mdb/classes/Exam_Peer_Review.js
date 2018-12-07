@@ -53,6 +53,9 @@ class Exam_Peer_Reviews extends Array{
         rev = this.filter(obj => (obj.submission === submission));
         return rev;
     }
+    filterByExamSubmitter(user){
+        return this.filter(obj => (obj.submission.submitter.id === user.id && obj.review !== ""));
+    }
     //GET METHODS
     getIndexById(id){
         let result = this.indexOf(this.find(obj => obj.id === id));

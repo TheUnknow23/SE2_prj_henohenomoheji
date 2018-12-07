@@ -6,7 +6,11 @@ const reviewsErrors = require('./../schemas/errors/review');
 
 
 router.get('/', function(req, res) {
-	res.send('exam_peer_reviews resources');
+	let type = req.query.select;
+	let token = req.query.token;
+	var result = logic.display_exam_peer_reviews_list(token, type);
+	res.status(result.status);
+	res.json(result.body);
 });
 
 router.put('/:id', function(req, res) {
