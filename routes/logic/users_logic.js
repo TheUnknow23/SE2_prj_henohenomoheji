@@ -133,10 +133,10 @@ function routerGetUsersExamSubmissions(token, id) {
 function routerPostUsers(postBody) {
 	
 	let validate = ajv.compile(userInputSchema);
-	
+	  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	if (!validate(postBody) || hasEmptyFields(postBody)) {
 		return errors.error400;
-	} else {
+	} else if(re.test(postBody.email)) {
 		let name = postBody.name;
 		let surname = postBody.surname;
 		let email = postBody.email;
@@ -148,6 +148,8 @@ function routerPostUsers(postBody) {
 		} else {
 			return {"status": 200, "body": result};
 		}
+	}else{
+		return errors.error400;
 	}
 }
 
