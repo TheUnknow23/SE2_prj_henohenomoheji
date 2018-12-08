@@ -106,6 +106,25 @@ function display_exam_peer_reviews_list(token, type){
 	}
 }
 
+function getPeerReviewById(token,id){
+	if (token !== undefined && token !== null && id !== null && id !== undefined){
+		var user = mdb.active_users.getUserByToken(token);
+		if (user !== null){
+			var peerReview = mdb.exam_peer_reviews.findById(id);
+			if (peerReview!== null && peerReview!==undefined){
+				return {"status": 200, "body":peerReview};
+			} else {
+				return generic_e.error404;
+			}
+		}else{
+			return generic_e.error401;
+		}
+	} else {
+		return generic_e.error401;
+	}
+}
+
 module.exports.insert_exam_peer_review = insert_exam_peer_review;
 module.exports.routerUpdateReview = routerUpdateReview;
 module.exports.display_exam_peer_reviews_list = display_exam_peer_reviews_list;
+module.exports.getPeerReviewById = getPeerReviewById;

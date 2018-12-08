@@ -13,6 +13,12 @@ router.get('/', function(req, res) {
 	res.json(result.body);
 });
 
+router.get('/:id', function (req, res) {
+	let id= req.params.id;
+	let token = req.params.token;
+	res.send(logic.getPeerReviewById(token, id));
+});
+
 router.put('/:id', function(req, res) {
 	let id = req.params.id;
 	let token = req.query.token;
