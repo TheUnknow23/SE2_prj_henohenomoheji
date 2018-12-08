@@ -29,8 +29,8 @@ test('GET /users NOT OK case with non existing arguments', () => {
 // POST /users
 
 test('POST /users OK case ', () => {
-    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "c@d.e", "password": "fgh"} ).body;
-    expect(result).toBe(mdb.users.getUserByEmail('c@d.e').id);
+    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gmail.com", "password": "fgh"} ).body;
+    expect(result).toBe(mdb.users.getUserByEmail('gino@gmail.com').id);
 });
 
 test('POST /users NOT OK case invalid payload (one required parameter missing)', () => {
@@ -43,8 +43,13 @@ test('POST /users NOT OK case invalid payload (one required paramete rempty)', (
     expect(result).toBe(errors.error400);
 });
 
+test('POST /users NOT OK case invalid payload (worn email)', () => {
+    let result = logic.routerPostUsers( {"name": "a", "surname": "ssss", "email": "zzzz@zz", "password": "fgh"} );
+    expect(result).toBe(errors.error400);
+});
+
 test('POST /users NOT OK case user already subscribed (same email)', () => {
-    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gino", "password": "fgh"} );
+    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "c@de", "password": "fgh"} );
     expect(result).toBe(errors.error400);
 });
 
