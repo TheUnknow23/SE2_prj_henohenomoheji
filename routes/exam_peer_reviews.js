@@ -28,4 +28,20 @@ router.post('/', function(req, res){
 	res.json(result.body);
 });
 
+
+router.delete('/:id',function (req, res) {
+
+        //get parametri necessari
+        let id = req.params["exam_peer_review_id"];
+        let token = req.query.token;
+        let result = logic.delete_exam_peer_review(token, id);
+        //send codice di stato 
+        res.sendStatus(result.status);
+});
+
+
+
+
+
+
 module.exports.router = router;

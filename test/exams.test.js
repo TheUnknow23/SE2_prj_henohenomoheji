@@ -4,20 +4,19 @@ const exams = require('./../routes/logic/exam_logic');
 const generic_e = require('./../schemas/errors/generic.json');
 
 
-const email = "geno@geno";
-const password = "pwd2";
+
 const token = mdb.active_users[0].token;
 const token2 = mdb.active_users[3].token;
 
 
 //dati giusta
-var testDati1 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
-var testDati2 = {"title": "geometria", "description": "sessione2018", "tasks_ids": "", "group_id": "", "final_deadline": "2018-11-22", "review_deadline": "2018-11-23"};
+var testDati1 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": 0, "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
+var testDati2 = {"title": "geometria", "description": "sessione2018", "tasks_ids": [], "group_id": -1, "final_deadline": "2018-11-22", "review_deadline": "2018-11-23"};
 //dati errata
-//manca dati description
-var testDati3 = {"title": "analisi", "description": "", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
+//gruppo id non è number
+var testDati3 = {"title": "analisi", "description": "ss", "tasks_ids": [0, 1], "group_id": "0", "final_deadline": "2018-11-22", "review_deadline": "2018-11-25"};
 //review data errata
-var testDati4 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": "0", "final_deadline": "2018-11-25", "review_deadline": "2018-11-25"};
+var testDati4 = {"title": "analisi", "description": "sessione2018", "tasks_ids": [0, 1, 2], "group_id": 0, "final_deadline": "2018-11-25", "review_deadline": "2018-11-25"};
 
 //test for get exam list
 test("validate token for get a exam list ", function () {
@@ -25,7 +24,7 @@ test("validate token for get a exam list ", function () {
         expect(exams.getExamlist("dsadawd", "assigned")).toEqual(generic_e.error401);
 });
 
-test("validate selection value for get a exam  list ", function () {//
+test("validate selection value for get a exam  list ", function () {
 
         expect(exams.getExamlist(token, "sadasd")).toEqual(generic_e.error400);
 });
@@ -66,7 +65,7 @@ test("validate input for post a exam", function () {
 
 test("validate response for post a exam", function () {
 
-        expect(exams.postExam(token, testDati1).body.id).toBeGreaterThan(0);
+       expect(exams.postExam(token, testDati1).body.id).toBeGreaterThan(0);
 
 
 });
@@ -168,3 +167,43 @@ test("validate response for get a submission list of exam", function () {
         expect(body[0].evaluation).toBeDefined();
 
 });
+
+
+
+/*
+//api test solo dal locale
+const BASE_URL = 'http://localhost:3000/';
+const fetch = require('node-fetch');
+
+// you can also use async/await
+test('API: GET a exam list)', async () => {
+        let response = await fetch(BASE_URL + "exams?token=71&select=created");
+        expect(response.status).toBe(200);
+});
+
+
+test('API: POST a new exam)', async () => {
+        let response = await fetch(BASE_URL + "exams?token=71", {method: 'POST', headers: {'Content-Type': 'application/json'}, body:  JSON.stringify(testDati1)}
+        );
+        let result = await response.json();
+        expect(result.id).toBeGreaterThanOrEqual(0);
+});
+
+
+test('API: GET a new exam)', async () => {
+        let response = await fetch(BASE_URL + "exams/0?token=71");
+        expect(response.status).toBe(200);
+});
+
+test('API: PUT a exist exam)', async () => {
+        let response = await fetch(BASE_URL + "exams/0?token=71", {method: 'PUT', headers: {'Content-Type': 'application/json'}, body:  JSON.stringify(testDati1)}
+       );
+        expect(response.status).toBe(200);
+});
+
+test('API: PUT a submission list of a exam)', async () => {
+        let response = await fetch(BASE_URL + "exams/0/exam_submissions?token=71");
+        expect(response.status).toBe(200);
+});
+
+*/

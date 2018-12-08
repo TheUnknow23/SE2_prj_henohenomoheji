@@ -50,6 +50,9 @@ test('call display_exam_peer_reviews_list with incorrect token', () => {
 test('call display_exam_peer_reviews_list with incorrect parameter', () => {
         expect(er.display_exam_peer_reviews_list(mdb.active_users[2].token, "recdeived")).toEqual(generic_e.error400);
 });
+
+
+
 //test for get a review
 test("validate token for get a review", function () {
 
@@ -127,20 +130,28 @@ test('PUT /exam_peer_reviews/:id NOT OK case missing some parameter', function()
 
 
 //test for delete a review
-test("validate token for delete a review", function () {
+let invalid_token = "sss";
+let valid_token = mdb.active_users.getTokenByUserId(1);
+test("DELETE exam_peer_reviews NOT OK token invalid", function () {
 
-        expect(1).toBe(1);
+       expect(er.delete_exam_peer_review(invalid_token, 0)).toEqual(generic_e.error401);
 });
 
-test("validate review id for delete a review", function () {
+test("DELETE exam_peer_reviews NOT OK id isn't number", function () {
 
-        expect(1).toBe(1);
+        expect(er.delete_exam_peer_review(valid_token, "sdas")).toEqual(generic_e.error400);
+});
+
+test("DELETE exam_peer_reviews NOT OK not exist reviews with this id ", function () {
+
+        expect(er.delete_exam_peer_review(valid_token, 1233234)).toEqual(generic_e.error404);
 });
 
 
-test("validate response for delete a exam", function () {
 
-        expect(1).toBe(1);
+test("DELETE exam_peer_reviews OK status code 204", function () {
+
+        expect(er.delete_exam_peer_review(valid_token, 1).status).toBe(204);
 
 });
 

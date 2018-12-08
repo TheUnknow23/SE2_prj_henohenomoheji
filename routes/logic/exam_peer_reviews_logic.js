@@ -106,6 +106,56 @@ function display_exam_peer_reviews_list(token, type){
 	}
 }
 
+
+/**
+ * delete review by id
+ * @param {type} token
+ * @param {type} review_id
+ * @returns {nm$_generic.module.exports.error401|nm$_generic.exports.error401|nm$_generic.exports.error404|nm$_generic.module.exports.error404|nm$_exam_peer_reviews_logic.delete_exam_peer_review.result|nm$_generic.module.exports.error400|nm$_generic.exports.error400|delete_exam_peer_review.result}
+ */
+function delete_exam_peer_review(token, review_id){
+        
+        
+         //il risultato da ritornare
+        let result;
+        //get user
+        let user = mdb.active_users.getUserByToken(token);
+        //if isn't empty
+        if (user === null)
+        {
+                result = generic_e.error401;
+        }
+        //if isn't valid id
+        else if (review_id === undefined || isNaN(parseInt(review_id)))
+        {
+
+                result = generic_e.error400;
+        }
+
+        else
+        {
+                //get tale review
+                let review = mdb.exam_peer_reviews.findById(parseInt(review_id));
+                //se non esiste review con tale id
+                if (review === undefined)
+                {
+                        result = generic_e.error404;
+                }
+                else
+                {
+                        //elimina review
+                        mdb.exam_peer_reviews.deleteById(parseInt(review_id));
+
+                        result = {};
+                        result.status = 204;
+                }
+        }
+        return result;
+        
+}
+
+
 module.exports.insert_exam_peer_review = insert_exam_peer_review;
 module.exports.routerUpdateReview = routerUpdateReview;
 module.exports.display_exam_peer_reviews_list = display_exam_peer_reviews_list;
+module.exports.delete_exam_peer_review = delete_exam_peer_review;

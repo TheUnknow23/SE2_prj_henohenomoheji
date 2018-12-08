@@ -1,6 +1,7 @@
 const mdb = require('./../../mdb/mdb');
 const errors = require('./../../schemas/errors/generic.json');
-
+const Ajv = require('ajv');
+var ajv = new Ajv();
 /**
  *  controlla se selection contiene valore giusto
  * @param {type} selection
@@ -26,16 +27,23 @@ function isValidselection(selection) {
  */
 function isValidInput(body) {
         let valid = true;
-
-        //controlla i dati sia definito e non sia vuoto
-        if (body.title === undefined || body.title === "" || body.description === undefined || body.description === "" || body.tasks_ids === undefined || body.group_id === undefined || body.final_deadline === undefined || body.final_deadline === "" || body.review_deadline === undefined || body.review_deadline === "")
+         let scheck = ajv.validate(require('./../../schemas/payloads/exam_post_and_put.json'), body);
+        //se schema non è valido
+        if(!scheck){
+                 valid = false;
+                 
+        }
+        //se i campi obbligatori sono vuoti
+        else if (body.title === ""  || body.description === ""  || body.final_deadline === ""  || body.review_deadline === "")
         {
                 valid = false;
+             
         }
         //controlla se le date sono valide e final_deadline è almeno un giorno prima di review_deadline
         else if (isNaN(Date.parse(body.final_deadline)) || isNaN(Date.parse(body.review_deadline)) || (Date.parse(body.final_deadline) + 86400000) > Date.parse(body.review_deadline))
         {
                 valid = false;
+               
         }
 
         return valid;

@@ -64,5 +64,5 @@ typings/
 .next
 
 .idea
-nbproject/private/
+nbproject/
 .vscode/

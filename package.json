@@ -26,7 +26,8 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "node-fetch": "^2.3.0"
   },
   "jest": {
     "verbose": true,
