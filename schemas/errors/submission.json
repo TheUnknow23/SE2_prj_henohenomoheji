@@ -1,6 +1,6 @@
 {   
     "expired_deadline":
-        {"status": 401, "body": {"code": 401,"message": "The deadline expired"}},
+        {"status": 403, "body": {"code": 401,"message": "The deadline expired"}},
     "existent_submission":
-        {"status": 401, "body": {"code": 401, "message": "A submission already exists"}}
+        {"status": 403, "body": {"code": 401, "message": "A submission already exists"}}
 }

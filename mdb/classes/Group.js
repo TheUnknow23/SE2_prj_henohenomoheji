@@ -60,7 +60,9 @@ class Groups extends Array{
             m = members;
         }else{
             for(let i = 0; i < members.length; i++){
-                m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+                if(mdb.users.getUserById(members[i]) !== undefined){
+                    m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+                }
             }
         }
         if(this.length === 0){
@@ -72,16 +74,19 @@ class Groups extends Array{
         }
         if(x !== null){
             this.push(x);
-            return true;
+            return this[this.length-1];
+        }else{
+            return false;
         }
-        return this[this.length-1];
     }
 
     //UPDATE METHOD
     updateById(id, name, description, members){
         var group = this.getGroupById(id); var m = [];
         for(let i = 0; i < members.length; i++){
-            m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+            if(mdb.users.getUserById(members[i]) !== undefined){
+                m.push({"id": members[i], "email": mdb.users.getUserById(members[i]).email});
+            }
         }
         if (group !== null&&group!==undefined){
             return group.update(name, description, m);
@@ -115,7 +120,7 @@ class Groups extends Array{
         }
     }
     deleteById(id){
-        var index = this.indexOf(this.find(obj => obj.id === id));
+        var index = this.indexOf(this.find(obj => obj.id === parseInt(id)));
         if(index>=0){
             this.splice(index,1);
             return 200;

@@ -55,10 +55,10 @@ function getTaskslist(token, selection) {
     if (user !==null && user!==undefined){
         switch (selection) {
             case 'all': {
-                return {status: 200, body: {code: 200, message: mdb.tasks}};
+                return {status: 200, body: {code: 200, body: mdb.tasks}};
             }
             case 'created': {
-                return {status: 200, body: {code: 200, message: mdb.tasks.filterByOwner(user)}};
+                return {status: 200, body: {code: 200, body: mdb.tasks.filterByOwner(user)}};
             }
             default:{
                 return generic_e.error400;
@@ -78,9 +78,10 @@ function createTask(token, body) {
     let user = mdb.active_users.getUserByToken(token);
     //if isn't empty
     if (user !== null&&user !==undefined){
-        if (ajv.validate(require('./../../schemas/payloads/tasks_post.json'), body)&&checkAtt(body)){
+        //console.log(body);
+        if (ajv.validate(require('./../../schemas/payloads/tasks_post.json'), body)){
             let result = mdb.tasks.add({id:user.id, email: user.email}, body.task_type,
-                body.title, body.subject, body.description, body.answer, body.solutions)
+                body.title, body.subject, body.description, body.options, body.solutions);
             return {"status" : 200, "body" : result};
         } else {
             return generic_e.error400;
@@ -112,9 +113,9 @@ function accessSpecificTask(token, task_id) {
     else
     {
 
-        let idtask = mdb.getTasksById(task_id);
+        let idtask = mdb.tasks.getTaskById(task_id);
         if (idtask === undefined) {
-            return undefined;
+            return generic_e.error404;
         } else {
             result = {};
             result.status = 200;
@@ -151,18 +152,20 @@ function updateTask(token, body, task_id) {
     } else {
 
         let Ttype = body.task_type;
-        let Tsubj = body.task_subject;
-        let Ttitle = body.task_title;
-        let Tdescription = body.task_description;
-        let Toptions = body.task_options;
-        let Tsolutions = body.task_solutions;
+        let Tsubj = body.subject;
+        let Ttitle = body.title;
+        let Tdescription = body.description;
+        let Toptions = body.options;
+        let Tsolutions = body.solutions;
         let index = mdb.tasks.getIndexById(task_id);
-
-        mdb.tasks[index].update(Ttype, Tsubj, Ttitle, Tdescription, Toptions, Tsolutions);
-
-
-        result = {};
-        result.status = 200;
+        if(mdb.tasks[index].owner.email === user.email){
+            mdb.tasks[index].update(Ttype, Tsubj, Ttitle, Tdescription, Toptions, Tsolutions);
+            result = {};
+            result.status = 200;
+            result.body = undefined;
+        }else{
+            result = generic_e.error403;
+        }
 
     }
 
@@ -189,12 +192,14 @@ function deleteTask(token, task_id) {
     {
         result = generic_e.error404;
     } else {
-
-        mdb.tasks.deleteById(task_id);
-
-
-        result = {};
-        result.status = 200;
+        if(mdb.tasks.getTaskById(task_id).owner.email === user.email){
+            mdb.tasks.deleteById(task_id);
+            result = {};
+            result.status = 200;
+            result.body = undefined;
+        }else{
+            result = generic_e.error403;
+        }
 
     }
 

@@ -22,7 +22,7 @@ function insert_exam_peer_review(token, exam_review){
                     var idx = mdb.exam_peer_reviews.getIndexByUserAndSubmission(user, ref_sub);
 					if(idx >= 0){//se è stato assegnato come reviewer
 						if(mdb.exam_peer_reviews[idx].review === ""){//se non ha già submittato una review
-							var review = mdb.exam_peer_reviews[idx].update("", "", exam_review.review);
+							var review = mdb.exam_peer_reviews[idx].update(exam_review.review, "", "");
 							return {"status": 201, "body": review};
 						}else{//there's already a review
 							return  review_e.existent_review;
@@ -74,6 +74,10 @@ function routerUpdateReview(token, id, updatedReview){
 	//Requester non logged or non reviewer
 	if (!(requester !== null && requester.id === examReviewToUpdate.reviewer.id)) {
 		return generic_e.error401;
+	}
+	//Requester does not have review yet
+	if(examReviewToUpdate.review === ""){
+		return generic_e.error400;
 	}
 
 	//Actual code

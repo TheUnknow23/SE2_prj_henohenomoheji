@@ -93,14 +93,9 @@ class Exams extends Array {
             for (let i = 0; i < this.length; i++) {
                 endInnerCycle = false;
                 currentExam = this[i];
-                console.log("-------CURRENT EXAMS");
-                console.log(currentExam);
-                console.log("searching for --> " + assignedId);
                 //Cycle through all members of group to which exam was assigned
                 for (let j = 0; j < currentExam.group.members.length && endInnerCycle === false; j++) {
-                        console.log("Þ");
                     if (currentExam.group.members[j].id === assignedId) {
-                            console.log("FOUND MEMBER!");
                         exams.push(currentExam);
                         endInnerCycle = true;
                     }

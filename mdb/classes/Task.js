@@ -7,18 +7,18 @@ class Task{
     subject(string)
     title(string)
     description(string)
-    answer(string[]) DEFAULT NULL
+    options(string[]) DEFAULT NULL
     solutions(string[]) 
     */
-    constructor(id, owner, task_type, subject, title, description, answer, solutions){
+    constructor(id, owner, task_type, subject, title, description, options, solutions){
         this.id = id; this.owner = owner; this.task_type = task_type; this.subject = subject; 
-        this.title = title; this.description = description; this.answer = answer; this.solutions = solutions;
+        this.title = title; this.description = description; this.options = options; this.solutions = solutions;
     }
-    update(task_type, subject, title, description, answer, solutions){
+    update(task_type, subject, title, description, options, solutions){
         if(task_type !== "" && task_type !== undefined) this.task_type = task_type;
         if(subject !== "" && subject !== undefined) this.subject = subject; 
         if(title !== "" && title !== undefined) this.title = title;
-        if(answer !== "" && answer !== undefined) this.answer = answer; 
+        if(options !== "" && options !== undefined) this.options = options; 
         if(solutions !== "" && solutions !== undefined) this.solutions = solutions; 
         if(description !== "" && description !== undefined){
             this.description = description;
@@ -29,12 +29,12 @@ class Task{
 }
 class Tasks extends Array{
     //ADD METHOD
-    add(owner, task_type, subject, title, description, answer, solutions){
+    add(owner, task_type, subject, title, description, options, solutions){
         var x = null;
         if(this.length === 0){
-            x = new Task(0, owner, task_type, subject, title, description, answer, solutions);
+            x = new Task(0, owner, task_type, subject, title, description, options, solutions);
         }else{
-            x = new Task(this[this.length-1].id+1, owner, task_type, subject, title, description, answer, solutions);
+            x = new Task(this[this.length-1].id+1, owner, task_type, subject, title, description, options, solutions);
         }
         if(x !== null){
             this.push(x);
@@ -50,14 +50,14 @@ class Tasks extends Array{
     }
     //GET METHODS
     getIndexById(id){
-        return this.indexOf(this.find(obj => obj.id === id));
+        return this.indexOf(this.find(obj => obj.id === parseInt(id)));
     }
     getTaskById(id){
-        return this.find(obj => obj.id === id);
+        return this.find(obj => obj.id === parseInt(id));
     }
     //DELETE METHODS
     deleteById(id){
-        var index = this.indexOf(this.find(obj => obj.id === id));
+        var index = this.indexOf(this.find(obj => obj.id === parseInt(id)));
         if(index>=0){
             this.splice(index,1);
         }

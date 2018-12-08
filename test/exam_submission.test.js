@@ -59,11 +59,11 @@ test('call insert_exam_submission with incorrect token', () => {
 test('call insert_exam_submission with incorrect payload', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token, {"ref_exam": 0,"answers":["bob","bobby"], "status": 2})).toBe(generic_e.error400);
 });
-test('call insert_exam_submission with correct values', () => {
-    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"}).body).toEqual(mdb.exam_submissions[3]);
+test('call insert_exam_submission with correct values on existent submission', () => {
+    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "on hold"})).toEqual(submission_e.existent_submission);
 });
-test('call insert_exam_submission with correct values as student who already submitted', () => {
-    expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "heck"})).toEqual(submission_e.existent_submission);
+test('call insert_exam_submission with correct values as student out of group', () => {
+    expect(es.insert_exam_submission(mdb.active_users[0].token,  {"ref_exam": 0,"answers":["bob","bobby"], "status": "heck"})).toEqual(generic_e.error401);
 });
 test('call insert_exam_submission on inexisting exams', () => {
     expect(es.insert_exam_submission(mdb.active_users[2].token,  {"ref_exam": 99,"answers":["dds","d"], "status": "heck"})).toEqual(generic_e.error404);

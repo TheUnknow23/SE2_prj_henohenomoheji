@@ -66,7 +66,7 @@ router.get('/:user_id/exams', function(req, res) {
 	//let data = routerGetUsersExams(mdb.active_users.getTokenByUserId(0), id, selection);
 	let data = logic.routerGetUsersExams(token, id, selection);
 	res.status(data.status);
-	res.send(JSON.stringify(data, null, 3));
+	res.send(JSON.stringify(data.body, null, 3));
 })
 
 router.get('/:user_id/exam_submissions', function(req, res) {

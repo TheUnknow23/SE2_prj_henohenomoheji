@@ -15,12 +15,12 @@
      "subject": { "type": "string" },
      "title": { "type": "string" },
      "description": { "type": "string" },
-     "answer": { 
+     "options": { 
         "type": "array",
         "items": { "type": "string" }
         },
      "solutions": { "type": "string" }
     }
     },
-    "required": ["id", "owner", "task_type", "subject","title", "description", "answer", "solutions"]
+    "required": ["id", "owner", "task_type", "subject","title", "description", "options", "solutions"]
 }

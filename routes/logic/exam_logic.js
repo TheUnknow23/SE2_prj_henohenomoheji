@@ -277,49 +277,52 @@ function putExam(token, putBody, exam_id) {
                 }
                 else
                 {
-
-                        //get parametri
-                        let title = putBody.title;
-                        let description = putBody.description;
-                        //get array di taskInExam
-                        let tasks_ids = putBody.tasks_ids;
-                        let taskset = [];
-                        //se tasks_ids non è vuoto
-                        if (tasks_ids !== "")
-                        {
-                                //se tasks_ids non è un array, trasforma in array
-                                if (tasks_ids.length === undefined)
-                                {
-                                        tasks_ids = [tasks_ids];
-                                }
-                                for (let i = 0; i < tasks_ids.length; i++)
-                                {
-                                        let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
-                                        if (singleTask !== undefined)
-                                        {
-                                                taskset.push({"task_id": singleTask.id, "description": singleTask.description});
-                                        }
-
-                                }
-                        }
-                        //get gruppo
-                        let group_id = putBody.group_id;
-                        let group = "";
-                        //se group non è vuoto
-                        if (group_id !== "")
-                        {
-                                group = mdb.groups.getGroupById(parseInt(group_id));
-                        }
-                        //get data con formatta giusta
-                        let final_deadline = formatDate(putBody.final_deadline);
-                        let review_deadline = formatDate(putBody.review_deadline);
-
-                        //insesce nella tabella
                         let index = mdb.exams.getIndexById(parseInt(exam_id));
-                        mdb.exams[index].update(title, description, taskset, group, final_deadline, review_deadline);
+                        if(mdb.exams[index].owner.email === user.email){
+                                //get parametri
+                                let title = putBody.title;
+                                let description = putBody.description;
+                                //get array di taskInExam
+                                let tasks_ids = putBody.tasks_ids;
+                                let taskset = [];
+                                //se tasks_ids non è vuoto
+                                if (tasks_ids !== "")
+                                {
+                                        //se tasks_ids non è un array, trasforma in array
+                                        if (tasks_ids.length === undefined)
+                                        {
+                                                tasks_ids = [tasks_ids];
+                                        }
+                                        for (let i = 0; i < tasks_ids.length; i++)
+                                        {
+                                                let singleTask = mdb.tasks.getTaskById(parseInt(tasks_ids[i]));
+                                                if (singleTask !== undefined)
+                                                {
+                                                        taskset.push({"task_id": singleTask.id, "description": singleTask.description});
+                                                }
 
-                        result = {};
-                        result.status = 200;
+                                        }
+                                }
+                                //get gruppo
+                                let group_id = putBody.group_id;
+                                let group = "";
+                                //se group non è vuoto
+                                if (group_id !== "")
+                                {
+                                        group = mdb.groups.getGroupById(parseInt(group_id));
+                                }
+                                //get data con formatta giusta
+                                let final_deadline = formatDate(putBody.final_deadline);
+                                let review_deadline = formatDate(putBody.review_deadline);
+
+                                //insesce nella tabella
+                                mdb.exams[index].update(title, description, taskset, group, final_deadline, review_deadline);
+
+                                result = {};
+                                result.status = 200;
+                        }else{
+                                result = errors.error403;
+                        }
                 }
         }
         return result;
@@ -359,19 +362,22 @@ function getSubmissionsOfExam(token, exam_id) {
                 {
 
                         let body;
+                        if(exam.owner.email === user.email){
+                                body = mdb.exam_submissions.filterByExam(exam);
 
-                        body = mdb.exam_submissions.filterByExam(exam);
-
-                        //se body è un array vuoto, significa 404
-                        if (body.length === 0)
-                        {
-                                result = errors.error404;
-                        }
-                        else
-                        {
-                                result = {};
-                                result.status = 200;
-                                result.body = body;
+                                //se body è un array vuoto, significa 404
+                                if (body.length === 0)
+                                {
+                                        result = errors.error404;
+                                }
+                                else
+                                {
+                                        result = {};
+                                        result.status = 200;
+                                        result.body = body;
+                                }
+                        }else{
+                                result = errors.error403;
                         }
 
                 }

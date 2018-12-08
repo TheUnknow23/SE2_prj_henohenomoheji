@@ -64,7 +64,7 @@ class Exam_Submissions extends Array{
         }
     }
     hasSubmission(exam, user){//checks is there's already an exam_submission for the given exam and user
-        var sub = this.find(obj => (obj.ref_exam === exam && obj.submitter === user));
+        var sub = this.find(obj => (obj.ref_exam.id === exam.id && obj.submitter.id === user.id));
         if(sub !== undefined){
             return true;
         }

@@ -103,6 +103,7 @@ function display_exam_submission(token, id){
 			if(mdb.exam_peer_reviews.getReviewerByExamSubmission(e_sub).id === user.id){
 				return {"status": 200, "body": e_sub};
 			}
+			return  generic_e.error401;
 		}else{
 			return  generic_e.error404;
 		}
@@ -131,6 +132,8 @@ function update_exam_submission(token, id, updated_submission){
 						var index = mdb.exam_submissions.getIndexById(id)
 						var updated = mdb.exam_submissions[mdb.exam_submissions.getIndexById(id)].update(updated_submission.answers,updated_submission.status);
 						return {"status": 200, "body": updated};
+					}else{
+						return  submission_e.expired_deadline;
 					}
 				}else{//se non è submitter
 					return  generic_e.error401;
@@ -195,6 +198,8 @@ function exam_submission_peer_review_list(token, id){
 				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
 			}else if(ref_sub.ref_exam.group.isThere(user)){
 				return {"status": 200, "body": mdb.exam_peer_reviews.filterPeerReviewBySubmission(ref_sub)};
+			}else{
+				return  generic_e.error400;
 			}
 		}else{//the submissions does not exist
 			return  generic_e.error404;

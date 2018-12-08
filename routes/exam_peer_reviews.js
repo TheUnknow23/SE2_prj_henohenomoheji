@@ -19,7 +19,8 @@ router.put('/:id/', function(req, res) {
 	//Just a string of the new review
 	let updatedReview = req.body;
 	let result = logic.routerUpdateReview(token, id, updatedReview);
-	res.sendStatus(result.status);
+	res.status(result.status);
+	res.json(undefined);
 });
 
 router.post('/', function(req, res){

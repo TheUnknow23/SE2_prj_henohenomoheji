@@ -9,14 +9,14 @@ test('dummy test', () => {
 
 test('Get list of all tasks.', () => {
     let token = mdb.active_users[0].token;
-    let result = tasks.getTaskslist(token, "all").body.message;
+    let result = tasks.getTaskslist(token, "all").body.body;
     var check = ajv.validate(require('./../schemas/payloads/tasks_array_schema.json'), result);
     expect(check).toBe(true);
 });
 
 test('Get list of created tasks.', () => {
     let token = mdb.active_users[1].token;
-    let result = tasks.getTaskslist(token, "created").body.message;
+    let result = tasks.getTaskslist(token, "created").body.body;
     var check = ajv.validate(require('./../schemas/payloads/tasks_array_schema.json'), result);
     var car = true;
     if(check){
@@ -51,21 +51,21 @@ test('Tasks not found when requesting for a specific users task', () => {
 
 test('Invalid user in creating task', () => {
     let token = undefined;
-    let body = {"task_type": "cane", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "cane", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let result = tasks.createTask(token, body).body;
     expect(result.message).toBe('Unauthorized, missing or invalid API Key')
 });
 
 test('createTask, body format is wrong', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": undefined, "subject": "gatto", "title": "lizard", "description": "", "answer": "[opt1]", "solutions": "ababa"}
+    let body = {"task_type": undefined, "subject": "gatto", "title": "lizard", "description": "", "options": "[opt1]", "solutions": "ababa"}
     let result = tasks.createTask(token, body).body;
     expect(result.message).toBe('Bad Request');
 });
 
 test('createtask returns 200 ok', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1", "opt3"], "solutions": "opt3"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "options": ["opt1", "opt3"], "solutions": "opt3"}
     let result = tasks.createTask(token, body).body;
     var check = ajv.validate(require('./../schemas/payloads/tasks_schema.json'), result);
     expect(check).toBe(true);
@@ -94,7 +94,7 @@ test('accessspecifictask NaN task id', () => {
 
 test('updatetask user is null, return 401', () => {
     let token = null;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let task_id = 20;
     let result = tasks.updateTask(token, body, task_id).body;
     expect(result.message).toBe("Unauthorized, missing or invalid API Key");
@@ -102,7 +102,7 @@ test('updatetask user is null, return 401', () => {
 
 test('updateTask task_id undefined', () =>{
     let token = mdb.active_users[0].token;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let task_id = undefined;
     let result = tasks.updateTask(token, body, task_id).body;
     expect(result.message).toBe("Bad Request")
@@ -110,7 +110,7 @@ test('updateTask task_id undefined', () =>{
 
 test('updateTask task_id NaN', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let task_id = 'stringa';
     let result = tasks.updateTask(token, body, task_id).body;
     expect(result.message).toBe("Bad Request")
@@ -118,7 +118,7 @@ test('updateTask task_id NaN', () => {
 
 test('updateTask, body format wrong', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": undefined, "subject": '', "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": undefined, "subject": '', "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let task_id = 'stringa';
     let result = tasks.updateTask(token, body, task_id).body;
     expect(result.message).toBe("Bad Request")
@@ -126,7 +126,7 @@ test('updateTask, body format wrong', () => {
 
 test('updateTask, task not found', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1"], "solutions": "ababa"}
     let task_id = 99999;
     let result = tasks.updateTask(token, body, task_id).body;
     expect(result.message).toBe("Not Found")
@@ -134,7 +134,7 @@ test('updateTask, task not found', () => {
 
 test('updateTask, returns 200', () => {
     let token = mdb.active_users[0].token;
-    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "answer": ["opt1"], "solutions": "ababa"}
+    let body = {"task_type": "pinkiepie", "subject": "gatto", "title": "lizard", "description": "gas", "options": ["opt1", "opt2"], "solutions": "opt1"}
     let task_id = 0;
     let result = tasks.updateTask(token, body, task_id).status;
     expect(result).toBe(200)

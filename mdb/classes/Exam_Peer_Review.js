@@ -31,7 +31,7 @@ class Exam_Peer_Reviews extends Array{
     }
     //FILTER METHODS
     filterBySubmitter(reviewer){
-        return this.filter(obj => obj.reviewer.email === reviewer.email);
+        return this.filter(obj => (obj.reviewer.email === reviewer.email && obj.review !== ""));
     }
     filterExamSubmissionByReviewer(reviewer, type){
         var rev = undefined;

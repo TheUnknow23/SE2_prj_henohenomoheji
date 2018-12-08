@@ -25,7 +25,7 @@ router.get('/:task_id', function(req, res) {
     let token = req.query.token;
     let task_id = req.params.task_id;
     //set codice di stato e risultato
-    let result = accessSpecificTask(token, task_id);
+    let result = logic. accessSpecificTask(token, task_id);
     res.status(result.status);
     res.json(result.body);
 });
@@ -36,15 +36,17 @@ router.put('/:task_id', function(req, res) {
     let task_id = req.params.task_id;
     //set codice di stato e risultato
     let result = logic.updateTask(token, body, task_id);
-    res.sendStatus(result.status);
+    res.status(result.status);
+    res.json(result.body);
 });
 
 router.delete('/:task_id', function(req, res) {
     let token = req.query.token;
-    let task_id = req.params.task.id;
+    let task_id = req.params.task_id;
     //set codice di stato e risultato
     let result = logic.deleteTask(token, task_id);
-    res.sendStatus(result.status);
+    res.status(result.status);
+    res.json(result.body);
 });
 
 module.exports = router;

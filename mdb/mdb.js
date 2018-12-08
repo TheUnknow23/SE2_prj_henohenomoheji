@@ -18,9 +18,9 @@ users.add("guno", "guno", "gono@gono", "pwd5");users.add("billy", "bill", "billy
 //default tasks | input schema: (owner, task_type, subject, description, description, answer[], solution)
 tasks.add({"id": users[0].id, "email": users[0].email}, "multiple choice", "CS", "title1", "my top desc 1", ["opt1", "opt2", "opt3"], "opt3");
 tasks.add({"id": users[0].id, "email": users[0].email}, "multiple choice", "CS", "title2", "my top desc 2", ["opt1", "opt2", "opt3"], "opt1");
-tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", ["a caso"], "correct solution");
-tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", ["a caso"], "correct solution");
-tasks.add({"id": users[1].id, "email": users[1].email}, "text", "CooooooS", "title45354353", "my top desc 34", ["a caso"], "corrects solution");
+tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", [], "correct solution");
+tasks.add({"id": users[0].id, "email": users[0].email}, "text", "CS", "title3", "my top desc 3", [], "correct solution");
+tasks.add({"id": users[1].id, "email": users[1].email}, "text", "CooooooS", "title45354353", "my top desc 34", [], "corrects solution");
 
 //default groups | input schema: (owner, name, description, members[])
 groups.add({"id": users[0].id, "email": users[0].email}, "group1", "desch1", [{"id": users[1].id, "email": users[1].email}, {"id": users[2].id, "email": users[2].email}, {"id": users[3].id, "email": users[3].email}, {"id": users[4].id, "email": users[4].email}]);
