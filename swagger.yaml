@@ -3,9 +3,7 @@ info:
   version: 0.0.1
   title: Henohenoapi
   description: >-
-    The project aims to create a platform for managing exams, teachers can
-    public exams(which have a deadline) and add tasks to them, while students
-    can submit their answers and answer.
+    The project aims to create a platform for managing exams, their submissions and the reviews related to the submissions
 host: henoheno-app.herokuapp.com
 basePath: /
 schemes:
@@ -61,16 +59,18 @@ paths:
         - {}
       responses:
         '201':
-          description: return a user 's token
+          description: OK
           schema:
             type: string
             description: a valid token
         '500':
           $ref: '#/responses/500_internal_server_error'
+        '403':
+          $ref: '#/responses/403_forbidden'
   /users:
     get:
       summary: users list
-      description: gets the list of all users registered on the platform
+      description: gets the list of all users registered on the platform (without password)
       tags:
         - Users_resource
       responses:
@@ -80,12 +80,10 @@ paths:
             $ref: '#/definitions/Users_in_response'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
-      summary: user subscription
+      summary: user registration
       description: creates a new user based on the data posted
       tags:
         - Users_resource
@@ -97,10 +95,7 @@ paths:
         '201':
           description: Created
           schema:
-            type: integer
-            description: the new user 's id
-        '204':
-          $ref: '#/responses/204_no_content'
+            $ref: '#/definitions/User'
         '400':
           $ref: '#/responses/400_bad_request'
         '401':
@@ -117,14 +112,8 @@ paths:
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '409':
           $ref: '#/responses/409_conflict'
         '500':
@@ -168,27 +157,6 @@ paths:
           $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
-  '/users/{user_id}/exam_submissions':
-    get:
-      summary: get the submissions of a student
-      description: displays the exam submissions of a student
-      tags:
-        - Users_resource
-      security:
-        - Api_key: []
-      parameters:
-        - $ref: '#/parameters/User_id_in_path'
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/Exam_submissions'
-        '401':
-          $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
-        '500':
-          $ref: '#/responses/500_internal_server_error'
   /logout:
     post:
       summary: user logout
@@ -202,8 +170,6 @@ paths:
           $ref: '#/responses/401_unauthorized'
         '404':
           $ref: '#/responses/404_not_found'
-        '405':
-          $ref: '#/responses/405_method_not_allowed'
         '500':
           $ref: '#/responses/500_internal_server_error'
   /tasks:
@@ -221,13 +187,13 @@ paths:
             $ref: '#/definitions/Tasks'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
+        '400':
+          $ref: '#/responses/400_bad_request'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
       summary: create new task
-      description: creates new task based on the posted data
+      description: creates new task based on the posted data("options" can be empty if the task is an open-ended question - in this case the array of solutions can contain one single element which an example of a correct answer to the question)
       tags:
         - Tasks_resource
       parameters:
@@ -268,7 +234,7 @@ paths:
           $ref: '#/responses/500_internal_server_error'
     put:
       summary: update an existing task
-      description: update an existing task
+      description: updates an existing task(can be done only by the owner of the task)
       tags:
         - Tasks_resource
       parameters:
@@ -277,10 +243,6 @@ paths:
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -303,14 +265,12 @@ paths:
           $ref: '#/responses/401_unauthorized'
         '404':
           $ref: '#/responses/404_not_found'
-        '405':
-          $ref: '#/responses/405_method_not_allowed'
         '500':
           $ref: '#/responses/500_internal_server_error'
   /groups:
     get:
       summary: groups list
-      description: get the list of created groups or the list of groups you're in
+      description: gets the list of all groups
       tags:
         - Groups_resource
       responses:
@@ -320,25 +280,20 @@ paths:
             $ref: '#/definitions/Groups'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
       summary: create new group
-      description: create new group
+      description: creates a new group made-up by the members indentified by their id in the payload
       tags:
         - Groups_resource
-      security:
-        - Api_key: []
       parameters:
         - $ref: '#/parameters/Group_in_post'
       responses:
         '201':
           description: Created
           schema:
-            type: integer
-            description: the new group 's id
+            $ref: '#/definitions/Group'
         '204':
           $ref: '#/responses/204_no_content'
         '400':
@@ -349,8 +304,8 @@ paths:
           $ref: '#/responses/500_internal_server_error'
   '/groups/{group_id}':
     get:
-      summary: see the members of a group
-      description: get a specific group
+      summary: get a specific group
+      description: access the details of the group specified by the id
       tags:
         - Groups_resource
       parameters:
@@ -359,7 +314,7 @@ paths:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/Groups'
+            $ref: '#/definitions/Group'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -371,18 +326,12 @@ paths:
       description: update an existing group
       tags:
         - Groups_resource
-      security:
-        - Api_key: []
       parameters:
         - $ref: '#/parameters/Group_id_in_path'
         - $ref: '#/parameters/Group_in_put'
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -396,8 +345,6 @@ paths:
       description: delete an existing group
       tags:
         - Groups_resource
-      security:
-        - Api_key: []
       parameters:
         - $ref: '#/parameters/Group_id_in_path'
       responses:
@@ -428,8 +375,6 @@ paths:
             $ref: '#/definitions/Exams'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
@@ -445,8 +390,7 @@ paths:
         '201':
           description: Created
           schema:
-            type: integer
-            description: the new exam's id
+            $ref: '#/definitions/Exam'
         '204':
           $ref: '#/responses/204_no_content'
         '400':
@@ -487,10 +431,6 @@ paths:
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -533,8 +473,6 @@ paths:
             $ref: '#/definitions/Exam_submissions'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
@@ -577,10 +515,9 @@ paths:
         '500':
           $ref: '#/responses/500_internal_server_error'
     put:
-      summary: update an existing solution(or assign evaluation)
+      summary: update an existing solution's answers
       description: >-
-        As a submitter you might update your submission, or if you're a the exam
-        owner you can set an evaluation for the submission
+        As a submitter you might update your submission
       tags:
         - Exam_submissions_resource
       parameters:
@@ -589,10 +526,26 @@ paths:
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
+        '401':
+          $ref: '#/responses/401_unauthorized'
+        '404':
+          $ref: '#/responses/404_not_found'
+        '409':
+          $ref: '#/responses/409_conflict'
+        '500':
+          $ref: '#/responses/500_internal_server_error'
+    patch:
+      summary: assign evaluation
+      description: >-
+        As the owner of the exam you might want to assign an evaluation to a submission
+      tags:
+        - Exam_submissions_resource
+      parameters:
+        - $ref: '#/parameters/Exam_submission_id_in_path'
+        - $ref: '#/parameters/Exam_submission_in_patch'
+      responses:
+        '200':
+          $ref: '#/responses/200_ok_only'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -623,9 +576,11 @@ paths:
   /exam_peer_reviews:
     get:
       summary: reviews list
-      description: As a student you can get the list of all your reviews
+      description: As a student you can get the list of all your reviews(created or received)
       tags:
         - Exam_peer_reviews_resource
+      parameters:
+        - $ref: '#/parameters/Selection_reviews'
       responses:
         '200':
           description: OK
@@ -633,13 +588,11 @@ paths:
             $ref: '#/definitions/Exam_peer_reviews'
         '401':
           $ref: '#/responses/401_unauthorized'
-        '404':
-          $ref: '#/responses/404_not_found'
         '500':
           $ref: '#/responses/500_internal_server_error'
     post:
-      summary: submit a review to an answer
-      description: submit a review to an answer
+      summary: submit a review
+      description: submit a review for a given submission(indentified by its id)
       tags:
         - Exam_peer_reviews_resource
       parameters:
@@ -688,10 +641,6 @@ paths:
       responses:
         '200':
           $ref: '#/responses/200_ok_only'
-        '201':
-          $ref: '#/responses/201_created'
-        '204':
-          $ref: '#/responses/204_no_content'
         '401':
           $ref: '#/responses/401_unauthorized'
         '404':
@@ -705,8 +654,6 @@ paths:
       description: delete an existing review
       tags:
         - Exam_peer_reviews_resource
-      security:
-        - Api_key: []
       parameters:
         - $ref: '#/parameters/Exam_peer_review_id_in_path'
       responses:
@@ -733,20 +680,20 @@ definitions:
     properties:
       id:
         type: integer
-        description: the user 's id
+        description: the user's id
       email:
         type: string
-        description: the user 's email
+        description: the user's email
       password:
         type: string
         format: password
-        description: the user 's password
+        description: the user's password
       name:
         type: string
-        description: the user 's name
+        description: the user's name
       surname:
         type: string
-        description: the user 's surname
+        description: the user's surname
   Users:
     type: array
     items:
@@ -890,16 +837,16 @@ definitions:
     properties:
       id:
         type: integer
-        description: the user 's id
+        description: the user's id
       email:
         type: string
-        description: the user 's email
+        description: the user's email
       name:
         type: string
-        description: the user 's name
+        description: the user's name
       surname:
         type: string
-        description: the user 's surname
+        description: the user's surname
   Users_in_response:
     type: array
     items:
@@ -909,17 +856,17 @@ definitions:
     properties:
       email:
         type: string
-        description: the user 's email
+        description: the user's email
       password:
         type: string
         format: password
-        description: the user 's password
+        description: the user's password
       name:
         type: string
-        description: the user 's name
+        description: the user's name
       surname:
         type: string
-        description: the user 's surname
+        description: the user's surname
   Exam_for_post:
     type: object
     properties:
@@ -983,9 +930,11 @@ definitions:
           type: string
       status:
         type: string
+  Exam_submission_for_patch:
+    type: object
+    properties:
       evaluation:
         type: string
-        description: only the owner of the exam can access this field
   Exam_peer_review_for_post:
     type: object
     properties:
@@ -1008,9 +957,7 @@ definitions:
     type: object
     properties:
       review:
-        type: array
-        items:
-          type: string
+        type: string
   Exam_assessment:
     type: object
     properties:
@@ -1070,6 +1017,15 @@ parameters:
     enum:
       - created
       - all
+  Selection_reviews:
+    in: query
+    name: select
+    description: select a particular type of reviews
+    required: true
+    type: string
+    enum:
+      - created
+      - received
   User_in_post:
     name: user
     description: the object user
@@ -1101,11 +1057,11 @@ parameters:
       properties:
         email:
           type: string
-          description: the user 's email
+          description: the user's email
         password:
           type: string
           format: password
-          description: the user 's password
+          description: the user's password
       required:
         - email
         - password
@@ -1188,7 +1144,7 @@ parameters:
       required:
         - name
         - description
-        - members
+        - members_id
   Group_in_put:
     name: group
     description: the object group
@@ -1198,7 +1154,7 @@ parameters:
       required:
         - name
         - description
-        - members
+        - members_id
   Group_id_in_path:
     name: group_id
     description: the id of a group
@@ -1221,8 +1177,16 @@ parameters:
     schema:
       $ref: '#/definitions/Exam_submission_for_put'
       required:
-        - ref_exam
         - answers
+        - status
+  Exam_submission_in_patch:
+    name: exam_submission
+    description: the object exam_submission
+    in: body
+    schema:
+      $ref: '#/definitions/Exam_submission_for_patch'
+      required:
+        - evaluation
   Exam_submission_id_in_path:
     name: exam_submission_id
     description: exam submission id
@@ -1245,7 +1209,6 @@ parameters:
     schema:
       $ref: '#/definitions/Exam_peer_review_for_put'
       required:
-        - ref_submission
         - review
   Exam_peer_review_id_in_path:
     name: exam_peer_review_id
@@ -1286,7 +1249,7 @@ responses:
     schema:
       $ref: '#/definitions/Error'
   200_ok_only:
-    description: Created
+    description: OK
   201_created:
     description: Created
   204_no_content:
@@ -1297,6 +1260,10 @@ responses:
       $ref: '#/definitions/Error'
   401_unauthorized:
     description: 'Unauthorized, missing or invalid API Key'
+    schema:
+      $ref: '#/definitions/Error'
+  403_forbidden:
+    description: Forbidden
     schema:
       $ref: '#/definitions/Error'
   404_not_found:
