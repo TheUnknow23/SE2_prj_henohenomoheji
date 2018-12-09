@@ -29,6 +29,10 @@
     "jest": "^23.6.0",
     "node-fetch": "^2.3.0"
   },
+	"engines": {
+		"node": "11.3.0",
+		"npm": "6.4.1"
+  },
   "jest": {
     "verbose": true,
     "collectCoverage": true,
