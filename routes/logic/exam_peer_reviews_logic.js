@@ -111,7 +111,7 @@ function getPeerReviewById(token,id){
 		var user = mdb.active_users.getUserByToken(token);
 		if (user !== null){
 			var peerReview = mdb.exam_peer_reviews.findById(id);
-			if (peerReview!== null && peerReview!==undefined){
+			if (peerReview!== null && peerReview!==undefined && peerReview.review !== ""){
 				return {"status": 200, "body":peerReview};
 			} else {
 				return generic_e.error404;
