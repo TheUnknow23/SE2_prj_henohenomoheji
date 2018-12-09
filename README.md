@@ -1,12 +1,12 @@
 # Exam manger service APIs
 The project aims to create a platform for managing exams, teachers can public exams(which have a deadline) and add tasks to them, while students can submit their answers and solutions.
 #### Possible resources
- - users<em>(insert, update, delete, read)</em>
- - exams<em>(insert, update, delete, read)</em>
+ - users<em>(insert, update, read)</em>
+ - exams<em>(insert, update, read)</em>
+ - exam submissions<em>(insert, update, read)</em>
+ - exam reviews<em>(insert, update, delete, read)</em>
  - tasks<em>(insert, update, delete, read)</em>
- - solutions<em>(insert, delete, read)</em>
  - groups<em>(insert, update, delete, read)</em>
- - marks<em>(insert, read)</em>
 #### Members
 - Genovese Mattia Mat. 187907 Git User: **[mattiagenovese](https://github.com/mattiagenovese)**
 - Longato Matteo   Mat. 187853   Git User: **[TheUnknow23](https://github.com/TheUnknow23)**
