@@ -73,7 +73,7 @@ class Exam_Peer_Reviews extends Array{
         return undefined;
     }
     findById(id){
-        return this.find(obj => obj.id === id);
+        return this.find(obj => obj.id === parseInt(id));
     }
     getIndexByUserAndSubmission(user, ref_sub){
         var index = this.indexOf(this.find(obj => (obj.submission.id === ref_sub.id && obj.reviewer.id === user.id)));
