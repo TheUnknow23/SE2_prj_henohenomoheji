@@ -13,7 +13,15 @@ router.get('/', function(req, res) {
 	res.json(result.body);
 });
 
-router.put('/:id/', function(req, res) {
+router.get('/:id', function (req, res) {
+	let id= req.params.id;
+	let token = req.query.token;
+	var result = logic.getPeerReviewById(token, id);
+	res.status(result.status);
+	res.json(result.body);
+});
+
+router.put('/:id', function(req, res) {
 	let id = req.params.id;
 	let token = req.query.token;
 	//Just a string of the new review
