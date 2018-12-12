@@ -4,8 +4,8 @@ const mdb = require ('./../mdb/mdb.js');
 const logic = require('./logic/logout_logic');
 
 router.get('/', function(req, res) {
-        logic.logoutFunction(req.query.token);
-        res.send('logout resources');
+        var data = logic.logoutFunction(req.query.token);
+        res.sendStatus(data.status);
 });
 
 module.exports = router;

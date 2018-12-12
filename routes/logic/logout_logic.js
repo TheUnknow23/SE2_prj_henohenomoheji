@@ -6,6 +6,9 @@ function logoutFunction(token) {
     const requester = mdb.active_users.getUserByToken(token);
     if(requester !== null){
         mdb.active_users.deleteByUser(requester);
+        return {status: 200}
+    }else{
+        return {status: 401}
     }
 }
 
