@@ -146,7 +146,7 @@ function routerPostUsers(postBody) {
 		if (result === -1) {
 			return errors.error400;
 		} else {
-			return {"status": 200, "body": result};
+			return {"status": 201, "body": result};
 		}
 	}else{
 		return errors.error400;

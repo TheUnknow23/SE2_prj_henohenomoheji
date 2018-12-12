@@ -19,17 +19,13 @@ router.post('/', function(req, res) {
 	
 	let postBody = req.body;
 
-	let result = logic.routerPostUsers(postBody);
-	if (result.status === 200) {
+	let data = logic.routerPostUsers(postBody);
+	if (data.status === 201) {
 		res.status(201);
-		res.send(result.body 
-			+ "<br>"
-			+ "<form action='/' method='GET'>"
-			+ "<input type='submit' value='home'>"
-			+ "</form>");
+		res.send(data.body);
 	} else {
 		res.status(500);
-		res.send(result + ': user probably already registered, try using another email');
+		res.send({code: 500, message: 'user probably already registered or wrong email format, try using another email'});
 	}
 	//Other stati determined automatically I guess
 });
@@ -37,8 +33,8 @@ router.post('/', function(req, res) {
 router.put('/', function(req, res) {
 	let putBody = req.body;
 	let token = req.query.token;
-	let result = logic.routerUpdateUser(token, putBody);
-	res.status(result.status);
+	let data = logic.routerUpdateUser(token, putBody);
+	res.status(data.status);
 	res.json();
 });
 
