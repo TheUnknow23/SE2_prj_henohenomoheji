@@ -29,7 +29,7 @@ test('GET /users NOT OK case with non existing arguments', () => {
 // POST /users
 
 test('POST /users OK case ', () => {
-    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gmail.com", "password": "fgh"} ).body;
+    let result = logic.routerPostUsers( {"name": "a", "surname": "b", "email": "gino@gmail.com", "password": "fgh"} ).body.id;
     expect(result).toBe(mdb.users.getUserByEmail('gino@gmail.com').id);
 });
 

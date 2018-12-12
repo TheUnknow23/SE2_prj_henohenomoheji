@@ -65,7 +65,7 @@ class Users extends Array{
             return -1;
         }
 
-        return this[this.length-1].id;
+        return this[this.length-1];
     }
 
     //FILTER METHODS
